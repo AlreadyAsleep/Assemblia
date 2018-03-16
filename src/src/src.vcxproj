@@ -11,7 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="AddTwo.asm" />
+    <MASM Include="main.asm" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="get_input.inc" />
+    <None Include="input_data.inc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{30111174-79c6-4488-be72-6fb074774414}</ProjectGuid>

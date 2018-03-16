@@ -1,0 +1,121 @@
+Microsoft (R) Macro Assembler Version 14.12.25834.0	    03/16/18 16:36:59
+main.asm						     Page 1 - 1
+
+
+				;// Main.asm - The file that contains the main game loop and launcher
+				;// Authors: Thomas and Ben
+				;// Since: 3/16/18
+
+				.386
+				.model stdcall, flat
+				.stack 4096
+
+ 00000000			.data
+
+				include input_data.inc
+ 00000000 00000000	      C input_state dword ?
+			      C 
+				include get_input.inc
+			      C _get_input macro
+			      C 
+			      C 	Local L
+			      C 	call ReadDec
+			      C if$L:
+			      C 	cmp eax, 0
+			      C 	jz then$L
+			      C 	jmp endif$L
+			      C then$L:
+			      C 	mov ecx, eax
+			      C endif$L:
+			      C 	nop
+			      C 
+			      C endm
+			      C 
+
+				WriteDec proto
+				ReadDec proto
+				ExitProcess proto, dwExitCode:dword
+
+ 00000000			.code
+
+ 00000000			main proc
+
+ 00000000  B9 00000001		mov ecx, 1
+ 00000005			while_main:						;//while( ecx != 0 )
+					_get_input
+ 00000005  E8 00000000 E     1		call ReadDec
+ 0000000A		     1	if$L:
+ 0000000A  83 F8 00	     1		cmp eax, 0
+ 0000000D  74 02	     1		jz then$L
+ 0000000F  EB 02	     1		jmp endif$L
+ 00000011		     1	then$L:
+ 00000011  8B C8	     1		mov ecx, eax
+ 00000013		     1	endif$L:
+ 00000013  90		     1		nop
+ 00000014  E8 00000000 E		call WriteDec
+ 00000019  83 F9 00			cmp ecx, 0
+ 0000001C  75 E7			jnz while_main
+ 0000001E			endwhile_main:
+					
+					invoke ExitProcess, 0
+ 0000001E  6A 00	   *	    push   +000000000h
+ 00000020  E8 00000000 E   *	    call   ExitProcess
+
+ 00000025			main endp
+
+				end main
+Microsoft (R) Macro Assembler Version 14.12.25834.0	    03/16/18 16:36:59
+main.asm						     Symbols 2 - 1
+
+
+
+
+Macros:
+
+                N a m e                 Type
+
+_get_input . . . . . . . . . . .	Proc
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000004 DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000025 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+ExitProcess  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ReadDec  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+WriteDec . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000025 Public STDCALL
+  while_main . . . . . . . . . .	L Near	 00000005 _TEXT	
+  if$L . . . . . . . . . . . . .	L Near	 0000000A _TEXT	
+  then$L . . . . . . . . . . . .	L Near	 00000011 _TEXT	
+  endif$L  . . . . . . . . . . .	L Near	 00000013 _TEXT	
+  endwhile_main  . . . . . . . .	L Near	 0000001E _TEXT	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000003h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+input_state  . . . . . . . . . .	DWord	 00000000 _DATA	
+
+	   0 Warnings
+	   0 Errors
