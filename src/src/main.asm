@@ -23,6 +23,7 @@ ExitProcess proto, dwExitCode:dword
 mainMenu       byte "Main Menu"        , 13, 10, 0
 quit           byte "0 Quit"           , 13, 10, 0
 characterSheet byte "1 Character Sheet", 13, 10, 0
+
 blank byte " ", 13, 10, 0
 
 
@@ -35,6 +36,7 @@ main proc
 mov ecx, 1
 while_main:						;//while( ecx != 0 )
 
+	
 	mov edx, offset mainMenu ;//Main Menu Display Start
 	call WriteString
 	mov edx, offset quit 
@@ -44,13 +46,15 @@ while_main:						;//while( ecx != 0 )
 
 	_get_input
 	
+	call Clrscr
+
 	cmp ecx, 0 ;//switch
 	je endwhile_main
 	cmp ecx, 1
 	je character_sheet
 
 	character_sheet:
-	mPrintCharacterSheet
+		mPrintCharacterSheet
 
 
 	jmp while_main ;//default
