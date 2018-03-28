@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.13.26129.0	    03/27/18 14:57:54
+Microsoft (R) Macro Assembler Version 14.13.26129.0	    03/27/18 21:58:47
 main.asm						     Page 1 - 1
 
 
@@ -39,21 +39,37 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000008  00000008 [	      C characterName  db    8 dup (?)
 	    00
 	   ]
--67FFFFF5  00000000	      C level          DWORD 0
+ 0000000B  00000000	      C level          DWORD 0
 			      C 
--67FFFFF1  00000001	      C brawn          DWORD 1 ;//Primary Attributes
--67FFFFED  00000001	      C agility        DWORD 1
--67FFFFE9  00000001	      C mind           DWORD 1
--67FFFFE5  00000001	      C fortune        DWORD 1
+ 0000000F  00000001	      C brawn          DWORD 1 ;//Primary Attributes
+ 00000013  00000001	      C agility        DWORD 1
+ 00000017  00000001	      C mind           DWORD 1
+ 0000001B  00000001	      C fortune        DWORD 1
 			      C 
--67FFFFE1  00000000	      C maxHp          DWORD 0
--67FFFFDD  00000000	      C hp             DWORD 0
--67FFFFD9  00000000	      C damageMin      DWORD 0
--67FFFFD5  00000000	      C damageMax      DWORD 0
--67FFFFD1  00000000	      C defence        DWORD 0
+ 0000001F  00000000	      C hpMax          DWORD 0
+ 00000023  00000000	      C hp             DWORD 0
+ 00000027  00000000	      C damageMin      DWORD 0
+ 0000002B  00000000	      C damageMax      DWORD 0
+ 0000002F  00000000	      C defence        DWORD 0
 			      C 
 			      C 
 			      C character ends
+			      C 
+				include enemyHeader.inc
+			      C ;// structure of enemy object
+ 0000001C		      C enemy struct 
+			      C 
+ 00000000  00000008 [	      C enemyName  db    8 dup (?)
+	    00
+	   ]
+			      C 
+ 07230003  00000000	      C hpMax          DWORD 0
+ 07230007  00000000	      C hp             DWORD 0
+ 0723000B  00000000	      C damageMin      DWORD 0
+ 0723000F  00000000	      C damageMax      DWORD 0
+ 07230013  00000000	      C defence        DWORD 0
+			      C 
+			      C enemy ends
 			      C 
 
  00000000			.data
@@ -66,14 +82,9 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C 
 			      C 	Local L
 			      C 	call ReadDec
-			      C if$L:
-			      C 	cmp eax, 0
-			      C 	jz then$L
-			      C 	jmp endif$L
-			      C then$L:
+			      C 
 			      C 	mov ecx, eax
-			      C endif$L:
-			      C 	nop
+			      C 
 			      C 
 			      C endm
 			      C 
@@ -139,8 +150,18 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 	   63 65 3A 00 0A
 	   00
 			      C 
+ 000000E8 45 6E 74 65 72      C command1 byte "Enter character name. Up to 8 Characters"  , 13, 10, 0
+	   20 63 68 61 72
+	   61 63 74 65 72
+	   20 6E 61 6D 65
+	   2E 20 55 70 20
+	   74 6F 20 38 20
+	   43 68 61 72 61
+	   63 74 65 72 73
+	   0D 0A 00
 			      C 
 			      C mPrintCharacterSheet MACRO ;//prints character sheet 
+			      C pushAD
 			      C 
 			      C mov edx, offset characterSheetTitle ;//prints a header
 			      C invoke WriteString
@@ -213,7 +234,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C call WriteDec
 			      C mov eax,'/'
 			      C call WriteChar
-			      C mov eax, c1.maxHp
+			      C mov eax, c1.hpMax
 			      C call WriteDec
 			      C mov edx, offset blank
 			      C invoke WriteString
@@ -240,6 +261,196 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C mov edx, offset blank
 			      C invoke WriteString
 			      C 
+			      C popAD
+			      C endm
+			      C 
+			      C mInitializeCharacter MACRO ;//prints character sheet
+			      C pushAD
+			      C 
+			      C mov edx, offset command1 ;//Player inputs character name
+			      C invoke WriteString
+			      C mov edx, offset c1.characterName
+			      C mov ecx, SIZEOF c1.characterName
+			      C call ReadString
+			      C 
+			      C mov c1.brawn  , 5 ;// sets primary attributes
+			      C mov c1.agility, 5
+			      C mov c1.mind   , 5
+			      C mov c1.fortune, 5
+			      C 
+			      C mov eax, c1.brawn ;// maxHP & hp initiliaze = brawn*2
+			      C sal eax,1 ;// multiply by 2
+			      C mov c1.hpMax,eax
+			      C mov c1.hp,eax
+			      C 
+			      C mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+			      C sar eax,1;//divide by 2
+			      C mov c1.damageMin,eax
+			      C mov ebx,c1.agility
+			      C sar ebx,2;//divide by 4
+			      C add eax,ebx
+			      C mov c1.damageMax,eax
+			      C 
+			      C popAD
+			      C endm
+			      C 
+				include enemy.inc
+ 00000113 42 6F 67 6C 69      C e1 enemy{"Boglin",1,1,1,1}
+	   6E
+	   00000002 [
+	    00
+	   ] 00000001
+	   00000001
+	   00000001
+	   00000001
+	   00000000
+			      C 
+			      C 
+			      C mInitializeEnemy MACRO
+			      C pushAD
+			      C 
+			      C mov ebx, c1.level ;//initialize enemy hp
+			      C mov eax,10
+			      C call RandomRange
+			      C inc eax
+			      C mul ebx
+			      C mov e1.hpMax,eax
+			      C mov e1.hp,eax
+			      C 
+			      C mov eax, 5 ;//initialize enemy damage
+			      C call RandomRange
+			      C inc eax
+			      C mul ebx
+			      C mov e1.damageMin,eax
+			      C mov ecx,eax
+			      C mov eax,2
+			      C call RandomRange
+			      C inc eax
+			      C add eax,ecx
+			      C mov e1.damageMax,eax
+			      C 
+			      C popAD
+			      C endm
+			      C 
+				include combat.inc
+ 0000012F 00		      C escape         byte 0
+ 00000130 00		      C playerDefeated byte 0
+ 00000131 00		      C enemyDefeated  byte 0
+			      C 
+ 00000132 2D 2D 43 4F 4D      C combatMenuTitle  byte "--COMBAT--"   , 13, 10, 0
+	   42 41 54 2D 2D
+	   0D 0A 00
+ 0000013F 45 6E 65 6D 79      C enemyNameTitle   byte "Enemy Name:"  , 0 , 10, 0
+	   20 4E 61 6D 65
+	   3A 00 0A 00
+ 0000014D 45 6E 65 6D 79      C enemyHPTitle     byte "Enemy HP:"    , 0 , 10, 0
+	   20 48 50 3A 00
+	   0A 00
+ 00000159 45 6E 65 6D 79      C enemyDamageTitle byte "Enemy Damage:", 0 , 10, 0
+	   20 44 61 6D 61
+	   67 65 3A 00 0A
+	   00
+			      C 
+ 00000169 2D 2D 43 6F 6D      C combatOptionsMenuTitle byte "--Combat Options--", 13, 10, 0
+	   62 61 74 20 4F
+	   70 74 69 6F 6E
+	   73 2D 2D 0D 0A
+	   00
+ 0000017E 30 3A 20 41 74      C attackTitle            byte "0: Attack"         , 13, 10, 0
+	   74 61 63 6B 0D
+	   0A 00
+ 0000018A 31 3A 20 46 6C      C fleeTitle              byte "1: Flee"           , 13, 10, 0
+	   65 65 0D 0A 00
+			      C 
+			      C mCombat MACRO
+			      C Local L
+			      C pushAD
+			      C 
+			      C mInitializeEnemy
+			      C 
+			      C mov escape        ,0 ;//combat end conditions
+			      C mov playerDefeated,0
+			      C mov enemyDefeated ,0
+			      C 
+			      C WHILE_COMBAT&L:    ;//disgusting triple & while statement
+			      C cmp escape,0       ;//while &
+			      C je AND_COMBAT1&L
+			      C jmp AND_FALSE_COMBAT&L
+			      C AND_COMBAT1&L: cmp playerDefeated,0
+			      C je AND_COMBAT2&L
+			      C jmp AND_FALSE_COMBAT&L
+			      C AND_COMBAT2&L: cmp enemyDefeated,0
+			      C je AND_COMBAT_TRUE&L
+			      C jmp AND_FALSE_COMBAT&L
+			      C AND_COMBAT_TRUE&L:
+			      C 	
+			      C 	mov edx, offset combatMenuTitle
+			      C 	invoke WriteString
+			      C 
+			      C 	mov edx, offset enemyNameTitle ;//prints enemy name
+			      C 	invoke WriteString
+			      C 	mov edx, offset e1.enemyName
+			      C 	invoke WriteString
+			      C 	mov edx, offset blank
+			      C 	invoke WriteString
+			      C 
+			      C 	mov edx, offset enemyHpTitle ;//prints enemy hp
+			      C 	invoke WriteString
+			      C 	mov eax, e1.hp
+			      C 	call WriteDec
+			      C 	mov eax,'/'
+			      C 	call WriteChar
+			      C 	mov eax, e1.hpMax
+			      C 	call WriteDec
+			      C 	mov edx, offset blank
+			      C 	invoke WriteString
+			      C 
+			      C 	mov edx, offset enemyDamageTitle ;//prints enemy damage
+			      C 	invoke WriteString
+			      C 	mov eax, e1.damageMin
+			      C 	call WriteDec
+			      C 	mov eax,'-'
+			      C 	call WriteChar
+			      C 	mov eax, e1.damageMax
+			      C 	call WriteDec
+			      C 	mov edx, offset blank
+			      C 	invoke WriteString
+			      C 
+			      C 	mov edx, offset combatOptionsMenuTitle
+			      C 	invoke WriteString
+			      C 
+			      C 	mov edx,offset attackTitle
+			      C 	invoke WriteString
+			      C 
+			      C 	mov edx,offset fleeTitle
+			      C 	invoke WriteString
+			      C 
+			      C 	_get_input
+			      C 	
+			      C 	call Clrscr
+			      C 
+			      C 	
+			      C 		cmp ecx, 0 ;//switch
+			      C 		je attack
+			      C 		cmp ecx, 1
+			      C 		je flee
+			      C 	
+			      C 		jmp end_switch&L
+			      C 
+			      C 		attack:
+			      C 			dec e1.hp
+			      C 			jmp end_switch&L
+			      C 		flee:
+			      C 			mov escape,1
+			      C 			
+			      C 		end_switch&L:
+			      C 		jmp WHILE_COMBAT&L;//default
+			      C 
+			      C 
+			      C 
+			      C 
+			      C AND_FALSE_COMBAT&L:
+			      C popAD
 			      C endm
 			      C 
 
@@ -247,17 +458,22 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 				ReadDec proto
 				ExitProcess proto, dwExitCode:dword
 
- 000000E8 4D 61 69 6E 20	mainMenu       byte "Main Menu"        , 13, 10, 0
+ 00000194 4D 61 69 6E 20	mainMenuTitle       byte "Main Menu"        , 13, 10, 0
 	   4D 65 6E 75 0D
 	   0A 00
- 000000F4 30 20 51 75 69	quit           byte "0 Quit"           , 13, 10, 0
+ 000001A0 30 20 51 75 69	quitTitle           byte "0 Quit"           , 13, 10, 0
 	   74 0D 0A 00
- 000000FD 31 20 43 68 61	characterSheet byte "1 Character Sheet", 13, 10, 0
+ 000001A9 31 20 43 68 61	characterSheet      byte "1 Character Sheet", 13, 10, 0
 	   72 61 63 74 65
 	   72 20 53 68 65
 	   65 74 0D 0A 00
+ 000001BD 32 20 43 6F 6D	combatTitle         byte "2 Combat"         , 13, 10, 0
+	   62 61 74 0D 0A
+	   00
 
- 00000111 20 0D 0A 00		blank byte " ", 13, 10, 0
+
+
+ 000001C8 20 0D 0A 00		blank byte " ", 13, 10, 0
 
 
 
@@ -266,134 +482,259 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 
  00000000			main proc
 
- 00000000  B9 00000001		mov ecx, 1
- 00000005			while_main:						;//while( ecx != 0 )
+				mInitializeCharacter
+ 00000000  60		     1	pushAD
+ 00000001  BA 000000E8 R     1	mov edx, offset command1 ;//Player inputs character name
+ 00000006  E8 00000000 E   *	    call   WriteString
+ 0000000B  BA 0000000C R     1	mov edx, offset c1.characterName
+ 00000010  B9 00000008	     1	mov ecx, SIZEOF c1.characterName
+ 00000015  E8 00000000 E     1	call ReadString
+ 0000001A  C7 05 00000018 R  1	mov c1.brawn  , 5 ;// sets primary attributes
+	   00000005
+ 00000024  C7 05 0000001C R  1	mov c1.agility, 5
+	   00000005
+ 0000002E  C7 05 00000020 R  1	mov c1.mind   , 5
+	   00000005
+ 00000038  C7 05 00000024 R  1	mov c1.fortune, 5
+	   00000005
+ 00000042  A1 00000018 R     1	mov eax, c1.brawn ;// maxHP & hp initiliaze = brawn*2
+ 00000047  D1 E0	     1	sal eax,1 ;// multiply by 2
+ 00000049  A3 00000028 R     1	mov c1.hpMax,eax
+ 0000004E  A3 0000002C R     1	mov c1.hp,eax
+ 00000053  A1 00000018 R     1	mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+ 00000058  D1 F8	     1	sar eax,1;//divide by 2
+ 0000005A  A3 00000030 R     1	mov c1.damageMin,eax
+ 0000005F  8B 1D 0000001C R  1	mov ebx,c1.agility
+ 00000065  C1 FB 02	     1	sar ebx,2;//divide by 4
+ 00000068  03 C3	     1	add eax,ebx
+ 0000006A  A3 00000034 R     1	mov c1.damageMax,eax
+ 0000006F  61		     1	popAD
+
+ 00000070  B9 00000001		mov ecx, 1
+ 00000075			while_main:						;//while( ecx != 0 )
 
 					
- 00000005  BA 000000E8 R		mov edx, offset mainMenu ;//Main Menu Display Start
- 0000000A  E8 00000000 E		call WriteString
- 0000000F  BA 000000F4 R		mov edx, offset quit 
- 00000014  E8 00000000 E		call WriteString
- 00000019  BA 000000FD R		mov edx, offset characterSheet
- 0000001E  E8 00000000 E		call WriteString         ;//Main Menu Display End
+ 00000075  BA 00000194 R		mov edx, offset mainMenuTitle ;//Main Menu Display Start
+ 0000007A  E8 00000000 E		call WriteString
+ 0000007F  BA 000001A0 R		mov edx, offset quitTitle 
+ 00000084  E8 00000000 E		call WriteString
+ 00000089  BA 000001A9 R		mov edx, offset characterSheet
+ 0000008E  E8 00000000 E		call WriteString    
+ 00000093  BA 000001BD R		mov edx, offset combatTitle
+ 00000098  E8 00000000 E		call WriteString     
 
 					_get_input
- 00000023  E8 00000000 E     1		call ReadDec
- 00000028		     1	if$L:
- 00000028  83 F8 00	     1		cmp eax, 0
- 0000002B  74 02	     1		jz then$L
- 0000002D  EB 02	     1		jmp endif$L
- 0000002F		     1	then$L:
- 0000002F  8B C8	     1		mov ecx, eax
- 00000031		     1	endif$L:
- 00000031  90		     1		nop
+ 0000009D  E8 00000000 E     1		call ReadDec
+ 000000A2  8B C8	     1		mov ecx, eax
 					
- 00000032  E8 00000000 E		call Clrscr
+ 000000A4  E8 00000000 E		call Clrscr
 
- 00000037  83 F9 00			cmp ecx, 0 ;//switch
- 0000003A  0F 84 000001A4		je endwhile_main
- 00000040  83 F9 01			cmp ecx, 1
- 00000043  74 00			je character_sheet
+ 000000A9  83 F9 00			cmp ecx, 0 ;//switch
+ 000000AC  0F 84 00000317		je endwhile_main
+ 000000B2  83 F9 01			cmp ecx, 1
+ 000000B5  74 0E			je character_sheet
+ 000000B7  83 F9 02			cmp ecx, 2
+ 000000BA  0F 84 000001A6		je combat
+ 000000C0  E9 000002FF			jmp end_switch
 
- 00000045				character_sheet:
+ 000000C5				character_sheet:
 						mPrintCharacterSheet
- 00000045  BA 0000003C R     1	mov edx, offset characterSheetTitle ;//prints a header
- 0000004A  E8 00000000 E   *	    call   WriteString
- 0000004F  BA 00000051 R     1	mov edx, offset xPosTitle ;// prints x position
- 00000054  E8 00000000 E   *	    call   WriteString
- 00000059  A1 00000004 R     1	mov eax, c1.xPos
- 0000005E  E8 00000000 E     1	call WriteDec
- 00000063  BA 00000111 R     1	mov edx, offset blank
- 00000068  E8 00000000 E   *	    call   WriteString
- 0000006D  BA 0000005A R     1	mov edx, offset yPosTitle ;// prints y position
- 00000072  E8 00000000 E   *	    call   WriteString
- 00000077  A1 00000008 R     1	mov eax, c1.yPos
- 0000007C  E8 00000000 E     1	call WriteDec
- 00000081  BA 00000111 R     1	mov edx, offset blank
- 00000086  E8 00000000 E   *	    call   WriteString
- 0000008B  BA 00000063 R     1	mov edx, offset nameTitle ;// prints character name
- 00000090  E8 00000000 E   *	    call   WriteString
- 00000095  BA 0000000C R     1	mov edx, offset c1.CharacterName
- 0000009A  E8 00000000 E     1	Call WriteString
- 0000009F  BA 00000111 R     1	mov edx, offset blank
- 000000A4  E8 00000000 E   *	    call   WriteString
- 000000A9  BA 0000006C R     1	mov edx, offset levelTitle ;//prints character level
- 000000AE  E8 00000000 E   *	    call   WriteString
- 000000B3  A1 00000014 R     1	mov eax, c1.level
- 000000B8  E8 00000000 E     1	call WriteDec
- 000000BD  BA 00000111 R     1	mov edx, offset blank
- 000000C2  E8 00000000 E   *	    call   WriteString
- 000000C7  BA 00000075 R     1	mov edx, offset primaryAttributesTitle ;//prints primary attributes header
- 000000CC  E8 00000000 E   *	    call   WriteString
- 000000D1  BA 0000008E R     1	mov edx, offset brawnTitle ;//prints character brawn
- 000000D6  E8 00000000 E   *	    call   WriteString
- 000000DB  A1 00000018 R     1	mov eax, c1.brawn
- 000000E0  E8 00000000 E     1	call WriteDec
- 000000E5  BA 00000111 R     1	mov edx, offset blank
- 000000EA  E8 00000000 E   *	    call   WriteString
- 000000EF  BA 00000097 R     1	mov edx, offset agilityTitle ;//prints character agility
- 000000F4  E8 00000000 E   *	    call   WriteString
- 000000F9  A1 0000001C R     1	mov eax, c1.agility
- 000000FE  E8 00000000 E     1	call WriteDec
- 00000103  BA 00000111 R     1	mov edx, offset blank
- 00000108  E8 00000000 E   *	    call   WriteString
- 0000010D  BA 000000A2 R     1	mov edx, offset mindTitle ;//prints character mind
- 00000112  E8 00000000 E   *	    call   WriteString
- 00000117  A1 00000020 R     1	mov eax, c1.mind
- 0000011C  E8 00000000 E     1	call WriteDec
- 00000121  BA 00000111 R     1	mov edx, offset blank
- 00000126  E8 00000000 E   *	    call   WriteString
- 0000012B  BA 000000AA R     1	mov edx, offset fortuneTitle ;//prints character fortune
- 00000130  E8 00000000 E   *	    call   WriteString
- 00000135  A1 00000024 R     1	mov eax, c1.fortune
- 0000013A  E8 00000000 E     1	call WriteDec
- 0000013F  BA 00000111 R     1	mov edx, offset blank
- 00000144  E8 00000000 E   *	    call   WriteString
- 00000149  BA 000000B5 R     1	mov edx, offset combatAttributesTitle ;//prints primary attributes header
- 0000014E  E8 00000000 E   *	    call   WriteString
- 00000153  BA 000000CD R     1	mov edx, offset hpTitle ;//prints character hp
- 00000158  E8 00000000 E   *	    call   WriteString
- 0000015D  A1 0000002C R     1	mov eax, c1.hp
- 00000162  E8 00000000 E     1	call WriteDec
- 00000167  B8 0000002F	     1	mov eax,'/'
- 0000016C  E8 00000000 E     1	call WriteChar
- 00000171  A1 00000028 R     1	mov eax, c1.maxHp
- 00000176  E8 00000000 E     1	call WriteDec
- 0000017B  BA 00000111 R     1	mov edx, offset blank
- 00000180  E8 00000000 E   *	    call   WriteString
- 00000185  BA 000000D3 R     1	mov edx, offset damageTitle ;//prints character damage
- 0000018A  E8 00000000 E   *	    call   WriteString
- 0000018F  A1 00000030 R     1	mov eax, c1.damageMin
- 00000194  E8 00000000 E     1	call WriteDec
- 00000199  B8 0000002D	     1	mov eax,'-'
- 0000019E  E8 00000000 E     1	call WriteChar
- 000001A3  A1 00000034 R     1	mov eax, c1.damageMax
- 000001A8  E8 00000000 E     1	call WriteDec
- 000001AD  BA 00000111 R     1	mov edx, offset blank
- 000001B2  E8 00000000 E   *	    call   WriteString
- 000001B7  BA 000000DD R     1	mov edx, offset defenceTitle ;//prints character defence
- 000001BC  E8 00000000 E   *	    call   WriteString
- 000001C1  A1 00000038 R     1	mov eax, c1.defence
- 000001C6  E8 00000000 E     1	call WriteDec
- 000001CB  BA 00000111 R     1	mov edx, offset blank
- 000001D0  E8 00000000 E   *	    call   WriteString
- 000001D5  BA 00000111 R     1	mov edx, offset blank
- 000001DA  E8 00000000 E   *	    call   WriteString
+ 000000C5  60		     1	pushAD
+ 000000C6  BA 0000003C R     1	mov edx, offset characterSheetTitle ;//prints a header
+ 000000CB  E8 00000000 E   *	    call   WriteString
+ 000000D0  BA 00000051 R     1	mov edx, offset xPosTitle ;// prints x position
+ 000000D5  E8 00000000 E   *	    call   WriteString
+ 000000DA  A1 00000004 R     1	mov eax, c1.xPos
+ 000000DF  E8 00000000 E     1	call WriteDec
+ 000000E4  BA 000001C8 R     1	mov edx, offset blank
+ 000000E9  E8 00000000 E   *	    call   WriteString
+ 000000EE  BA 0000005A R     1	mov edx, offset yPosTitle ;// prints y position
+ 000000F3  E8 00000000 E   *	    call   WriteString
+ 000000F8  A1 00000008 R     1	mov eax, c1.yPos
+ 000000FD  E8 00000000 E     1	call WriteDec
+ 00000102  BA 000001C8 R     1	mov edx, offset blank
+ 00000107  E8 00000000 E   *	    call   WriteString
+ 0000010C  BA 00000063 R     1	mov edx, offset nameTitle ;// prints character name
+ 00000111  E8 00000000 E   *	    call   WriteString
+ 00000116  BA 0000000C R     1	mov edx, offset c1.CharacterName
+ 0000011B  E8 00000000 E     1	Call WriteString
+ 00000120  BA 000001C8 R     1	mov edx, offset blank
+ 00000125  E8 00000000 E   *	    call   WriteString
+ 0000012A  BA 0000006C R     1	mov edx, offset levelTitle ;//prints character level
+ 0000012F  E8 00000000 E   *	    call   WriteString
+ 00000134  A1 00000014 R     1	mov eax, c1.level
+ 00000139  E8 00000000 E     1	call WriteDec
+ 0000013E  BA 000001C8 R     1	mov edx, offset blank
+ 00000143  E8 00000000 E   *	    call   WriteString
+ 00000148  BA 00000075 R     1	mov edx, offset primaryAttributesTitle ;//prints primary attributes header
+ 0000014D  E8 00000000 E   *	    call   WriteString
+ 00000152  BA 0000008E R     1	mov edx, offset brawnTitle ;//prints character brawn
+ 00000157  E8 00000000 E   *	    call   WriteString
+ 0000015C  A1 00000018 R     1	mov eax, c1.brawn
+ 00000161  E8 00000000 E     1	call WriteDec
+ 00000166  BA 000001C8 R     1	mov edx, offset blank
+ 0000016B  E8 00000000 E   *	    call   WriteString
+ 00000170  BA 00000097 R     1	mov edx, offset agilityTitle ;//prints character agility
+ 00000175  E8 00000000 E   *	    call   WriteString
+ 0000017A  A1 0000001C R     1	mov eax, c1.agility
+ 0000017F  E8 00000000 E     1	call WriteDec
+ 00000184  BA 000001C8 R     1	mov edx, offset blank
+ 00000189  E8 00000000 E   *	    call   WriteString
+ 0000018E  BA 000000A2 R     1	mov edx, offset mindTitle ;//prints character mind
+ 00000193  E8 00000000 E   *	    call   WriteString
+ 00000198  A1 00000020 R     1	mov eax, c1.mind
+ 0000019D  E8 00000000 E     1	call WriteDec
+ 000001A2  BA 000001C8 R     1	mov edx, offset blank
+ 000001A7  E8 00000000 E   *	    call   WriteString
+ 000001AC  BA 000000AA R     1	mov edx, offset fortuneTitle ;//prints character fortune
+ 000001B1  E8 00000000 E   *	    call   WriteString
+ 000001B6  A1 00000024 R     1	mov eax, c1.fortune
+ 000001BB  E8 00000000 E     1	call WriteDec
+ 000001C0  BA 000001C8 R     1	mov edx, offset blank
+ 000001C5  E8 00000000 E   *	    call   WriteString
+ 000001CA  BA 000000B5 R     1	mov edx, offset combatAttributesTitle ;//prints primary attributes header
+ 000001CF  E8 00000000 E   *	    call   WriteString
+ 000001D4  BA 000000CD R     1	mov edx, offset hpTitle ;//prints character hp
+ 000001D9  E8 00000000 E   *	    call   WriteString
+ 000001DE  A1 0000002C R     1	mov eax, c1.hp
+ 000001E3  E8 00000000 E     1	call WriteDec
+ 000001E8  B8 0000002F	     1	mov eax,'/'
+ 000001ED  E8 00000000 E     1	call WriteChar
+ 000001F2  A1 00000028 R     1	mov eax, c1.hpMax
+ 000001F7  E8 00000000 E     1	call WriteDec
+ 000001FC  BA 000001C8 R     1	mov edx, offset blank
+ 00000201  E8 00000000 E   *	    call   WriteString
+ 00000206  BA 000000D3 R     1	mov edx, offset damageTitle ;//prints character damage
+ 0000020B  E8 00000000 E   *	    call   WriteString
+ 00000210  A1 00000030 R     1	mov eax, c1.damageMin
+ 00000215  E8 00000000 E     1	call WriteDec
+ 0000021A  B8 0000002D	     1	mov eax,'-'
+ 0000021F  E8 00000000 E     1	call WriteChar
+ 00000224  A1 00000034 R     1	mov eax, c1.damageMax
+ 00000229  E8 00000000 E     1	call WriteDec
+ 0000022E  BA 000001C8 R     1	mov edx, offset blank
+ 00000233  E8 00000000 E   *	    call   WriteString
+ 00000238  BA 000000DD R     1	mov edx, offset defenceTitle ;//prints character defence
+ 0000023D  E8 00000000 E   *	    call   WriteString
+ 00000242  A1 00000038 R     1	mov eax, c1.defence
+ 00000247  E8 00000000 E     1	call WriteDec
+ 0000024C  BA 000001C8 R     1	mov edx, offset blank
+ 00000251  E8 00000000 E   *	    call   WriteString
+ 00000256  BA 000001C8 R     1	mov edx, offset blank
+ 0000025B  E8 00000000 E   *	    call   WriteString
+ 00000260  61		     1	popAD
+ 00000261  E9 0000015E				jmp end_switch
+ 00000266				combat:
+						mCombat
+ 00000266  60		     1	pushAD
+ 00000267  60		     2	pushAD
+ 00000268  8B 1D 00000014 R  2	mov ebx, c1.level ;//initialize enemy hp
+ 0000026E  B8 0000000A	     2	mov eax,10
+ 00000273  E8 00000000 E     2	call RandomRange
+ 00000278  40		     2	inc eax
+ 00000279  F7 E3	     2	mul ebx
+ 0000027B  A3 0000011B R     2	mov e1.hpMax,eax
+ 00000280  A3 0000011F R     2	mov e1.hp,eax
+ 00000285  B8 00000005	     2	mov eax, 5 ;//initialize enemy damage
+ 0000028A  E8 00000000 E     2	call RandomRange
+ 0000028F  40		     2	inc eax
+ 00000290  F7 E3	     2	mul ebx
+ 00000292  A3 00000123 R     2	mov e1.damageMin,eax
+ 00000297  8B C8	     2	mov ecx,eax
+ 00000299  B8 00000002	     2	mov eax,2
+ 0000029E  E8 00000000 E     2	call RandomRange
+ 000002A3  40		     2	inc eax
+ 000002A4  03 C1	     2	add eax,ecx
+ 000002A6  A3 00000127 R     2	mov e1.damageMax,eax
+ 000002AB  61		     2	popAD
+ 000002AC  C6 05 0000012F R  1	mov escape        ,0 ;//combat end conditions
+	   00
+ 000002B3  C6 05 00000130 R  1	mov playerDefeated,0
+	   00
+ 000002BA  C6 05 00000131 R  1	mov enemyDefeated ,0
+	   00
+ 000002C1		     1	WHILE_COMBAT??0001:    ;//disgusting triple & while statement
+ 000002C1  80 3D 0000012F R  1	cmp escape,0       ;//while &
+	   00
+ 000002C8  74 05	     1	je AND_COMBAT1??0001
+ 000002CA  E9 000000F2	     1	jmp AND_FALSE_COMBAT??0001
+ 000002CF  80 3D 00000130 R  1	AND_COMBAT1??0001: cmp playerDefeated,0
+	   00
+ 000002D6  74 05	     1	je AND_COMBAT2??0001
+ 000002D8  E9 000000E4	     1	jmp AND_FALSE_COMBAT??0001
+ 000002DD  80 3D 00000131 R  1	AND_COMBAT2??0001: cmp enemyDefeated,0
+	   00
+ 000002E4  74 05	     1	je AND_COMBAT_TRUE??0001
+ 000002E6  E9 000000D6	     1	jmp AND_FALSE_COMBAT??0001
+ 000002EB		     1	AND_COMBAT_TRUE??0001:
+ 000002EB  BA 00000132 R     1		mov edx, offset combatMenuTitle
+ 000002F0  E8 00000000 E   *	    call   WriteString
+ 000002F5  BA 0000013F R     1		mov edx, offset enemyNameTitle ;//prints enemy name
+ 000002FA  E8 00000000 E   *	    call   WriteString
+ 000002FF  BA 00000113 R     1		mov edx, offset e1.enemyName
+ 00000304  E8 00000000 E   *	    call   WriteString
+ 00000309  BA 000001C8 R     1		mov edx, offset blank
+ 0000030E  E8 00000000 E   *	    call   WriteString
+ 00000313  BA 0000014D R     1		mov edx, offset enemyHpTitle ;//prints enemy hp
+ 00000318  E8 00000000 E   *	    call   WriteString
+ 0000031D  A1 0000011F R     1		mov eax, e1.hp
+ 00000322  E8 00000000 E     1		call WriteDec
+ 00000327  B8 0000002F	     1		mov eax,'/'
+ 0000032C  E8 00000000 E     1		call WriteChar
+ 00000331  A1 0000011B R     1		mov eax, e1.hpMax
+ 00000336  E8 00000000 E     1		call WriteDec
+ 0000033B  BA 000001C8 R     1		mov edx, offset blank
+ 00000340  E8 00000000 E   *	    call   WriteString
+ 00000345  BA 00000159 R     1		mov edx, offset enemyDamageTitle ;//prints enemy damage
+ 0000034A  E8 00000000 E   *	    call   WriteString
+ 0000034F  A1 00000123 R     1		mov eax, e1.damageMin
+ 00000354  E8 00000000 E     1		call WriteDec
+ 00000359  B8 0000002D	     1		mov eax,'-'
+ 0000035E  E8 00000000 E     1		call WriteChar
+ 00000363  A1 00000127 R     1		mov eax, e1.damageMax
+ 00000368  E8 00000000 E     1		call WriteDec
+ 0000036D  BA 000001C8 R     1		mov edx, offset blank
+ 00000372  E8 00000000 E   *	    call   WriteString
+ 00000377  BA 00000169 R     1		mov edx, offset combatOptionsMenuTitle
+ 0000037C  E8 00000000 E   *	    call   WriteString
+ 00000381  BA 0000017E R     1		mov edx,offset attackTitle
+ 00000386  E8 00000000 E   *	    call   WriteString
+ 0000038B  BA 0000018A R     1		mov edx,offset fleeTitle
+ 00000390  E8 00000000 E   *	    call   WriteString
+ 00000395  E8 00000000 E     2		call ReadDec
+ 0000039A  8B C8	     2		mov ecx, eax
+ 0000039C  E8 00000000 E     1		call Clrscr
+ 000003A1  83 F9 00	     1			cmp ecx, 0 ;//switch
+ 000003A4  74 07	     1			je attack
+ 000003A6  83 F9 01	     1			cmp ecx, 1
+ 000003A9  74 0A	     1			je flee
+ 000003AB  EB 0F	     1			jmp end_switch??0001
+ 000003AD		     1			attack:
+ 000003AD  FF 0D 0000011F R  1				dec e1.hp
+ 000003B3  EB 07	     1				jmp end_switch??0001
+ 000003B5		     1			flee:
+ 000003B5  C6 05 0000012F R  1				mov escape,1
+	   01
+ 000003BC		     1			end_switch??0001:
+ 000003BC  E9 FFFFFF00	     1			jmp WHILE_COMBAT??0001;//default
+ 000003C1		     1	AND_FALSE_COMBAT??0001:
+ 000003C1  61		     1	popAD
+ 000003C2  EB 00				jmp end_switch
+
+ 000003C4				end_switch:
+ 000003C4  E9 FFFFFCAC			jmp while_main ;//default
 
 
- 000001DF  E9 FFFFFE21			jmp while_main ;//default
-
-
- 000001E4			endwhile_main:
+ 000003C9			endwhile_main:
 					
 					invoke ExitProcess, 0
- 000001E4  6A 00	   *	    push   +000000000h
- 000001E6  E8 00000000 E   *	    call   ExitProcess
+ 000003C9  6A 00	   *	    push   +000000000h
+ 000003CB  E8 00000000 E   *	    call   ExitProcess
 
- 000001EB			main endp
+ 000003D0			main endp
 
 				end main
-Microsoft (R) Macro Assembler Version 14.13.26129.0	    03/27/18 14:57:54
+Microsoft (R) Macro Assembler Version 14.13.26129.0	    03/27/18 21:58:47
 main.asm						     Symbols 2 - 1
 
 
@@ -404,6 +745,9 @@ Macros:
                 N a m e                 Type
 
 _get_input . . . . . . . . . . .	Proc
+mCombat  . . . . . . . . . . . .	Proc
+mInitializeCharacter . . . . . .	Proc
+mInitializeEnemy . . . . . . . .	Proc
 mPrintCharacterSheet . . . . . .	Proc
 
 
@@ -496,11 +840,18 @@ character  . . . . . . . . . . .	 00000038
   agility  . . . . . . . . . . .	 00000018	 DWord
   mind . . . . . . . . . . . . .	 0000001C	 DWord
   fortune  . . . . . . . . . . .	 00000020	 DWord
-  maxHp  . . . . . . . . . . . .	 00000024	 DWord
+  hpMax  . . . . . . . . . . . .	 00000024	 DWord
   hp . . . . . . . . . . . . . .	 00000028	 DWord
   damageMin  . . . . . . . . . .	 0000002C	 DWord
   damageMax  . . . . . . . . . .	 00000030	 DWord
   defence  . . . . . . . . . . .	 00000034	 DWord
+enemy  . . . . . . . . . . . . .	 0000001C
+  enemyName  . . . . . . . . . .	 00000000	 Byte
+  hpMax  . . . . . . . . . . . .	 00000008	 DWord
+  hp . . . . . . . . . . . . . .	 0000000C	 DWord
+  damageMin  . . . . . . . . . .	 00000010	 DWord
+  damageMax  . . . . . . . . . .	 00000014	 DWord
+  defence  . . . . . . . . . . .	 00000018	 DWord
 
 
 Segments and Groups:
@@ -509,8 +860,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000115 DWord	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000001EB DWord	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 000001CC DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000003D0 DWord	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -617,13 +968,20 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000001EB Public STDCALL
-  while_main . . . . . . . . . .	L Near	 00000005 _TEXT	
-  if$L . . . . . . . . . . . . .	L Near	 00000028 _TEXT	
-  then$L . . . . . . . . . . . .	L Near	 0000002F _TEXT	
-  endif$L  . . . . . . . . . . .	L Near	 00000031 _TEXT	
-  character_sheet  . . . . . . .	L Near	 00000045 _TEXT	
-  endwhile_main  . . . . . . . .	L Near	 000001E4 _TEXT	
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000003D0 Public STDCALL
+  while_main . . . . . . . . . .	L Near	 00000075 _TEXT	
+  character_sheet  . . . . . . .	L Near	 000000C5 _TEXT	
+  combat . . . . . . . . . . . .	L Near	 00000266 _TEXT	
+  WHILE_COMBAT??0001 . . . . . .	L Near	 000002C1 _TEXT	
+  AND_COMBAT1??0001  . . . . . .	L Near	 000002CF _TEXT	
+  AND_COMBAT2??0001  . . . . . .	L Near	 000002DD _TEXT	
+  AND_COMBAT_TRUE??0001  . . . .	L Near	 000002EB _TEXT	
+  attack . . . . . . . . . . . .	L Near	 000003AD _TEXT	
+  flee . . . . . . . . . . . . .	L Near	 000003B5 _TEXT	
+  end_switch??0001 . . . . . . .	L Near	 000003BC _TEXT	
+  AND_FALSE_COMBAT??0001 . . . .	L Near	 000003C1 _TEXT	
+  end_switch . . . . . . . . . .	L Near	 000003C4 _TEXT	
+  endwhile_main  . . . . . . . .	L Near	 000003C9 _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -844,18 +1202,30 @@ WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
 agilityTitle . . . . . . . . . .	Byte	 00000097 _DATA	
+attackTitle  . . . . . . . . . .	Byte	 0000017E _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
-blank  . . . . . . . . . . . . .	Byte	 00000111 _DATA	
+blank  . . . . . . . . . . . . .	Byte	 000001C8 _DATA	
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brawnTitle . . . . . . . . . . .	Byte	 0000008E _DATA	
 brown  . . . . . . . . . . . . .	Number	 00000006h   
 characterSheetTitle  . . . . . .	Byte	 0000003C _DATA	
-characterSheet . . . . . . . . .	Byte	 000000FD _DATA	
+characterSheet . . . . . . . . .	Byte	 000001A9 _DATA	
 combatAttributesTitle  . . . . .	Byte	 000000B5 _DATA	
+combatMenuTitle  . . . . . . . .	Byte	 00000132 _DATA	
+combatOptionsMenuTitle . . . . .	Byte	 00000169 _DATA	
+combatTitle  . . . . . . . . . .	Byte	 000001BD _DATA	
+command1 . . . . . . . . . . . .	Byte	 000000E8 _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
 damageTitle  . . . . . . . . . .	Byte	 000000D3 _DATA	
 defenceTitle . . . . . . . . . .	Byte	 000000DD _DATA	
+e1 . . . . . . . . . . . . . . .	enemy	 00000113 _DATA	
+enemyDamageTitle . . . . . . . .	Byte	 00000159 _DATA	
+enemyDefeated  . . . . . . . . .	Byte	 00000131 _DATA	
+enemyHPTitle . . . . . . . . . .	Byte	 0000014D _DATA	
+enemyNameTitle . . . . . . . . .	Byte	 0000013F _DATA	
+escape . . . . . . . . . . . . .	Byte	 0000012F _DATA	
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
+fleeTitle  . . . . . . . . . . .	Byte	 0000018A _DATA	
 fortuneTitle . . . . . . . . . .	Byte	 000000AA _DATA	
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
@@ -869,11 +1239,12 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
-mainMenu . . . . . . . . . . . .	Byte	 000000E8 _DATA	
+mainMenuTitle  . . . . . . . . .	Byte	 00000194 _DATA	
 mindTitle  . . . . . . . . . . .	Byte	 000000A2 _DATA	
 nameTitle  . . . . . . . . . . .	Byte	 00000063 _DATA	
+playerDefeated . . . . . . . . .	Byte	 00000130 _DATA	
 primaryAttributesTitle . . . . .	Byte	 00000075 _DATA	
-quit . . . . . . . . . . . . . .	Byte	 000000F4 _DATA	
+quitTitle  . . . . . . . . . . .	Byte	 000001A0 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA

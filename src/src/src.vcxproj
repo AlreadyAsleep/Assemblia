@@ -16,6 +16,8 @@
   <ItemGroup>
     <None Include="character.inc" />
     <None Include="characterHeader.inc" />
+    <None Include="combat.inc" />
+    <None Include="enemy.inc" />
     <None Include="enemyHeader.inc" />
     <None Include="get_input.inc" />
     <None Include="input_data.inc" />

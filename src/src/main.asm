@@ -8,6 +8,7 @@
 include irvine32.inc
 
 include characterHeader.inc
+include enemyHeader.inc
 
 .data
 
@@ -15,14 +16,19 @@ include input_data.inc
 include get_input.inc
 
 include character.inc
+include enemy.inc
+include combat.inc
 
 WriteDec proto
 ReadDec proto
 ExitProcess proto, dwExitCode:dword
 
-mainMenu       byte "Main Menu"        , 13, 10, 0
-quit           byte "0 Quit"           , 13, 10, 0
-characterSheet byte "1 Character Sheet", 13, 10, 0
+mainMenuTitle       byte "Main Menu"        , 13, 10, 0
+quitTitle           byte "0 Quit"           , 13, 10, 0
+characterSheet      byte "1 Character Sheet", 13, 10, 0
+combatTitle         byte "2 Combat"         , 13, 10, 0
+
+
 
 blank byte " ", 13, 10, 0
 
@@ -33,16 +39,20 @@ blank byte " ", 13, 10, 0
 
 main proc
 
+mInitializeCharacter
+
 mov ecx, 1
 while_main:						;//while( ecx != 0 )
 
 	
-	mov edx, offset mainMenu ;//Main Menu Display Start
+	mov edx, offset mainMenuTitle ;//Main Menu Display Start
 	call WriteString
-	mov edx, offset quit 
+	mov edx, offset quitTitle 
 	call WriteString
 	mov edx, offset characterSheet
-	call WriteString         ;//Main Menu Display End
+	call WriteString    
+	mov edx, offset combatTitle
+	call WriteString     
 
 	_get_input
 	
@@ -52,11 +62,18 @@ while_main:						;//while( ecx != 0 )
 	je endwhile_main
 	cmp ecx, 1
 	je character_sheet
+	cmp ecx, 2
+	je combat
+	jmp end_switch
 
 	character_sheet:
 		mPrintCharacterSheet
+		jmp end_switch
+	combat:
+		mCombat
+		jmp end_switch
 
-
+	end_switch:
 	jmp while_main ;//default
 
 

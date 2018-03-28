@@ -18,8 +18,10 @@ hpTitle             byte "HP:"                      , 0 , 10, 0
 damageTitle         byte "Damage:"                  , 0 , 10, 0
 defenceTitle        byte "Defence:"                 , 0 , 10, 0
 
+command1 byte "Enter character name. Up to 8 Characters"  , 13, 10, 0
 
 mPrintCharacterSheet MACRO ;//prints character sheet 
+pushAD
 
 mov edx, offset characterSheetTitle ;//prints a header
 invoke WriteString
@@ -92,7 +94,7 @@ mov eax, c1.hp
 call WriteDec
 mov eax,'/'
 call WriteChar
-mov eax, c1.maxHp
+mov eax, c1.hpMax
 call WriteDec
 mov edx, offset blank
 invoke WriteString
@@ -119,4 +121,35 @@ invoke WriteString
 mov edx, offset blank
 invoke WriteString
 
+popAD
+endm
+
+mInitializeCharacter MACRO ;//prints character sheet
+pushAD
+
+mov edx, offset command1 ;//Player inputs character name
+invoke WriteString
+mov edx, offset c1.characterName
+mov ecx, SIZEOF c1.characterName
+call ReadString
+
+mov c1.brawn  , 5 ;// sets primary attributes
+mov c1.agility, 5
+mov c1.mind   , 5
+mov c1.fortune, 5
+
+mov eax, c1.brawn ;// maxHP & hp initiliaze = brawn*2
+sal eax,1 ;// multiply by 2
+mov c1.hpMax,eax
+mov c1.hp,eax
+
+mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+sar eax,1;//divide by 2
+mov c1.damageMin,eax
+mov ebx,c1.agility
+sar ebx,2;//divide by 4
+add eax,ebx
+mov c1.damageMax,eax
+
+popAD
 endm

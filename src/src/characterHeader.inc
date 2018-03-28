@@ -11,7 +11,7 @@ agility        DWORD 1
 mind           DWORD 1
 fortune        DWORD 1
 
-maxHp          DWORD 0
+hpMax          DWORD 0
 hp             DWORD 0
 damageMin      DWORD 0
 damageMax      DWORD 0
