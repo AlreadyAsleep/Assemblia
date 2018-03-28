@@ -18,6 +18,7 @@ include get_input.inc
 include character.inc
 include enemy.inc
 include combat.inc
+include levelUp.inc
 
 WriteDec proto
 ReadDec proto
@@ -27,6 +28,8 @@ mainMenuTitle       byte "Main Menu"        , 13, 10, 0
 quitTitle           byte "0 Quit"           , 13, 10, 0
 characterSheet      byte "1 Character Sheet", 13, 10, 0
 combatTitle         byte "2 Combat"         , 13, 10, 0
+levelUpTitle        byte "3 Level Up:"      , 13, 10, 0
+
 
 
 
@@ -39,6 +42,7 @@ blank byte " ", 13, 10, 0
 
 main proc
 
+mGetCharacterName
 mInitializeCharacter
 
 mov ecx, 1
@@ -53,6 +57,8 @@ while_main:						;//while( ecx != 0 )
 	call WriteString    
 	mov edx, offset combatTitle
 	call WriteString     
+	mov edx, offset levelUpTitle
+	call WriteString
 
 	_get_input
 	
@@ -64,6 +70,8 @@ while_main:						;//while( ecx != 0 )
 	je character_sheet
 	cmp ecx, 2
 	je combat
+	cmp ecx, 3
+	je levelUp
 	jmp end_switch
 
 	character_sheet:
@@ -71,6 +79,9 @@ while_main:						;//while( ecx != 0 )
 		jmp end_switch
 	combat:
 		mCombat
+		jmp end_switch
+	levelUp:
+		mLevelUp
 		jmp end_switch
 
 	end_switch:

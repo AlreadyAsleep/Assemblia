@@ -21,6 +21,7 @@
     <None Include="enemyHeader.inc" />
     <None Include="get_input.inc" />
     <None Include="input_data.inc" />
+    <None Include="levelUp.inc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{30111174-79c6-4488-be72-6fb074774414}</ProjectGuid>

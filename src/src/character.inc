@@ -1,11 +1,13 @@
 
-C1 character {0,0,"Name",1,1,1,1,1,5,5,1,3,0}
+C1 character {0,0,"Name",1,0,100,4,4,4,4,5,5,1,3,}
 
 characterSheetTitle byte "--CharacterSheet--"       , 13, 10, 0
 xPosTitle           byte "xPos: "                   , 0 , 10, 0
 yPosTitle           byte "yPos: "                   , 0 , 10, 0
 nameTitle           byte "Name: "                   , 0 , 10, 0
 levelTitle          byte "Level:"                   , 0 , 10, 0
+expTitle            byte "Exp:"                     , 0 , 10, 0
+
 
 primaryAttributesTitle byte "--Primary Attributes--", 13, 10, 0
 brawnTitle          byte "Brawn:"                   , 0 , 10, 0
@@ -50,6 +52,17 @@ invoke WriteString
 mov edx, offset levelTitle ;//prints character level
 invoke WriteString
 mov eax, c1.level
+call WriteDec
+mov edx, offset blank
+invoke WriteString
+
+mov edx, offset expTitle ;//prints character exp
+invoke WriteString
+mov eax, c1.exp
+call WriteDec
+mov eax,'/'
+call WriteChar
+mov eax, c1.expToNext
 call WriteDec
 mov edx, offset blank
 invoke WriteString
@@ -124,7 +137,7 @@ invoke WriteString
 popAD
 endm
 
-mInitializeCharacter MACRO ;//prints character sheet
+mGetCharacterName MACRO
 pushAD
 
 mov edx, offset command1 ;//Player inputs character name
@@ -133,10 +146,18 @@ mov edx, offset c1.characterName
 mov ecx, SIZEOF c1.characterName
 call ReadString
 
-mov c1.brawn  , 5 ;// sets primary attributes
-mov c1.agility, 5
-mov c1.mind   , 5
-mov c1.fortune, 5
+popAD
+endm
+
+mInitializeCharacter MACRO ;//prints character sheet
+pushAD
+
+
+
+inc c1.brawn   ;// sets primary attributes
+inc c1.agility
+inc c1.mind   
+inc c1.fortune
 
 mov eax, c1.brawn ;// maxHP & hp initiliaze = brawn*2
 sal eax,1 ;// multiply by 2
@@ -151,5 +172,7 @@ sar ebx,2;//divide by 4
 add eax,ebx
 mov c1.damageMax,eax
 
+
 popAD
 endm
+

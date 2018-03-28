@@ -8,5 +8,6 @@ hp             DWORD 0
 damageMin      DWORD 0
 damageMax      DWORD 0
 defence        DWORD 0
+expReward      DWORD 0
 
 enemy ends
