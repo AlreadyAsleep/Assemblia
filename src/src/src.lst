@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.13.26129.0	    03/28/18 19:55:19
+Microsoft (R) Macro Assembler Version 14.13.26129.0	    03/28/18 20:48:20
 main.asm						     Page 1 - 1
 
 
@@ -39,20 +39,20 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000008  00000008 [	      C characterName  db    8 dup (?)
 	    00
 	   ]
- 4800000B  00000000	      C level          DWORD 0
- 4800000F  00000000	      C exp            DWORD 0
- 48000013  00000000	      C expToNext      DWORD 0
+-17FFFFF5  00000000	      C level          DWORD 0
+-17FFFFF1  00000000	      C exp            DWORD 0
+-17FFFFED  00000000	      C expToNext      DWORD 0
 			      C 
- 48000017  00000001	      C brawn          DWORD 1 ;//Primary Attributes
- 4800001B  00000001	      C agility        DWORD 1
- 4800001F  00000001	      C mind           DWORD 1
- 48000023  00000001	      C fortune        DWORD 1
+-17FFFFE9  00000001	      C brawn          DWORD 1 ;//Primary Attributes
+-17FFFFE5  00000001	      C agility        DWORD 1
+-17FFFFE1  00000001	      C mind           DWORD 1
+-17FFFFDD  00000001	      C fortune        DWORD 1
 			      C 
- 48000027  00000000	      C hpMax          DWORD 0
- 4800002B  00000000	      C hp             DWORD 0
- 4800002F  00000000	      C damageMin      DWORD 0
- 48000033  00000000	      C damageMax      DWORD 0
- 48000037  00000000	      C defence        DWORD 0
+-17FFFFD9  00000000	      C hpMax          DWORD 0
+-17FFFFD5  00000000	      C hp             DWORD 0
+-17FFFFD1  00000000	      C damageMin      DWORD 0
+-17FFFFCD  00000000	      C damageMax      DWORD 0
+-17FFFFC9  00000000	      C defence        DWORD 0
 			      C 
 			      C 
 			      C 
@@ -342,14 +342,14 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C pushAD
 			      C 
 			      C mov ebx, c1.level ;//initialize enemy hp
-			      C mov eax,5
+			      C mov eax,3
 			      C call RandomRange
 			      C inc eax
 			      C mul ebx
 			      C mov e1.hpMax,eax
 			      C mov e1.hp,eax
 			      C 
-			      C mov eax, 3 ;//initialize enemy damage
+			      C mov eax, 2 ;//initialize enemy damage
 			      C call RandomRange
 			      C inc eax
 			      C add eax,ebx
@@ -530,7 +530,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C 			jmp end_switch&L
 			      C 			enemy_dead:
 			      C 				mov enemyDefeated,1
-			      C 				jmp end_switch&L
+			      C 				jmp AND_FALSE_COMBAT&L
 			      C 		flee:
 			      C 			mov escape,1
 			      C 			
@@ -821,13 +821,13 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  0000029D  60		     1	pushAD
  0000029E  60		     2	pushAD
  0000029F  8B 1D 00000014 R  2	mov ebx, c1.level ;//initialize enemy hp
- 000002A5  B8 00000005	     2	mov eax,5
+ 000002A5  B8 00000003	     2	mov eax,3
  000002AA  E8 00000000 E     2	call RandomRange
  000002AF  40		     2	inc eax
  000002B0  F7 E3	     2	mul ebx
  000002B2  A3 0000012A R     2	mov e1.hpMax,eax
  000002B7  A3 0000012E R     2	mov e1.hp,eax
- 000002BC  B8 00000003	     2	mov eax, 3 ;//initialize enemy damage
+ 000002BC  B8 00000002	     2	mov eax, 2 ;//initialize enemy damage
  000002C1  E8 00000000 E     2	call RandomRange
  000002C6  40		     2	inc eax
  000002C7  03 C3	     2	add eax,ebx
@@ -944,7 +944,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000493		     1				enemy_dead:
  00000493  C6 05 00000144 R  1					mov enemyDefeated,1
 	   01
- 0000049A  EB 07	     1					jmp end_switch??0001
+ 0000049A  EB 39	     1					jmp AND_FALSE_COMBAT??0001
  0000049C		     1			flee:
  0000049C  C6 05 00000142 R  1				mov escape,1
 	   01
@@ -1043,7 +1043,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000005C2			main endp
 
 				end main
-Microsoft (R) Macro Assembler Version 14.13.26129.0	    03/28/18 19:55:19
+Microsoft (R) Macro Assembler Version 14.13.26129.0	    03/28/18 20:48:20
 main.asm						     Symbols 2 - 1
 
 

@@ -5,14 +5,14 @@ mInitializeEnemy MACRO
 pushAD
 
 mov ebx, c1.level ;//initialize enemy hp
-mov eax,5
+mov eax,3
 call RandomRange
 inc eax
 mul ebx
 mov e1.hpMax,eax
 mov e1.hp,eax
 
-mov eax, 3 ;//initialize enemy damage
+mov eax, 2 ;//initialize enemy damage
 call RandomRange
 inc eax
 add eax,ebx

@@ -133,7 +133,7 @@ invoke WriteString
 			jmp end_switch&L
 			enemy_dead:
 				mov enemyDefeated,1
-				jmp end_switch&L
+				jmp AND_FALSE_COMBAT&L
 		flee:
 			mov escape,1
 			
