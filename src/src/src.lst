@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.13.26129.0	    03/28/18 20:48:20
+Microsoft (R) Macro Assembler Version 14.13.26129.0	    04/01/18 19:09:59
 main.asm						     Page 1 - 1
 
 
@@ -32,30 +32,34 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 
 				include characterHeader.inc
 			      C ;// structure of character object
- 00000040		      C character struct 
+ 0000004E		      C character struct 
 			      C 
  00000000  00000000	      C xPos           DWORD 0
  00000004  00000000	      C yPos           DWORD 0
- 00000008  00000008 [	      C characterName  db    8 dup (?)
+ 00000008  00000006 [	      C characterName  db    6 dup (?)
 	    00
 	   ]
--17FFFFF5  00000000	      C level          DWORD 0
--17FFFFF1  00000000	      C exp            DWORD 0
--17FFFFED  00000000	      C expToNext      DWORD 0
+-4FFFFFF5  00000000	      C level          DWORD 0
+-4FFFFFF1  00000000	      C exp            DWORD 0
+-4FFFFFED  00000000	      C expToNext      DWORD 0
 			      C 
--17FFFFE9  00000001	      C brawn          DWORD 1 ;//Primary Attributes
--17FFFFE5  00000001	      C agility        DWORD 1
--17FFFFE1  00000001	      C mind           DWORD 1
--17FFFFDD  00000001	      C fortune        DWORD 1
+-4FFFFFE9  00000001	      C brawn          DWORD 1 ;//Primary Attributes
+-4FFFFFE5  00000001	      C agility        DWORD 1
+-4FFFFFE1  00000001	      C mind           DWORD 1
+-4FFFFFDD  00000001	      C fortune        DWORD 1
 			      C 
--17FFFFD9  00000000	      C hpMax          DWORD 0
--17FFFFD5  00000000	      C hp             DWORD 0
--17FFFFD1  00000000	      C damageMin      DWORD 0
--17FFFFCD  00000000	      C damageMax      DWORD 0
--17FFFFC9  00000000	      C defence        DWORD 0
+-4FFFFFD9  00000000	      C hpMax          DWORD 0
+-4FFFFFD5  00000000	      C hp             DWORD 0
+-4FFFFFD1  00000000	      C damageMin      DWORD 0
+-4FFFFFCD  00000000	      C damageMax      DWORD 0
+			      C 
+-4FFFFFC9  00000000	      C weaponCode      DWORD 0
+-4FFFFFC5  00000000	      C weaponBuyValue  DWORD 0
+-4FFFFFC1  00000000	      C weaponSellValue DWORD 0
+-4FFFFFBD  00000000	      C weaponDamage    DWORD 0
 			      C 
 			      C 
-			      C 
+-4FFFFFB9  00000000	      C defence        DWORD 0
 			      C 
 			      C character ends
 			      C 
@@ -76,11 +80,87 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C 
 			      C enemy ends
 			      C 
+				include itemHeader.inc
+			      C ;// structure of item object
+			      C 
+ 0000001C		      C item struc
+			      C 
+ 00000000  00000000	      C itemCode  DWORD NULL
+ 00000004  00000000	      C buyValue  DWORD ?
+ 00000008  00000000	      C sellValue DWORD ?
+ 0000000C  00000000	      C prev      DWORD NULL
+ 00000010  00000000	      C next      DWORD NULL
+			      C 
+ 00000014  00000000	      C combatValue DWORD NULL ;// attack for weapons defense for armor
+ 00000018  00000000	      C itemType  DWORD NULL
+			      C 
+			      C item ends
+			      C 
 
  00000000			.data
-
+				include getItemName.inc
+			      C ;// gets items name based off code and prints it
+ 00000000 72 6F 70 65 00      C itemName1 byte "rope" , 0 , 10, 0
+	   0A 00
+ 00000007 67 75 6E 00 0A      C itemName2 byte "gun"  , 0 , 10, 0
+	   00
+ 0000000D 73 77 6F 72 64      C itemName3 byte "sword", 0 , 10, 0
+	   00 0A 00
+ 00000015 61 78 65 00 0A      C itemName4 byte "axe"  , 0 , 10, 0
+	   00
+			      C 
+ 0000001B 49 74 65 6D 20      C defaultName   byte "Item not found", 0 , 10, 0
+	   6E 6F 74 20 66
+	   6F 75 6E 64 00
+	   0A 00
+			      C 
+			      C mGetItemName MACRO
+			      C Local L
+			      C 
+			      C 
+			      C ;//item code stored in eax
+			      C 
+			      C cmp eax,1
+			      C je item0&L
+			      C cmp eax,2
+			      C je item1&L
+			      C cmp eax,3
+			      C je item2&L
+			      C cmp eax,4
+			      C je item3&L
+			      C 
+			      C jmp default&L
+			      C 
+			      C 
+			      C 
+			      C item0&L:
+			      C 	mov edx, offset itemName1
+			      C 
+			      C 	jmp print&L
+			      C item1&L:
+			      C 	mov edx, offset itemName2
+			      C 
+			      C 	jmp print&L
+			      C item2&L:
+			      C 	mov edx, offset itemName3
+			      C 	
+			      C 	jmp print&L
+			      C item3&L:
+			      C 	mov edx, offset itemName4
+			      C 	
+			      C 	jmp print&L
+			      C 
+			      C default&L:
+			      C 	mov edx, offset defaultName
+			      C 
+			      C print&L:
+			      C 	invoke WriteString
+			      C 
+			      C 
+			      C endm
+			      C 
 				include input_data.inc
- 00000000 00000000	      C input_state dword ?
+ 0000002C 00000000	      C input_state dword ?
 			      C 
 				include get_input.inc
 			      C _get_input macro
@@ -96,10 +176,10 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 
 				include character.inc
 			      C 
- 00000004 00000000	      C C1 character {0,0,"Name",1,0,100,4,4,4,4,5,5,1,3,}
+ 00000030 00000000	      C C1 character {0,0,"Name",1,0,100,4,4,4,4,5,5,1,3,}
 	   00000000 4E 61
 	   6D 65
-	   00000004 [
+	   00000002 [
 	    00
 	   ] 00000001
 	   00000000
@@ -113,54 +193,60 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 	   00000001
 	   00000003
 	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
 			      C 
- 00000044 2D 2D 43 68 61      C characterSheetTitle byte "--CharacterSheet--"       , 13, 10, 0
+ 0000007E 2D 2D 43 68 61      C characterSheetTitle byte "--CharacterSheet--"       , 13, 10, 0
 	   72 61 63 74 65
 	   72 53 68 65 65
 	   74 2D 2D 0D 0A
 	   00
- 00000059 78 50 6F 73 3A      C xPosTitle           byte "xPos: "                   , 0 , 10, 0
+ 00000093 78 50 6F 73 3A      C xPosTitle           byte "xPos: "                   , 0 , 10, 0
 	   20 00 0A 00
- 00000062 79 50 6F 73 3A      C yPosTitle           byte "yPos: "                   , 0 , 10, 0
+ 0000009C 79 50 6F 73 3A      C yPosTitle           byte "yPos: "                   , 0 , 10, 0
 	   20 00 0A 00
- 0000006B 4E 61 6D 65 3A      C nameTitle           byte "Name: "                   , 0 , 10, 0
+ 000000A5 4E 61 6D 65 3A      C nameTitle           byte "Name: "                   , 0 , 10, 0
 	   20 00 0A 00
- 00000074 4C 65 76 65 6C      C levelTitle          byte "Level:"                   , 0 , 10, 0
+ 000000AE 4C 65 76 65 6C      C levelTitle          byte "Level:"                   , 0 , 10, 0
 	   3A 00 0A 00
- 0000007D 45 78 70 3A 00      C expTitle            byte "Exp:"                     , 0 , 10, 0
+ 000000B7 45 78 70 3A 00      C expTitle            byte "Exp:"                     , 0 , 10, 0
 	   0A 00
 			      C 
 			      C 
- 00000084 2D 2D 50 72 69      C primaryAttributesTitle byte "--Primary Attributes--", 13, 10, 0
+ 000000BE 2D 2D 50 72 69      C primaryAttributesTitle byte "--Primary Attributes--", 13, 10, 0
 	   6D 61 72 79 20
 	   41 74 74 72 69
 	   62 75 74 65 73
 	   2D 2D 0D 0A 00
- 0000009D 42 72 61 77 6E      C brawnTitle          byte "Brawn:"                   , 0 , 10, 0
+ 000000D7 42 72 61 77 6E      C brawnTitle          byte "Brawn:"                   , 0 , 10, 0
 	   3A 00 0A 00
- 000000A6 41 67 69 6C 69      C agilityTitle        byte "Agility:"                 , 0 , 10, 0
+ 000000E0 41 67 69 6C 69      C agilityTitle        byte "Agility:"                 , 0 , 10, 0
 	   74 79 3A 00 0A
 	   00
- 000000B1 4D 69 6E 64 3A      C mindTitle           byte "Mind:"                    , 0 , 10, 0
+ 000000EB 4D 69 6E 64 3A      C mindTitle           byte "Mind:"                    , 0 , 10, 0
 	   00 0A 00
- 000000B9 46 6F 72 74 75      C fortuneTitle        byte "Fortune:"                 , 0 , 10, 0
+ 000000F3 46 6F 72 74 75      C fortuneTitle        byte "Fortune:"                 , 0 , 10, 0
 	   6E 65 3A 00 0A
 	   00
 			      C 
- 000000C4 2D 2D 43 6F 6D      C combatAttributesTitle byte "--Combat Attributes--"  , 13, 10, 0
+ 000000FE 2D 2D 43 6F 6D      C combatAttributesTitle byte "--Combat Attributes--"  , 13, 10, 0
 	   62 61 74 20 41
 	   74 74 72 69 62
 	   75 74 65 73 2D
 	   2D 0D 0A 00
- 000000DC 48 50 3A 00 0A      C hpTitle             byte "HP:"                      , 0 , 10, 0
+ 00000116 48 50 3A 00 0A      C hpTitle             byte "HP:"                      , 0 , 10, 0
 	   00
- 000000E2 44 61 6D 61 67      C damageTitle         byte "Damage:"                  , 0 , 10, 0
+ 0000011C 44 61 6D 61 67      C damageTitle         byte "Damage:"                  , 0 , 10, 0
 	   65 3A 00 0A 00
- 000000EC 44 65 66 65 6E      C defenceTitle        byte "Defence:"                 , 0 , 10, 0
+ 00000126 44 65 66 65 6E      C defenceTitle        byte "Defence:"                 , 0 , 10, 0
 	   63 65 3A 00 0A
 	   00
+ 00000131 57 65 61 70 6F      C equippedWeaponTitle byte "Weapon:"                  , 0 , 10, 0
+	   6E 3A 00 0A 00
 			      C 
- 000000F7 45 6E 74 65 72      C command1 byte "Enter character name. Up to 8 Characters"  , 13, 10, 0
+ 0000013B 45 6E 74 65 72      C command1 byte "Enter character name. Up to 8 Characters"  , 13, 10, 0
 	   20 63 68 61 72
 	   61 63 74 65 72
 	   20 6E 61 6D 65
@@ -278,6 +364,10 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C mov edx, offset blank
 			      C invoke WriteString
 			      C 
+			      C mov edx, offset equippedWeaponTitle
+			      C invoke WriteString
+			      C mov eax, c1.weaponCode
+			      C mGetItemName
 			      C 
 			      C mov edx, offset blank
 			      C invoke WriteString
@@ -285,6 +375,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C popAD
 			      C endm
 			      C 
+			      C ;//gets character name
 			      C mGetCharacterName MACRO
 			      C pushAD
 			      C 
@@ -297,6 +388,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C popAD
 			      C endm
 			      C 
+			      C ;//initializes character
 			      C mInitializeCharacter MACRO ;//prints character sheet
 			      C pushAD
 			      C 
@@ -307,26 +399,27 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C inc c1.mind   
 			      C inc c1.fortune
 			      C 
-			      C mov eax, c1.brawn ;// maxHP & hp initiliaze = brawn*2
+			      C mov eax, c1.brawn ;// maxHP & hp initialize = brawn*2
 			      C sal eax,1 ;// multiply by 2
 			      C mov c1.hpMax,eax
 			      C mov c1.hp,eax
 			      C 
 			      C mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
 			      C sar eax,1;//divide by 2
+			      C add eax,c1.weaponDamage
 			      C mov c1.damageMin,eax
 			      C mov ebx,c1.agility
 			      C sar ebx,2;//divide by 4
 			      C add eax,ebx
 			      C mov c1.damageMax,eax
 			      C 
-			      C 
 			      C popAD
 			      C endm
 			      C 
 			      C 
+			      C 
 				include enemy.inc
- 00000122 42 6F 67 6C 69      C e1 enemy{"Boglin",1,1,1,1}
+ 00000166 42 6F 67 6C 69      C e1 enemy{"Boglin",1,1,1,1,1,1}
 	   6E
 	   00000002 [
 	    00
@@ -334,10 +427,10 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 	   00000001
 	   00000001
 	   00000001
-	   00000000
-	   00000000
+	   00000001
+	   00000001
 			      C 
-			      C 
+			      C ;//initialize emeny
 			      C mInitializeEnemy MACRO
 			      C pushAD
 			      C 
@@ -370,44 +463,44 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C endm
 			      C 
 				include combat.inc
- 00000142 00		      C escape         byte 0
- 00000143 00		      C playerDefeated byte 0
- 00000144 00		      C enemyDefeated  byte 0
+ 00000186 00		      C escape         byte 0
+ 00000187 00		      C playerDefeated byte 0
+ 00000188 00		      C enemyDefeated  byte 0
 			      C 
- 00000145 2D 2D 43 4F 4D      C combatMenuTitle  byte "--COMBAT--"   , 13, 10, 0
+ 00000189 2D 2D 43 4F 4D      C combatMenuTitle  byte "--COMBAT--"   , 13, 10, 0
 	   42 41 54 2D 2D
 	   0D 0A 00
- 00000152 45 6E 65 6D 79      C enemyNameTitle   byte "Enemy Name:"  , 0 , 10, 0
+ 00000196 45 6E 65 6D 79      C enemyNameTitle   byte "Enemy Name:"  , 0 , 10, 0
 	   20 4E 61 6D 65
 	   3A 00 0A 00
- 00000160 45 6E 65 6D 79      C enemyHPTitle     byte "Enemy HP:"    , 0 , 10, 0
+ 000001A4 45 6E 65 6D 79      C enemyHPTitle     byte "Enemy HP:"    , 0 , 10, 0
 	   20 48 50 3A 00
 	   0A 00
- 0000016C 45 6E 65 6D 79      C enemyDamageTitle byte "Enemy Damage:", 0 , 10, 0
+ 000001B0 45 6E 65 6D 79      C enemyDamageTitle byte "Enemy Damage:", 0 , 10, 0
 	   20 44 61 6D 61
 	   67 65 3A 00 0A
 	   00
 			      C 
 			      C 
- 0000017C 2D 2D 43 6F 6D      C combatOptionsMenuTitle byte "--Combat Options--", 13, 10, 0
+ 000001C0 2D 2D 43 6F 6D      C combatOptionsMenuTitle byte "--Combat Options--", 13, 10, 0
 	   62 61 74 20 4F
 	   70 74 69 6F 6E
 	   73 2D 2D 0D 0A
 	   00
- 00000191 30 3A 20 41 74      C attackTitle            byte "0: Attack"         , 13, 10, 0
+ 000001D5 30 3A 20 41 74      C attackTitle            byte "0: Attack"         , 13, 10, 0
 	   74 61 63 6B 0D
 	   0A 00
- 0000019D 31 3A 20 46 6C      C fleeTitle              byte "1: Flee"           , 13, 10, 0
+ 000001E1 31 3A 20 46 6C      C fleeTitle              byte "1: Flee"           , 13, 10, 0
 	   65 65 0D 0A 00
 			      C 
- 000001A7 59 6F 75 20 45      C escapeEvent          byte "You Escaped!"          , 13, 10, 0
+ 000001EB 59 6F 75 20 45      C escapeEvent          byte "You Escaped!"          , 13, 10, 0
 	   73 63 61 70 65
 	   64 21 0D 0A 00
- 000001B6 59 6F 75 20 77      C playerDefeatedEvent  byte "You were defeated"     , 13, 10, 0
+ 000001FA 59 6F 75 20 77      C playerDefeatedEvent  byte "You were defeated"     , 13, 10, 0
 	   65 72 65 20 64
 	   65 66 65 61 74
 	   65 64 0D 0A 00
- 000001CA 59 6F 75 20 44      C enemyDefeatedEvent   byte "You Defeated the Enemy", 13, 10, 0
+ 0000020E 59 6F 75 20 44      C enemyDefeatedEvent   byte "You Defeated the Enemy", 13, 10, 0
 	   65 66 65 61 74
 	   65 64 20 74 68
 	   65 20 45 6E 65
@@ -574,6 +667,8 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C 
 			      C mov edx,offset enemyDefeatedEvent;//will print if enemy was defeated
 			      C invoke WriteString
+			      C mov eax, offset t1
+			      C mAddItem
 			      C 
 			      C mov eax,e1.expReward ;//rewarding player exp
 			      C add c1.exp,eax
@@ -583,6 +678,8 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C mov eax,2000
 			      C call Delay
 			      C 
+			      C 
+			      C 
 			      C call Clrscr
 			      C 
 			      C popAD
@@ -590,7 +687,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C 
 				include levelUp.inc
 			      C ;//level up class
- 000001E3 4E 6F 74 20 65      C notEnoughResponse byte "Not enough experience", 13, 10, 0
+ 00000227 4E 6F 74 20 65      C notEnoughResponse byte "Not enough experience", 13, 10, 0
 	   6E 6F 75 67 68
 	   20 65 78 70 65
 	   72 69 65 6E 63
@@ -628,31 +725,427 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C popAD
 			      C endm
 			      C 
+				include inventory.inc
+			      C ;//inventory using linked list
+			      C ;//linked list of 10 items 
+			      C 
+ 0000023F 00000000	      C i10 item {0,0,0,i9,null}
+	   00000000
+	   00000000
+	   0000025B R
+	   00000000
+	   00000000
+	   00000000
+ 0000025B 00000000	      C i9 item {0,0,0,i8,i10}
+	   00000000
+	   00000000
+	   00000277 R
+	   0000023F R
+	   00000000
+	   00000000
+ 00000277 00000000	      C i8 item {0,0,0,i7,i9}
+	   00000000
+	   00000000
+	   00000293 R
+	   0000025B R
+	   00000000
+	   00000000
+ 00000293 00000000	      C i7 item {0,0,0,i6,i8}
+	   00000000
+	   00000000
+	   000002AF R
+	   00000277 R
+	   00000000
+	   00000000
+ 000002AF 00000000	      C i6 item {0,0,0,i5,i7}
+	   00000000
+	   00000000
+	   000002CB R
+	   00000293 R
+	   00000000
+	   00000000
+ 000002CB 00000000	      C i5 item {0,0,0,i4,i6}
+	   00000000
+	   00000000
+	   000002E7 R
+	   000002AF R
+	   00000000
+	   00000000
+ 000002E7 00000000	      C i4 item {0,0,0,i3,i5}
+	   00000000
+	   00000000
+	   00000303 R
+	   000002CB R
+	   00000000
+	   00000000
+ 00000303 00000001	      C i3 item {1,1,2,i2,i4,5,"W"}
+	   00000001
+	   00000002
+	   0000031F R
+	   000002E7 R
+	   00000005
+	   00000057
+ 0000031F 00000002	      C i2 item {2,1,2,i1,i3,10,"W"}
+	   00000001
+	   00000002
+	   0000033B R
+	   00000303 R
+	   0000000A
+	   00000057
+ 0000033B 00000003	      C i1 item {3,1,2,null,i2,3,"A"}
+	   00000001
+	   00000002
+	   00000000
+	   0000031F R
+	   00000003
+	   00000041
+			      C 
+ 00000357 00000004	      C t1 item {4,1,2,NULL,NULL}
+	   00000001
+	   00000002
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+			      C 
+ 00000373  00000008 [	      C tempString  db    8 dup (?)
+	    00
+	   ]
+			      C 
+ 0000037B 2D 2D 53 65 6C      C selectItemTitle byte "--Select an Item--", 13, 10, 0
+	   65 63 74 20 61
+	   6E 20 49 74 65
+	   6D 2D 2D 0D 0A
+	   00
+			      C 
+ 00000390 30 20 45 78 69      C exitTitle    byte "0 Exit: "      , 13, 10, 0
+	   74 3A 20 0D 0A
+	   00
+ 0000039B 31 20 44 69 73      C discardTitle byte "1 Discard: "   , 13, 10, 0
+	   63 61 72 64 3A
+	   20 0D 0A 00
+ 000003A9 32 20 45 71 75      C equipTitle   byte "2 Equip: "     , 13, 10, 0
+	   69 70 3A 20 0D
+	   0A 00
+ 000003B5 33 20 49 74 65      C infoTitle    byte "3 Item Info "  , 13, 10, 0
+	   6D 20 49 6E 66
+	   6F 20 0D 0A 00
+			      C 
+ 000003C4 49 74 65 6D 20      C itemNameTitle        byte "Item Name: "      , 0, 10, 0
+	   4E 61 6D 65 3A
+	   20 00 0A 00
+ 000003D2 53 65 6C 6C 20      C itemSellValueTitle   byte "Sell Value: "     , 0, 10, 0
+	   56 61 6C 75 65
+	   3A 20 00 0A 00
+ 000003E1 42 75 79 20 56      C itemBuyValueTitle    byte "Buy Value: "      , 0, 10, 0
+	   61 6C 75 65 3A
+	   20 00 0A 00
+ 000003EF 43 6F 6D 62 61      C itemCombatValueTitle byte "Combat Value:"    , 0, 10, 0
+	   74 20 56 61 6C
+	   75 65 3A 00 0A
+	   00
+ 000003FF 49 74 65 6D 20      C itemType             byte "Item Type:   "    , 0, 10, 0
+	   54 79 70 65 3A
+	   20 20 20 00 0A
+	   00
+			      C 
+			      C ;//displays inventory
+			      C mDisplayInventory MACRO
+			      C Local L
+			      C pushAD
+			      C 
+			      C xor ecx,ecx
+			      C mov eBx, offset i1
+			      C DO1&L:
+			      C 
+			      C mov eax,ecx
+			      C call WriteDec
+			      C mov eax, ':'
+			      C call WriteChar
+			      C mov eax, [ebx].item.itemCode
+			      C mGetItemName
+			      C mov edx,offset blank
+			      C call WriteString
+			      C 
+			      C mov eBx,[ebx].item.next
+			      C 
+			      C inc ecx
+			      C cmp ebx,null
+			      C jne DO1&L
+			      C 
+			      C popAD
+			      C endm
+			      C 
+			      C mInventory MACRO
+			      C 
+			      C mov edx, offset selectItemTitle
+			      C call WriteString
+			      C 
+			      C mDisplayInventory
+			      C _get_input
+			      C 
+			      C cmp ecx,0
+			      C 	je item0
+			      C cmp ecx,1
+			      C 	je item1
+			      C cmp ecx,2
+			      C 	je item2
+			      C cmp ecx,3
+			      C 	je item3
+			      C cmp ecx,4
+			      C 	je item4
+			      C cmp ecx,5
+			      C 	je item5
+			      C cmp ecx,6
+			      C 	je item6
+			      C cmp ecx,7
+			      C 	je item7
+			      C cmp ecx,8
+			      C 	je item8
+			      C cmp ecx,9
+			      C 	je item9
+			      C 
+			      C item0:
+			      C 	mov ebx,offset i1 ;//storing item for use
+			      C 	mitemOptions
+			      C 	jmp endInventory
+			      C item1:
+			      C 	mov ebx,offset i2 ;//storing item for use
+			      C 	mitemOptions
+			      C 	jmp endInventory
+			      C item2:
+			      C 	mov ebx,offset i3 ;//storing item for use
+			      C 	mitemOptions
+			      C 	jmp endInventory
+			      C item3:
+			      C 	mov ebx,offset i4 ;//storing item for use
+			      C 	mitemOptions
+			      C 	jmp endInventory
+			      C item4:
+			      C 	mov ebx,offset i5 ;//storing item for use
+			      C 	mitemOptions
+			      C 	jmp endInventory
+			      C item5:
+			      C 	mov ebx,offset i6 ;//storing item for use
+			      C 	mitemOptions
+			      C 	jmp endInventory
+			      C item6:
+			      C 	mov ebx,offset i7 ;//storing item for use
+			      C 	mitemOptions
+			      C 	jmp endInventory
+			      C item7:
+			      C 	mov ebx,offset i8 ;//storing item for use
+			      C 	mitemOptions
+			      C 	jmp endInventory
+			      C item8:
+			      C 	mov ebx,offset i9 ;//storing item for use
+			      C 	mitemOptions
+			      C 	jmp endInventory
+			      C item9:
+			      C 	mov ebx,offset i10 ;//storing item for use
+			      C 	mitemOptions
+			      C 	jmp endInventory
+			      C 
+			      C endInventory:
+			      C 
+			      C call clrscr
+			      C endm
+			      C 
+			      C mitemOptions MACRO
+			      C local L
+			      C 
+			      C mov edx, offset exitTitle
+			      C call WriteString
+			      C mov edx, offset discardTitle
+			      C call WriteString
+			      C mov edx, offset equipTitle
+			      C call WriteString
+			      C mov edx, offset infoTitle
+			      C call WriteString
+			      C 
+			      C _get_input
+			      C 
+			      C cmp ecx,0
+			      C je exit&L
+			      C cmp ecx,1
+			      C je removeItem&L
+			      C cmp ecx,2
+			      C je equipItem&L
+			      C cmp ecx,3
+			      C je infoItem&L
+			      C jmp endCase&L
+			      C 
+			      C exit&L:
+			      C 	jmp endCase&L
+			      C removeItem&L:
+			      C 	mRemoveItem
+			      C 	jmp endCase&L
+			      C equipItem&L:
+			      C 	mEquip
+			      C 	jmp endCase&L
+			      C infoItem&L:
+			      C 	call clrscr
+			      C 	mDisplayItemInfo
+			      C 	mov eax,2000
+			      C 	call Delay
+			      C 
+			      C endCase&L:
+			      C 
+			      C endm
+			      C 
+			      C ;//remove an item from inventory
+			      C mRemoveItem MACRO
+			      C 
+			      C ;//ebx is item being removed
+			      C 
+			      C mov [ebx].item.itemCode,null
+			      C mov [ebx].item.sellValue,0
+			      C mov [ebx].item.buyValue,0
+			      C 
+			      C endm;//mRemoveItem
+			      C 
+			      C ;//equips item
+			      C mEquip MACRO
+			      C 
+			      C ;//ebx is item being equipped
+			      C 
+			      C mov edx, [ebx].item.itemCode
+			      C mov c1.weaponCode, edx
+			      C mov edx, [ebx].item.combatValue
+			      C mov c1.weaponDamage, edx
+			      C mov edx, [ebx].item.buyValue
+			      C mov c1.weaponBuyValue,edx
+			      C mov edx,[ebx].item.sellValue
+			      C mov c1.weaponsellValue,edx
+			      C mRemoveItem
+			      C mInitializeCharacter
+			      C 
+			      C endm;//mEquip
+			      C 
+			      C ;//displays item Info
+			      C mDisplayItemInfo MACRO
+			      C ;ebx is item Info
+			      C 
+			      C mov edx, offset blank
+			      C call WriteString
+			      C 
+			      C mov edx, offset itemBuyValueTitle ;displays buy value
+			      C call WriteString
+			      C mov eax, [ebx].item.buyValue
+			      C call WriteDec
+			      C mov edx, offset blank
+			      C call WriteString
+			      C 
+			      C mov edx, offset itemSellValueTitle ;displays sell value 
+			      C call WriteString
+			      C mov eax, [ebx].item.SellValue
+			      C call WriteDec
+			      C mov edx, offset blank
+			      C call WriteString
+			      C 
+			      C mov edx, offset itemCombatValueTitle ;displays combat value
+			      C call WriteString
+			      C mov eax, [ebx].item.combatValue
+			      C call WriteDec
+			      C mov edx, offset blank
+			      C call WriteString
+			      C 
+			      C endm
+			      C 
+			      C mDequip MACRO
+			      C Local L
+			      C 
+			      C cmp c1.weaponCode,0
+			      C je nothingEquipped&L
+			      C 
+			      C mov ebx, offset i1
+			      C 
+			      C notEmpty&L:
+			      C cmp [ebx].item.itemCode,0
+			      C je isEmpty&L 
+			      C cmp [ebx].item.next,null
+			      C je inventoryFull&L
+			      C mov ebx,[ebx].item.next
+			      C jmp notEmpty&L
+			      C 
+			      C isEmpty&L:
+			      C 
+			      C mov eax, c1.weaponCode
+			      C mov [ebx].item.itemCode,eax
+			      C mov c1.weaponCode,0
+			      C 
+			      C mov eax, c1.weaponBuyValue
+			      C mov [ebx].item.buyValue,eax
+			      C mov c1.weaponBuyValue,0
+			      C 
+			      C mov eax, c1.weaponSellValue
+			      C mov [ebx].item.sellValue,eax
+			      C mov c1.weaponSellValue,0
+			      C 
+			      C mov eax, c1.weaponDamage
+			      C mov [ebx].item.combatValue,eax
+			      C mov c1.weaponDamage,0
+			      C mInitializeCharacter
+			      C 
+			      C inventoryFull&L:
+			      C nothingEquipped&L:
+			      C 
+			      C endm
+			      C 
+			      C mAddItem MACRO
+			      C Local L
+			      C ;//item is in eax
+			      C 
+			      C mov ebx, offset i1
+			      C 
+			      C notEmpty&L:
+			      C cmp [ebx].item.itemCode,0
+			      C je isEmpty&L 
+			      C cmp [ebx].item.next,null
+			      C je inventoryFull&L
+			      C mov ebx,[ebx].item.next
+			      C jmp notEmpty&L
+			      C 
+			      C isEmpty&L:
+			      C 
+			      C mov ecx, [eax].item.itemCode
+			      C mov [ebx].item.itemCode,ecx
+			      C 
+			      C inventoryFull&L:
+			      C 
+			      C endm
+			      C 
+			      C 
 
 				WriteDec proto
 				ReadDec proto
 				ExitProcess proto, dwExitCode:dword
 
- 000001FB 4D 61 69 6E 20	mainMenuTitle       byte "Main Menu"        , 13, 10, 0
+ 0000040F 4D 61 69 6E 20	mainMenuTitle    byte "Main Menu"        , 13, 10, 0
 	   4D 65 6E 75 0D
 	   0A 00
- 00000207 30 20 51 75 69	quitTitle           byte "0 Quit"           , 13, 10, 0
+ 0000041B 30 20 51 75 69	quitTitle        byte "0 Quit"           , 13, 10, 0
 	   74 0D 0A 00
- 00000210 31 20 43 68 61	characterSheet      byte "1 Character Sheet", 13, 10, 0
+ 00000424 31 20 43 68 61	characterSheet   byte "1 Character Sheet", 13, 10, 0
 	   72 61 63 74 65
 	   72 20 53 68 65
 	   65 74 0D 0A 00
- 00000224 32 20 43 6F 6D	combatTitle         byte "2 Combat"         , 13, 10, 0
+ 00000438 32 20 43 6F 6D	combatTitle      byte "2 Combat"         , 13, 10, 0
 	   62 61 74 0D 0A
 	   00
- 0000022F 33 20 4C 65 76	levelUpTitle        byte "3 Level Up:"      , 13, 10, 0
+ 00000443 33 20 4C 65 76	levelUpTitle     byte "3 Level Up"       , 13, 10, 0
 	   65 6C 20 55 70
-	   3A 0D 0A 00
+	   0D 0A 00
+ 00000450 34 20 49 6E 76	inventoryTitle   byte "4 Inventory"      , 13, 10, 0
+	   65 6E 74 6F 72
+	   79 0D 0A 00
+ 0000045E 35 20 44 65 71	dequipTitle      byte "5 Dequip"         , 13, 10, 0
+	   75 69 70 0D 0A
+	   00
 
 
 
-
- 0000023D 20 0D 0A 00		blank byte " ", 13, 10, 0
+ 00000469 20 0D 0A 00		blank byte " ", 13, 10, 0
 
 
 
@@ -663,387 +1156,1449 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 
 				mGetCharacterName
  00000000  60		     1	pushAD
- 00000001  BA 000000F7 R     1	mov edx, offset command1 ;//Player inputs character name
+ 00000001  BA 0000013B R     1	mov edx, offset command1 ;//Player inputs character name
  00000006  E8 00000000 E   *	    call   WriteString
- 0000000B  BA 0000000C R     1	mov edx, offset c1.characterName
- 00000010  B9 00000008	     1	mov ecx, SIZEOF c1.characterName
+ 0000000B  BA 00000038 R     1	mov edx, offset c1.characterName
+ 00000010  B9 00000006	     1	mov ecx, SIZEOF c1.characterName
  00000015  E8 00000000 E     1	call ReadString
  0000001A  61		     1	popAD
 				mInitializeCharacter
  0000001B  60		     1	pushAD
- 0000001C  FF 05 00000020 R  1	inc c1.brawn   ;// sets primary attributes
- 00000022  FF 05 00000024 R  1	inc c1.agility
- 00000028  FF 05 00000028 R  1	inc c1.mind   
- 0000002E  FF 05 0000002C R  1	inc c1.fortune
- 00000034  A1 00000020 R     1	mov eax, c1.brawn ;// maxHP & hp initiliaze = brawn*2
+ 0000001C  FF 05 0000004A R  1	inc c1.brawn   ;// sets primary attributes
+ 00000022  FF 05 0000004E R  1	inc c1.agility
+ 00000028  FF 05 00000052 R  1	inc c1.mind   
+ 0000002E  FF 05 00000056 R  1	inc c1.fortune
+ 00000034  A1 0000004A R     1	mov eax, c1.brawn ;// maxHP & hp initialize = brawn*2
  00000039  D1 E0	     1	sal eax,1 ;// multiply by 2
- 0000003B  A3 00000030 R     1	mov c1.hpMax,eax
- 00000040  A3 00000034 R     1	mov c1.hp,eax
- 00000045  A1 00000020 R     1	mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+ 0000003B  A3 0000005A R     1	mov c1.hpMax,eax
+ 00000040  A3 0000005E R     1	mov c1.hp,eax
+ 00000045  A1 0000004A R     1	mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
  0000004A  D1 F8	     1	sar eax,1;//divide by 2
- 0000004C  A3 00000038 R     1	mov c1.damageMin,eax
- 00000051  8B 1D 00000024 R  1	mov ebx,c1.agility
- 00000057  C1 FB 02	     1	sar ebx,2;//divide by 4
- 0000005A  03 C3	     1	add eax,ebx
- 0000005C  A3 0000003C R     1	mov c1.damageMax,eax
- 00000061  61		     1	popAD
+ 0000004C  03 05 00000076 R  1	add eax,c1.weaponDamage
+ 00000052  A3 00000062 R     1	mov c1.damageMin,eax
+ 00000057  8B 1D 0000004E R  1	mov ebx,c1.agility
+ 0000005D  C1 FB 02	     1	sar ebx,2;//divide by 4
+ 00000060  03 C3	     1	add eax,ebx
+ 00000062  A3 00000066 R     1	mov c1.damageMax,eax
+ 00000067  61		     1	popAD
 
- 00000062  B9 00000001		mov ecx, 1
- 00000067			while_main:						;//while( ecx != 0 )
+ 00000068  B9 00000001		mov ecx, 1
+ 0000006D			while_main:						;//while( ecx != 0 )
 
 					
- 00000067  BA 000001FB R		mov edx, offset mainMenuTitle ;//Main Menu Display Start
- 0000006C  E8 00000000 E		call WriteString
- 00000071  BA 00000207 R		mov edx, offset quitTitle 
- 00000076  E8 00000000 E		call WriteString
- 0000007B  BA 00000210 R		mov edx, offset characterSheet
- 00000080  E8 00000000 E		call WriteString    
- 00000085  BA 00000224 R		mov edx, offset combatTitle
- 0000008A  E8 00000000 E		call WriteString     
- 0000008F  BA 0000022F R		mov edx, offset levelUpTitle
- 00000094  E8 00000000 E		call WriteString
+ 0000006D  BA 0000040F R		mov edx, offset mainMenuTitle ;//Main Menu Display Start
+ 00000072  E8 00000000 E		call WriteString
+ 00000077  BA 0000041B R		mov edx, offset quitTitle 
+ 0000007C  E8 00000000 E		call WriteString
+ 00000081  BA 00000424 R		mov edx, offset characterSheet
+ 00000086  E8 00000000 E		call WriteString    
+ 0000008B  BA 00000438 R		mov edx, offset combatTitle
+ 00000090  E8 00000000 E		call WriteString     
+ 00000095  BA 00000443 R		mov edx, offset levelUpTitle
+ 0000009A  E8 00000000 E		call WriteString
+ 0000009F  BA 00000450 R		mov edx, offset inventoryTitle
+ 000000A4  E8 00000000 E		call WriteString
+ 000000A9  BA 0000045E R		mov edx, offset dequipTitle
+ 000000AE  E8 00000000 E		call WriteString
 
 					_get_input
- 00000099  E8 00000000 E     1		call ReadDec
- 0000009E  8B C8	     1		mov ecx, eax
+ 000000B3  E8 00000000 E     1		call ReadDec
+ 000000B8  8B C8	     1		mov ecx, eax
 					
- 000000A0  E8 00000000 E		call Clrscr
+ 000000BA  E8 00000000 E		call Clrscr
 
- 000000A5  83 F9 00			cmp ecx, 0 ;//switch
- 000000A8  0F 84 0000050D		je endwhile_main
- 000000AE  83 F9 01			cmp ecx, 1
- 000000B1  74 17			je character_sheet
- 000000B3  83 F9 02			cmp ecx, 2
- 000000B6  0F 84 000001E1		je combat
- 000000BC  83 F9 03			cmp ecx, 3
- 000000BF  0F 84 00000464		je levelUp
- 000000C5  E9 000004EC			jmp end_switch
+ 000000BF  83 F9 00			cmp ecx, 0 ;//switch
+ 000000C2  0F 84 0000152C		je endwhile_main
+ 000000C8  83 F9 01			cmp ecx, 1
+ 000000CB  74 29			je character_sheet
+ 000000CD  83 F9 02			cmp ecx, 2
+ 000000D0  0F 84 0000023E		je combat
+ 000000D6  83 F9 03			cmp ecx, 3
+ 000000D9  0F 84 000004DF		je levelUp
+ 000000DF  83 F9 04			cmp ecx, 4
+ 000000E2  0F 84 0000056C		je inventory
+ 000000E8  83 F9 05			cmp ecx, 5
+ 000000EB  0F 84 00001442		je dequip
+ 000000F1  E9 000014F9			jmp end_switch
 
- 000000CA				character_sheet:
+ 000000F6				character_sheet:
 						mPrintCharacterSheet
- 000000CA  60		     1	pushAD
- 000000CB  BA 00000044 R     1	mov edx, offset characterSheetTitle ;//prints a header
- 000000D0  E8 00000000 E   *	    call   WriteString
- 000000D5  BA 00000059 R     1	mov edx, offset xPosTitle ;// prints x position
- 000000DA  E8 00000000 E   *	    call   WriteString
- 000000DF  A1 00000004 R     1	mov eax, c1.xPos
- 000000E4  E8 00000000 E     1	call WriteDec
- 000000E9  BA 0000023D R     1	mov edx, offset blank
- 000000EE  E8 00000000 E   *	    call   WriteString
- 000000F3  BA 00000062 R     1	mov edx, offset yPosTitle ;// prints y position
- 000000F8  E8 00000000 E   *	    call   WriteString
- 000000FD  A1 00000008 R     1	mov eax, c1.yPos
- 00000102  E8 00000000 E     1	call WriteDec
- 00000107  BA 0000023D R     1	mov edx, offset blank
- 0000010C  E8 00000000 E   *	    call   WriteString
- 00000111  BA 0000006B R     1	mov edx, offset nameTitle ;// prints character name
- 00000116  E8 00000000 E   *	    call   WriteString
- 0000011B  BA 0000000C R     1	mov edx, offset c1.CharacterName
- 00000120  E8 00000000 E     1	Call WriteString
- 00000125  BA 0000023D R     1	mov edx, offset blank
- 0000012A  E8 00000000 E   *	    call   WriteString
- 0000012F  BA 00000074 R     1	mov edx, offset levelTitle ;//prints character level
- 00000134  E8 00000000 E   *	    call   WriteString
- 00000139  A1 00000014 R     1	mov eax, c1.level
- 0000013E  E8 00000000 E     1	call WriteDec
- 00000143  BA 0000023D R     1	mov edx, offset blank
- 00000148  E8 00000000 E   *	    call   WriteString
- 0000014D  BA 0000007D R     1	mov edx, offset expTitle ;//prints character exp
- 00000152  E8 00000000 E   *	    call   WriteString
- 00000157  A1 00000018 R     1	mov eax, c1.exp
- 0000015C  E8 00000000 E     1	call WriteDec
- 00000161  B8 0000002F	     1	mov eax,'/'
- 00000166  E8 00000000 E     1	call WriteChar
- 0000016B  A1 0000001C R     1	mov eax, c1.expToNext
- 00000170  E8 00000000 E     1	call WriteDec
- 00000175  BA 0000023D R     1	mov edx, offset blank
- 0000017A  E8 00000000 E   *	    call   WriteString
- 0000017F  BA 00000084 R     1	mov edx, offset primaryAttributesTitle ;//prints primary attributes header
- 00000184  E8 00000000 E   *	    call   WriteString
- 00000189  BA 0000009D R     1	mov edx, offset brawnTitle ;//prints character brawn
- 0000018E  E8 00000000 E   *	    call   WriteString
- 00000193  A1 00000020 R     1	mov eax, c1.brawn
- 00000198  E8 00000000 E     1	call WriteDec
- 0000019D  BA 0000023D R     1	mov edx, offset blank
- 000001A2  E8 00000000 E   *	    call   WriteString
- 000001A7  BA 000000A6 R     1	mov edx, offset agilityTitle ;//prints character agility
- 000001AC  E8 00000000 E   *	    call   WriteString
- 000001B1  A1 00000024 R     1	mov eax, c1.agility
- 000001B6  E8 00000000 E     1	call WriteDec
- 000001BB  BA 0000023D R     1	mov edx, offset blank
- 000001C0  E8 00000000 E   *	    call   WriteString
- 000001C5  BA 000000B1 R     1	mov edx, offset mindTitle ;//prints character mind
- 000001CA  E8 00000000 E   *	    call   WriteString
- 000001CF  A1 00000028 R     1	mov eax, c1.mind
- 000001D4  E8 00000000 E     1	call WriteDec
- 000001D9  BA 0000023D R     1	mov edx, offset blank
- 000001DE  E8 00000000 E   *	    call   WriteString
- 000001E3  BA 000000B9 R     1	mov edx, offset fortuneTitle ;//prints character fortune
- 000001E8  E8 00000000 E   *	    call   WriteString
- 000001ED  A1 0000002C R     1	mov eax, c1.fortune
- 000001F2  E8 00000000 E     1	call WriteDec
- 000001F7  BA 0000023D R     1	mov edx, offset blank
- 000001FC  E8 00000000 E   *	    call   WriteString
- 00000201  BA 000000C4 R     1	mov edx, offset combatAttributesTitle ;//prints primary attributes header
- 00000206  E8 00000000 E   *	    call   WriteString
- 0000020B  BA 000000DC R     1	mov edx, offset hpTitle ;//prints character hp
- 00000210  E8 00000000 E   *	    call   WriteString
- 00000215  A1 00000034 R     1	mov eax, c1.hp
- 0000021A  E8 00000000 E     1	call WriteDec
- 0000021F  B8 0000002F	     1	mov eax,'/'
- 00000224  E8 00000000 E     1	call WriteChar
- 00000229  A1 00000030 R     1	mov eax, c1.hpMax
- 0000022E  E8 00000000 E     1	call WriteDec
- 00000233  BA 0000023D R     1	mov edx, offset blank
- 00000238  E8 00000000 E   *	    call   WriteString
- 0000023D  BA 000000E2 R     1	mov edx, offset damageTitle ;//prints character damage
- 00000242  E8 00000000 E   *	    call   WriteString
- 00000247  A1 00000038 R     1	mov eax, c1.damageMin
- 0000024C  E8 00000000 E     1	call WriteDec
- 00000251  B8 0000002D	     1	mov eax,'-'
- 00000256  E8 00000000 E     1	call WriteChar
- 0000025B  A1 0000003C R     1	mov eax, c1.damageMax
- 00000260  E8 00000000 E     1	call WriteDec
- 00000265  BA 0000023D R     1	mov edx, offset blank
- 0000026A  E8 00000000 E   *	    call   WriteString
- 0000026F  BA 000000EC R     1	mov edx, offset defenceTitle ;//prints character defence
- 00000274  E8 00000000 E   *	    call   WriteString
- 00000279  A1 00000040 R     1	mov eax, c1.defence
- 0000027E  E8 00000000 E     1	call WriteDec
- 00000283  BA 0000023D R     1	mov edx, offset blank
- 00000288  E8 00000000 E   *	    call   WriteString
- 0000028D  BA 0000023D R     1	mov edx, offset blank
- 00000292  E8 00000000 E   *	    call   WriteString
- 00000297  61		     1	popAD
- 00000298  E9 00000319				jmp end_switch
- 0000029D				combat:
+ 000000F6  60		     1	pushAD
+ 000000F7  BA 0000007E R     1	mov edx, offset characterSheetTitle ;//prints a header
+ 000000FC  E8 00000000 E   *	    call   WriteString
+ 00000101  BA 00000093 R     1	mov edx, offset xPosTitle ;// prints x position
+ 00000106  E8 00000000 E   *	    call   WriteString
+ 0000010B  A1 00000030 R     1	mov eax, c1.xPos
+ 00000110  E8 00000000 E     1	call WriteDec
+ 00000115  BA 00000469 R     1	mov edx, offset blank
+ 0000011A  E8 00000000 E   *	    call   WriteString
+ 0000011F  BA 0000009C R     1	mov edx, offset yPosTitle ;// prints y position
+ 00000124  E8 00000000 E   *	    call   WriteString
+ 00000129  A1 00000034 R     1	mov eax, c1.yPos
+ 0000012E  E8 00000000 E     1	call WriteDec
+ 00000133  BA 00000469 R     1	mov edx, offset blank
+ 00000138  E8 00000000 E   *	    call   WriteString
+ 0000013D  BA 000000A5 R     1	mov edx, offset nameTitle ;// prints character name
+ 00000142  E8 00000000 E   *	    call   WriteString
+ 00000147  BA 00000038 R     1	mov edx, offset c1.CharacterName
+ 0000014C  E8 00000000 E     1	Call WriteString
+ 00000151  BA 00000469 R     1	mov edx, offset blank
+ 00000156  E8 00000000 E   *	    call   WriteString
+ 0000015B  BA 000000AE R     1	mov edx, offset levelTitle ;//prints character level
+ 00000160  E8 00000000 E   *	    call   WriteString
+ 00000165  A1 0000003E R     1	mov eax, c1.level
+ 0000016A  E8 00000000 E     1	call WriteDec
+ 0000016F  BA 00000469 R     1	mov edx, offset blank
+ 00000174  E8 00000000 E   *	    call   WriteString
+ 00000179  BA 000000B7 R     1	mov edx, offset expTitle ;//prints character exp
+ 0000017E  E8 00000000 E   *	    call   WriteString
+ 00000183  A1 00000042 R     1	mov eax, c1.exp
+ 00000188  E8 00000000 E     1	call WriteDec
+ 0000018D  B8 0000002F	     1	mov eax,'/'
+ 00000192  E8 00000000 E     1	call WriteChar
+ 00000197  A1 00000046 R     1	mov eax, c1.expToNext
+ 0000019C  E8 00000000 E     1	call WriteDec
+ 000001A1  BA 00000469 R     1	mov edx, offset blank
+ 000001A6  E8 00000000 E   *	    call   WriteString
+ 000001AB  BA 000000BE R     1	mov edx, offset primaryAttributesTitle ;//prints primary attributes header
+ 000001B0  E8 00000000 E   *	    call   WriteString
+ 000001B5  BA 000000D7 R     1	mov edx, offset brawnTitle ;//prints character brawn
+ 000001BA  E8 00000000 E   *	    call   WriteString
+ 000001BF  A1 0000004A R     1	mov eax, c1.brawn
+ 000001C4  E8 00000000 E     1	call WriteDec
+ 000001C9  BA 00000469 R     1	mov edx, offset blank
+ 000001CE  E8 00000000 E   *	    call   WriteString
+ 000001D3  BA 000000E0 R     1	mov edx, offset agilityTitle ;//prints character agility
+ 000001D8  E8 00000000 E   *	    call   WriteString
+ 000001DD  A1 0000004E R     1	mov eax, c1.agility
+ 000001E2  E8 00000000 E     1	call WriteDec
+ 000001E7  BA 00000469 R     1	mov edx, offset blank
+ 000001EC  E8 00000000 E   *	    call   WriteString
+ 000001F1  BA 000000EB R     1	mov edx, offset mindTitle ;//prints character mind
+ 000001F6  E8 00000000 E   *	    call   WriteString
+ 000001FB  A1 00000052 R     1	mov eax, c1.mind
+ 00000200  E8 00000000 E     1	call WriteDec
+ 00000205  BA 00000469 R     1	mov edx, offset blank
+ 0000020A  E8 00000000 E   *	    call   WriteString
+ 0000020F  BA 000000F3 R     1	mov edx, offset fortuneTitle ;//prints character fortune
+ 00000214  E8 00000000 E   *	    call   WriteString
+ 00000219  A1 00000056 R     1	mov eax, c1.fortune
+ 0000021E  E8 00000000 E     1	call WriteDec
+ 00000223  BA 00000469 R     1	mov edx, offset blank
+ 00000228  E8 00000000 E   *	    call   WriteString
+ 0000022D  BA 000000FE R     1	mov edx, offset combatAttributesTitle ;//prints primary attributes header
+ 00000232  E8 00000000 E   *	    call   WriteString
+ 00000237  BA 00000116 R     1	mov edx, offset hpTitle ;//prints character hp
+ 0000023C  E8 00000000 E   *	    call   WriteString
+ 00000241  A1 0000005E R     1	mov eax, c1.hp
+ 00000246  E8 00000000 E     1	call WriteDec
+ 0000024B  B8 0000002F	     1	mov eax,'/'
+ 00000250  E8 00000000 E     1	call WriteChar
+ 00000255  A1 0000005A R     1	mov eax, c1.hpMax
+ 0000025A  E8 00000000 E     1	call WriteDec
+ 0000025F  BA 00000469 R     1	mov edx, offset blank
+ 00000264  E8 00000000 E   *	    call   WriteString
+ 00000269  BA 0000011C R     1	mov edx, offset damageTitle ;//prints character damage
+ 0000026E  E8 00000000 E   *	    call   WriteString
+ 00000273  A1 00000062 R     1	mov eax, c1.damageMin
+ 00000278  E8 00000000 E     1	call WriteDec
+ 0000027D  B8 0000002D	     1	mov eax,'-'
+ 00000282  E8 00000000 E     1	call WriteChar
+ 00000287  A1 00000066 R     1	mov eax, c1.damageMax
+ 0000028C  E8 00000000 E     1	call WriteDec
+ 00000291  BA 00000469 R     1	mov edx, offset blank
+ 00000296  E8 00000000 E   *	    call   WriteString
+ 0000029B  BA 00000126 R     1	mov edx, offset defenceTitle ;//prints character defence
+ 000002A0  E8 00000000 E   *	    call   WriteString
+ 000002A5  A1 0000007A R     1	mov eax, c1.defence
+ 000002AA  E8 00000000 E     1	call WriteDec
+ 000002AF  BA 00000469 R     1	mov edx, offset blank
+ 000002B4  E8 00000000 E   *	    call   WriteString
+ 000002B9  BA 00000131 R     1	mov edx, offset equippedWeaponTitle
+ 000002BE  E8 00000000 E   *	    call   WriteString
+ 000002C3  A1 0000006A R     1	mov eax, c1.weaponCode
+ 000002C8  83 F8 01	     2	cmp eax,1
+ 000002CB  74 11	     2	je item0??0001
+ 000002CD  83 F8 02	     2	cmp eax,2
+ 000002D0  74 13	     2	je item1??0001
+ 000002D2  83 F8 03	     2	cmp eax,3
+ 000002D5  74 15	     2	je item2??0001
+ 000002D7  83 F8 04	     2	cmp eax,4
+ 000002DA  74 17	     2	je item3??0001
+ 000002DC  EB 1C	     2	jmp default??0001
+ 000002DE		     2	item0??0001:
+ 000002DE  BA 00000000 R     2		mov edx, offset itemName1
+ 000002E3  EB 1A	     2		jmp print??0001
+ 000002E5		     2	item1??0001:
+ 000002E5  BA 00000007 R     2		mov edx, offset itemName2
+ 000002EA  EB 13	     2		jmp print??0001
+ 000002EC		     2	item2??0001:
+ 000002EC  BA 0000000D R     2		mov edx, offset itemName3
+ 000002F1  EB 0C	     2		jmp print??0001
+ 000002F3		     2	item3??0001:
+ 000002F3  BA 00000015 R     2		mov edx, offset itemName4
+ 000002F8  EB 05	     2		jmp print??0001
+ 000002FA		     2	default??0001:
+ 000002FA  BA 0000001B R     2		mov edx, offset defaultName
+ 000002FF		     2	print??0001:
+ 000002FF  E8 00000000 E   *	    call   WriteString
+ 00000304  BA 00000469 R     1	mov edx, offset blank
+ 00000309  E8 00000000 E   *	    call   WriteString
+ 0000030E  61		     1	popAD
+ 0000030F  E9 000012DB				jmp end_switch
+ 00000314				combat:
 						mCombat
- 0000029D  60		     1	pushAD
- 0000029E  60		     2	pushAD
- 0000029F  8B 1D 00000014 R  2	mov ebx, c1.level ;//initialize enemy hp
- 000002A5  B8 00000003	     2	mov eax,3
- 000002AA  E8 00000000 E     2	call RandomRange
- 000002AF  40		     2	inc eax
- 000002B0  F7 E3	     2	mul ebx
- 000002B2  A3 0000012A R     2	mov e1.hpMax,eax
- 000002B7  A3 0000012E R     2	mov e1.hp,eax
- 000002BC  B8 00000002	     2	mov eax, 2 ;//initialize enemy damage
- 000002C1  E8 00000000 E     2	call RandomRange
- 000002C6  40		     2	inc eax
- 000002C7  03 C3	     2	add eax,ebx
- 000002C9  A3 00000132 R     2	mov e1.damageMin,eax
- 000002CE  8B C8	     2	mov ecx,eax
- 000002D0  B8 00000002	     2	mov eax,2
- 000002D5  E8 00000000 E     2	call RandomRange
- 000002DA  40		     2	inc eax
- 000002DB  03 C1	     2	add eax,ecx
- 000002DD  A3 00000136 R     2	mov e1.damageMax,eax
- 000002E2  A1 0000012A R     2	mov eax,e1.hpMax ;//initialize expReward
- 000002E7  BB 0000000A	     2	mov ebx,10
- 000002EC  F7 E3	     2	mul ebx
- 000002EE  A3 0000013E R     2	mov e1.expReward ,eax
- 000002F3  61		     2	popAD
- 000002F4  A1 00000030 R     1	mov eax,c1.hpMax
- 000002F9  A3 00000034 R     1	mov c1.hp,eax
- 000002FE  C6 05 00000142 R  1	mov escape        ,0 ;//combat end conditions
+ 00000314  60		     1	pushAD
+ 00000315  60		     2	pushAD
+ 00000316  8B 1D 0000003E R  2	mov ebx, c1.level ;//initialize enemy hp
+ 0000031C  B8 00000003	     2	mov eax,3
+ 00000321  E8 00000000 E     2	call RandomRange
+ 00000326  40		     2	inc eax
+ 00000327  F7 E3	     2	mul ebx
+ 00000329  A3 0000016E R     2	mov e1.hpMax,eax
+ 0000032E  A3 00000172 R     2	mov e1.hp,eax
+ 00000333  B8 00000002	     2	mov eax, 2 ;//initialize enemy damage
+ 00000338  E8 00000000 E     2	call RandomRange
+ 0000033D  40		     2	inc eax
+ 0000033E  03 C3	     2	add eax,ebx
+ 00000340  A3 00000176 R     2	mov e1.damageMin,eax
+ 00000345  8B C8	     2	mov ecx,eax
+ 00000347  B8 00000002	     2	mov eax,2
+ 0000034C  E8 00000000 E     2	call RandomRange
+ 00000351  40		     2	inc eax
+ 00000352  03 C1	     2	add eax,ecx
+ 00000354  A3 0000017A R     2	mov e1.damageMax,eax
+ 00000359  A1 0000016E R     2	mov eax,e1.hpMax ;//initialize expReward
+ 0000035E  BB 0000000A	     2	mov ebx,10
+ 00000363  F7 E3	     2	mul ebx
+ 00000365  A3 00000182 R     2	mov e1.expReward ,eax
+ 0000036A  61		     2	popAD
+ 0000036B  A1 0000005A R     1	mov eax,c1.hpMax
+ 00000370  A3 0000005E R     1	mov c1.hp,eax
+ 00000375  C6 05 00000186 R  1	mov escape        ,0 ;//combat end conditions
 	   00
- 00000305  C6 05 00000143 R  1	mov playerDefeated,0
+ 0000037C  C6 05 00000187 R  1	mov playerDefeated,0
 	   00
- 0000030C  C6 05 00000144 R  1	mov enemyDefeated ,0
+ 00000383  C6 05 00000188 R  1	mov enemyDefeated ,0
 	   00
- 00000313		     1	WHILE_COMBAT??0001:    ;//disgusting triple & while statement
- 00000313  80 3D 00000142 R  1	cmp escape,0       ;//while &
+ 0000038A		     1	WHILE_COMBAT??0002:    ;//disgusting triple & while statement
+ 0000038A  80 3D 00000186 R  1	cmp escape,0       ;//while &
 	   00
- 0000031A  74 05	     1	je AND_COMBAT1??0001
- 0000031C  E9 000001B4	     1	jmp AND_FALSE_COMBAT??0001
- 00000321  80 3D 00000143 R  1	AND_COMBAT1??0001: cmp playerDefeated,0
+ 00000391  74 05	     1	je AND_COMBAT1??0002
+ 00000393  E9 000001B4	     1	jmp AND_FALSE_COMBAT??0002
+ 00000398  80 3D 00000187 R  1	AND_COMBAT1??0002: cmp playerDefeated,0
 	   00
- 00000328  74 05	     1	je AND_COMBAT2??0001
- 0000032A  E9 000001A6	     1	jmp AND_FALSE_COMBAT??0001
- 0000032F  80 3D 00000144 R  1	AND_COMBAT2??0001: cmp enemyDefeated,0
+ 0000039F  74 05	     1	je AND_COMBAT2??0002
+ 000003A1  E9 000001A6	     1	jmp AND_FALSE_COMBAT??0002
+ 000003A6  80 3D 00000188 R  1	AND_COMBAT2??0002: cmp enemyDefeated,0
 	   00
- 00000336  74 05	     1	je AND_COMBAT_TRUE??0001
- 00000338  E9 00000198	     1	jmp AND_FALSE_COMBAT??0001
- 0000033D		     1	AND_COMBAT_TRUE??0001:
- 0000033D  BA 00000145 R     1		mov edx, offset combatMenuTitle
- 00000342  E8 00000000 E   *	    call   WriteString
- 00000347  BA 00000152 R     1		mov edx, offset enemyNameTitle ;//prints enemy name
- 0000034C  E8 00000000 E   *	    call   WriteString
- 00000351  BA 00000122 R     1		mov edx, offset e1.enemyName
- 00000356  E8 00000000 E   *	    call   WriteString
- 0000035B  BA 0000023D R     1		mov edx, offset blank
- 00000360  E8 00000000 E   *	    call   WriteString
- 00000365  BA 00000160 R     1		mov edx, offset enemyHpTitle ;//prints enemy hp
- 0000036A  E8 00000000 E   *	    call   WriteString
- 0000036F  A1 0000012E R     1		mov eax, e1.hp
- 00000374  E8 00000000 E     1		call WriteDec
- 00000379  B8 0000002F	     1		mov eax,'/'
- 0000037E  E8 00000000 E     1		call WriteChar
- 00000383  A1 0000012A R     1		mov eax, e1.hpMax
- 00000388  E8 00000000 E     1		call WriteDec
- 0000038D  BA 0000023D R     1		mov edx, offset blank
- 00000392  E8 00000000 E   *	    call   WriteString
- 00000397  BA 0000016C R     1		mov edx, offset enemyDamageTitle ;//prints enemy damage
- 0000039C  E8 00000000 E   *	    call   WriteString
- 000003A1  A1 00000132 R     1		mov eax, e1.damageMin
- 000003A6  E8 00000000 E     1		call WriteDec
- 000003AB  B8 0000002D	     1		mov eax,'-'
- 000003B0  E8 00000000 E     1		call WriteChar
- 000003B5  A1 00000136 R     1		mov eax, e1.damageMax
- 000003BA  E8 00000000 E     1		call WriteDec
- 000003BF  BA 0000023D R     1		mov edx, offset blank
- 000003C4  E8 00000000 E   *	    call   WriteString
- 000003C9  BA 000000C4 R     1		mov edx, offset combatAttributesTitle ;//prints primary attributes header
- 000003CE  E8 00000000 E   *	    call   WriteString
- 000003D3  BA 000000DC R     1		mov edx, offset hpTitle ;//prints character hp
- 000003D8  E8 00000000 E   *	    call   WriteString
- 000003DD  A1 00000034 R     1		mov eax, c1.hp
- 000003E2  E8 00000000 E     1		call WriteDec
- 000003E7  B8 0000002F	     1		mov eax,'/'
- 000003EC  E8 00000000 E     1		call WriteChar
- 000003F1  A1 00000030 R     1		mov eax, c1.hpMax
- 000003F6  E8 00000000 E     1		call WriteDec
- 000003FB  BA 0000023D R     1		mov edx, offset blank
- 00000400  E8 00000000 E   *	    call   WriteString
- 00000405  BA 000000E2 R     1		mov edx, offset damageTitle ;//prints character damage
- 0000040A  E8 00000000 E   *	    call   WriteString
- 0000040F  A1 00000038 R     1		mov eax, c1.damageMin
- 00000414  E8 00000000 E     1		call WriteDec
- 00000419  B8 0000002D	     1		mov eax,'-'
- 0000041E  E8 00000000 E     1		call WriteChar
- 00000423  A1 0000003C R     1		mov eax, c1.damageMax
- 00000428  E8 00000000 E     1		call WriteDec
- 0000042D  BA 0000023D R     1		mov edx, offset blank
- 00000432  E8 00000000 E   *	    call   WriteString
- 00000437  BA 0000017C R     1		mov edx, offset combatOptionsMenuTitle ;//prints combat Options
- 0000043C  E8 00000000 E   *	    call   WriteString
- 00000441  BA 00000191 R     1		mov edx,offset attackTitle
- 00000446  E8 00000000 E   *	    call   WriteString
- 0000044B  BA 0000019D R     1		mov edx,offset fleeTitle
- 00000450  E8 00000000 E   *	    call   WriteString
- 00000455  E8 00000000 E     2		call ReadDec
- 0000045A  8B C8	     2		mov ecx, eax
- 0000045C  E8 00000000 E     1		call Clrscr
- 00000461  83 F9 00	     1			cmp ecx, 0 ;//switch
- 00000464  74 07	     1			je attack
- 00000466  83 F9 01	     1			cmp ecx, 1
- 00000469  74 31	     1			je flee
- 0000046B  EB 36	     1			jmp end_switch??0001
- 0000046D		     1			attack:
- 0000046D  A1 0000003C R     1				mov eax,c1.damageMax;//player attacks
- 00000472  8B 1D 00000038 R  1				mov ebx,c1.damageMin
- 00000478  2B C3	     1				sub eax,ebx
- 0000047A  40		     1				inc eax
- 0000047B  E8 00000000 E     1				call RandomRange
- 00000480  03 C3	     1				add eax,ebx
- 00000482  29 05 0000012E R  1				sub e1.hp,eax
- 00000488  83 3D 0000012E R  1				cmp e1.hp,0 ;//check to see if enemy died
+ 000003AD  74 05	     1	je AND_COMBAT_TRUE??0002
+ 000003AF  E9 00000198	     1	jmp AND_FALSE_COMBAT??0002
+ 000003B4		     1	AND_COMBAT_TRUE??0002:
+ 000003B4  BA 00000189 R     1		mov edx, offset combatMenuTitle
+ 000003B9  E8 00000000 E   *	    call   WriteString
+ 000003BE  BA 00000196 R     1		mov edx, offset enemyNameTitle ;//prints enemy name
+ 000003C3  E8 00000000 E   *	    call   WriteString
+ 000003C8  BA 00000166 R     1		mov edx, offset e1.enemyName
+ 000003CD  E8 00000000 E   *	    call   WriteString
+ 000003D2  BA 00000469 R     1		mov edx, offset blank
+ 000003D7  E8 00000000 E   *	    call   WriteString
+ 000003DC  BA 000001A4 R     1		mov edx, offset enemyHpTitle ;//prints enemy hp
+ 000003E1  E8 00000000 E   *	    call   WriteString
+ 000003E6  A1 00000172 R     1		mov eax, e1.hp
+ 000003EB  E8 00000000 E     1		call WriteDec
+ 000003F0  B8 0000002F	     1		mov eax,'/'
+ 000003F5  E8 00000000 E     1		call WriteChar
+ 000003FA  A1 0000016E R     1		mov eax, e1.hpMax
+ 000003FF  E8 00000000 E     1		call WriteDec
+ 00000404  BA 00000469 R     1		mov edx, offset blank
+ 00000409  E8 00000000 E   *	    call   WriteString
+ 0000040E  BA 000001B0 R     1		mov edx, offset enemyDamageTitle ;//prints enemy damage
+ 00000413  E8 00000000 E   *	    call   WriteString
+ 00000418  A1 00000176 R     1		mov eax, e1.damageMin
+ 0000041D  E8 00000000 E     1		call WriteDec
+ 00000422  B8 0000002D	     1		mov eax,'-'
+ 00000427  E8 00000000 E     1		call WriteChar
+ 0000042C  A1 0000017A R     1		mov eax, e1.damageMax
+ 00000431  E8 00000000 E     1		call WriteDec
+ 00000436  BA 00000469 R     1		mov edx, offset blank
+ 0000043B  E8 00000000 E   *	    call   WriteString
+ 00000440  BA 000000FE R     1		mov edx, offset combatAttributesTitle ;//prints primary attributes header
+ 00000445  E8 00000000 E   *	    call   WriteString
+ 0000044A  BA 00000116 R     1		mov edx, offset hpTitle ;//prints character hp
+ 0000044F  E8 00000000 E   *	    call   WriteString
+ 00000454  A1 0000005E R     1		mov eax, c1.hp
+ 00000459  E8 00000000 E     1		call WriteDec
+ 0000045E  B8 0000002F	     1		mov eax,'/'
+ 00000463  E8 00000000 E     1		call WriteChar
+ 00000468  A1 0000005A R     1		mov eax, c1.hpMax
+ 0000046D  E8 00000000 E     1		call WriteDec
+ 00000472  BA 00000469 R     1		mov edx, offset blank
+ 00000477  E8 00000000 E   *	    call   WriteString
+ 0000047C  BA 0000011C R     1		mov edx, offset damageTitle ;//prints character damage
+ 00000481  E8 00000000 E   *	    call   WriteString
+ 00000486  A1 00000062 R     1		mov eax, c1.damageMin
+ 0000048B  E8 00000000 E     1		call WriteDec
+ 00000490  B8 0000002D	     1		mov eax,'-'
+ 00000495  E8 00000000 E     1		call WriteChar
+ 0000049A  A1 00000066 R     1		mov eax, c1.damageMax
+ 0000049F  E8 00000000 E     1		call WriteDec
+ 000004A4  BA 00000469 R     1		mov edx, offset blank
+ 000004A9  E8 00000000 E   *	    call   WriteString
+ 000004AE  BA 000001C0 R     1		mov edx, offset combatOptionsMenuTitle ;//prints combat Options
+ 000004B3  E8 00000000 E   *	    call   WriteString
+ 000004B8  BA 000001D5 R     1		mov edx,offset attackTitle
+ 000004BD  E8 00000000 E   *	    call   WriteString
+ 000004C2  BA 000001E1 R     1		mov edx,offset fleeTitle
+ 000004C7  E8 00000000 E   *	    call   WriteString
+ 000004CC  E8 00000000 E     2		call ReadDec
+ 000004D1  8B C8	     2		mov ecx, eax
+ 000004D3  E8 00000000 E     1		call Clrscr
+ 000004D8  83 F9 00	     1			cmp ecx, 0 ;//switch
+ 000004DB  74 07	     1			je attack
+ 000004DD  83 F9 01	     1			cmp ecx, 1
+ 000004E0  74 31	     1			je flee
+ 000004E2  EB 36	     1			jmp end_switch??0002
+ 000004E4		     1			attack:
+ 000004E4  A1 00000066 R     1				mov eax,c1.damageMax;//player attacks
+ 000004E9  8B 1D 00000062 R  1				mov ebx,c1.damageMin
+ 000004EF  2B C3	     1				sub eax,ebx
+ 000004F1  40		     1				inc eax
+ 000004F2  E8 00000000 E     1				call RandomRange
+ 000004F7  03 C3	     1				add eax,ebx
+ 000004F9  29 05 00000172 R  1				sub e1.hp,eax
+ 000004FF  83 3D 00000172 R  1				cmp e1.hp,0 ;//check to see if enemy died
 	   00
- 0000048F  7E 02	     1				jle enemy_dead
- 00000491  EB 10	     1				jmp end_switch??0001
- 00000493		     1				enemy_dead:
- 00000493  C6 05 00000144 R  1					mov enemyDefeated,1
+ 00000506  7E 02	     1				jle enemy_dead
+ 00000508  EB 10	     1				jmp end_switch??0002
+ 0000050A		     1				enemy_dead:
+ 0000050A  C6 05 00000188 R  1					mov enemyDefeated,1
 	   01
- 0000049A  EB 39	     1					jmp AND_FALSE_COMBAT??0001
- 0000049C		     1			flee:
- 0000049C  C6 05 00000142 R  1				mov escape,1
+ 00000511  EB 39	     1					jmp AND_FALSE_COMBAT??0002
+ 00000513		     1			flee:
+ 00000513  C6 05 00000186 R  1				mov escape,1
 	   01
- 000004A3		     1			end_switch??0001:
- 000004A3  A1 00000136 R     1				mov eax,e1.damageMax;//enemy attacks
- 000004A8  8B 1D 00000132 R  1				mov ebx,e1.damageMin
- 000004AE  2B C3	     1				sub eax,ebx
- 000004B0  40		     1				inc eax
- 000004B1  E8 00000000 E     1				call RandomRange
- 000004B6  03 C3	     1				add eax,ebx
- 000004B8  29 05 00000034 R  1				sub c1.hp,eax
- 000004BE  83 3D 00000034 R  1				cmp c1.hp,0    ;// checking to see if character died
+ 0000051A		     1			end_switch??0002:
+ 0000051A  A1 0000017A R     1				mov eax,e1.damageMax;//enemy attacks
+ 0000051F  8B 1D 00000176 R  1				mov ebx,e1.damageMin
+ 00000525  2B C3	     1				sub eax,ebx
+ 00000527  40		     1				inc eax
+ 00000528  E8 00000000 E     1				call RandomRange
+ 0000052D  03 C3	     1				add eax,ebx
+ 0000052F  29 05 0000005E R  1				sub c1.hp,eax
+ 00000535  83 3D 0000005E R  1				cmp c1.hp,0    ;// checking to see if character died
 	   00
- 000004C5  7E 02	     1				jle character_dead
- 000004C7  EB 07	     1				jmp character_not_dead
- 000004C9		     1				character_dead:
- 000004C9  C6 05 00000143 R  1					mov playerDefeated,1
+ 0000053C  7E 02	     1				jle character_dead
+ 0000053E  EB 07	     1				jmp character_not_dead
+ 00000540		     1				character_dead:
+ 00000540  C6 05 00000187 R  1					mov playerDefeated,1
 	   01
- 000004D0		     1				character_not_dead:
- 000004D0  E9 FFFFFE3E	     1			jmp WHILE_COMBAT??0001;//default
- 000004D5		     1	AND_FALSE_COMBAT??0001:
- 000004D5  80 3D 00000142 R  1	cmp escape,0
+ 00000547		     1				character_not_dead:
+ 00000547  E9 FFFFFE3E	     1			jmp WHILE_COMBAT??0002;//default
+ 0000054C		     1	AND_FALSE_COMBAT??0002:
+ 0000054C  80 3D 00000186 R  1	cmp escape,0
 	   00
- 000004DC  74 0C	     1	je not_escape
- 000004DE  BA 000001A7 R     1	mov edx, offset escapeEvent;//will print if player fleed
- 000004E3  E8 00000000 E   *	    call   WriteString
- 000004E8  EB 2A	     1	jmp eventDetermined
- 000004EA		     1	not_escape:
- 000004EA  80 3D 00000143 R  1	cmp playerDefeated,0
+ 00000553  74 0C	     1	je not_escape
+ 00000555  BA 000001EB R     1	mov edx, offset escapeEvent;//will print if player fleed
+ 0000055A  E8 00000000 E   *	    call   WriteString
+ 0000055F  EB 48	     1	jmp eventDetermined
+ 00000561		     1	not_escape:
+ 00000561  80 3D 00000187 R  1	cmp playerDefeated,0
 	   00
- 000004F1  74 0C	     1	je not_playerDefeated
- 000004F3  BA 000001B6 R     1	mov edx, offset playerDefeatedEvent;//will print if player was defeated
- 000004F8  E8 00000000 E   *	    call   WriteString
- 000004FD  EB 15	     1	jmp eventDetermined
- 000004FF		     1	not_playerDefeated:
- 000004FF  BA 000001CA R     1	mov edx,offset enemyDefeatedEvent;//will print if enemy was defeated
- 00000504  E8 00000000 E   *	    call   WriteString
- 00000509  A1 0000013E R     1	mov eax,e1.expReward ;//rewarding player exp
- 0000050E  01 05 00000018 R  1	add c1.exp,eax
- 00000514		     1	eventDetermined:
- 00000514  B8 000007D0	     1	mov eax,2000
- 00000519  E8 00000000 E     1	call Delay
- 0000051E  E8 00000000 E     1	call Clrscr
- 00000523  61		     1	popAD
- 00000524  E9 0000008D				jmp end_switch
- 00000529				levelUp:
+ 00000568  74 0C	     1	je not_playerDefeated
+ 0000056A  BA 000001FA R     1	mov edx, offset playerDefeatedEvent;//will print if player was defeated
+ 0000056F  E8 00000000 E   *	    call   WriteString
+ 00000574  EB 33	     1	jmp eventDetermined
+ 00000576		     1	not_playerDefeated:
+ 00000576  BA 0000020E R     1	mov edx,offset enemyDefeatedEvent;//will print if enemy was defeated
+ 0000057B  E8 00000000 E   *	    call   WriteString
+ 00000580  B8 00000357 R     1	mov eax, offset t1
+ 00000585  BB 0000033B R     2	mov ebx, offset i1
+ 0000058A		     2	notEmpty??0004:
+ 0000058A  83 3B 00	     2	cmp [ebx].item.itemCode,0
+ 0000058D  74 0B	     2	je isEmpty??0004 
+ 0000058F  83 7B 10 00	     2	cmp [ebx].item.next,null
+ 00000593  74 09	     2	je inventoryFull??0004
+ 00000595  8B 5B 10	     2	mov ebx,[ebx].item.next
+ 00000598  EB F0	     2	jmp notEmpty??0004
+ 0000059A		     2	isEmpty??0004:
+ 0000059A  8B 08	     2	mov ecx, [eax].item.itemCode
+ 0000059C  89 0B	     2	mov [ebx].item.itemCode,ecx
+ 0000059E		     2	inventoryFull??0004:
+ 0000059E  A1 00000182 R     1	mov eax,e1.expReward ;//rewarding player exp
+ 000005A3  01 05 00000042 R  1	add c1.exp,eax
+ 000005A9		     1	eventDetermined:
+ 000005A9  B8 000007D0	     1	mov eax,2000
+ 000005AE  E8 00000000 E     1	call Delay
+ 000005B3  E8 00000000 E     1	call Clrscr
+ 000005B8  61		     1	popAD
+ 000005B9  E9 00001031				jmp end_switch
+ 000005BE				levelUp:
 						mLevelUp
- 00000529  60		     1	pushAD
- 0000052A  A1 00000018 R     1	mov eax,c1.exp
- 0000052F  8B 1D 0000001C R  1	mov ebx,c1.expToNext
- 00000535  3B C3	     1	cmp eax,ebx
- 00000537  7C 61	     1	jl notEnough
- 00000539  FF 05 00000014 R  1	inc c1.level
- 0000053F  60		     2	pushAD
- 00000540  FF 05 00000020 R  2	inc c1.brawn   ;// sets primary attributes
- 00000546  FF 05 00000024 R  2	inc c1.agility
- 0000054C  FF 05 00000028 R  2	inc c1.mind   
- 00000552  FF 05 0000002C R  2	inc c1.fortune
- 00000558  A1 00000020 R     2	mov eax, c1.brawn ;// maxHP & hp initiliaze = brawn*2
- 0000055D  D1 E0	     2	sal eax,1 ;// multiply by 2
- 0000055F  A3 00000030 R     2	mov c1.hpMax,eax
- 00000564  A3 00000034 R     2	mov c1.hp,eax
- 00000569  A1 00000020 R     2	mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
- 0000056E  D1 F8	     2	sar eax,1;//divide by 2
- 00000570  A3 00000038 R     2	mov c1.damageMin,eax
- 00000575  8B 1D 00000024 R  2	mov ebx,c1.agility
- 0000057B  C1 FB 02	     2	sar ebx,2;//divide by 4
- 0000057E  03 C3	     2	add eax,ebx
- 00000580  A3 0000003C R     2	mov c1.damageMax,eax
- 00000585  61		     2	popAD
- 00000586  A1 00000018 R     1	mov eax,c1.exp
- 0000058B  8B 1D 0000001C R  1	mov ebx,c1.expToNext
- 00000591  2B C3	     1	sub eax,ebx
- 00000593  A3 00000018 R     1	mov c1.exp,eax
- 00000598  EB 19	     1	jmp leveledUp
- 0000059A		     1	notEnough:
- 0000059A  BA 000001E3 R     1	mov edx,offset notEnoughResponse
- 0000059F  E8 00000000 E   *	    call   WriteString
- 000005A4  B8 000007D0	     1	mov eax,2000
- 000005A9  E8 00000000 E     1	call Delay
- 000005AE  E8 00000000 E     1	call Clrscr
- 000005B3		     1	leveledUp:
- 000005B3  61		     1	popAD
- 000005B4  EB 00				jmp end_switch
+ 000005BE  60		     1	pushAD
+ 000005BF  A1 00000042 R     1	mov eax,c1.exp
+ 000005C4  8B 1D 00000046 R  1	mov ebx,c1.expToNext
+ 000005CA  3B C3	     1	cmp eax,ebx
+ 000005CC  7C 67	     1	jl notEnough
+ 000005CE  FF 05 0000003E R  1	inc c1.level
+ 000005D4  60		     2	pushAD
+ 000005D5  FF 05 0000004A R  2	inc c1.brawn   ;// sets primary attributes
+ 000005DB  FF 05 0000004E R  2	inc c1.agility
+ 000005E1  FF 05 00000052 R  2	inc c1.mind   
+ 000005E7  FF 05 00000056 R  2	inc c1.fortune
+ 000005ED  A1 0000004A R     2	mov eax, c1.brawn ;// maxHP & hp initialize = brawn*2
+ 000005F2  D1 E0	     2	sal eax,1 ;// multiply by 2
+ 000005F4  A3 0000005A R     2	mov c1.hpMax,eax
+ 000005F9  A3 0000005E R     2	mov c1.hp,eax
+ 000005FE  A1 0000004A R     2	mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+ 00000603  D1 F8	     2	sar eax,1;//divide by 2
+ 00000605  03 05 00000076 R  2	add eax,c1.weaponDamage
+ 0000060B  A3 00000062 R     2	mov c1.damageMin,eax
+ 00000610  8B 1D 0000004E R  2	mov ebx,c1.agility
+ 00000616  C1 FB 02	     2	sar ebx,2;//divide by 4
+ 00000619  03 C3	     2	add eax,ebx
+ 0000061B  A3 00000066 R     2	mov c1.damageMax,eax
+ 00000620  61		     2	popAD
+ 00000621  A1 00000042 R     1	mov eax,c1.exp
+ 00000626  8B 1D 00000046 R  1	mov ebx,c1.expToNext
+ 0000062C  2B C3	     1	sub eax,ebx
+ 0000062E  A3 00000042 R     1	mov c1.exp,eax
+ 00000633  EB 19	     1	jmp leveledUp
+ 00000635		     1	notEnough:
+ 00000635  BA 00000227 R     1	mov edx,offset notEnoughResponse
+ 0000063A  E8 00000000 E   *	    call   WriteString
+ 0000063F  B8 000007D0	     1	mov eax,2000
+ 00000644  E8 00000000 E     1	call Delay
+ 00000649  E8 00000000 E     1	call Clrscr
+ 0000064E		     1	leveledUp:
+ 0000064E  61		     1	popAD
+ 0000064F  E9 00000F9B				jmp end_switch
+ 00000654				inventory:
+						mInventory
+ 00000654  BA 0000037B R     1	mov edx, offset selectItemTitle
+ 00000659  E8 00000000 E     1	call WriteString
+ 0000065E  60		     2	pushAD
+ 0000065F  33 C9	     2	xor ecx,ecx
+ 00000661  BB 0000033B R     2	mov eBx, offset i1
+ 00000666		     2	DO1??0005:
+ 00000666  8B C1	     2	mov eax,ecx
+ 00000668  E8 00000000 E     2	call WriteDec
+ 0000066D  B8 0000003A	     2	mov eax, ':'
+ 00000672  E8 00000000 E     2	call WriteChar
+ 00000677  8B 03	     2	mov eax, [ebx].item.itemCode
+ 00000679  83 F8 01	     3	cmp eax,1
+ 0000067C  74 11	     3	je item0??0006
+ 0000067E  83 F8 02	     3	cmp eax,2
+ 00000681  74 13	     3	je item1??0006
+ 00000683  83 F8 03	     3	cmp eax,3
+ 00000686  74 15	     3	je item2??0006
+ 00000688  83 F8 04	     3	cmp eax,4
+ 0000068B  74 17	     3	je item3??0006
+ 0000068D  EB 1C	     3	jmp default??0006
+ 0000068F		     3	item0??0006:
+ 0000068F  BA 00000000 R     3		mov edx, offset itemName1
+ 00000694  EB 1A	     3		jmp print??0006
+ 00000696		     3	item1??0006:
+ 00000696  BA 00000007 R     3		mov edx, offset itemName2
+ 0000069B  EB 13	     3		jmp print??0006
+ 0000069D		     3	item2??0006:
+ 0000069D  BA 0000000D R     3		mov edx, offset itemName3
+ 000006A2  EB 0C	     3		jmp print??0006
+ 000006A4		     3	item3??0006:
+ 000006A4  BA 00000015 R     3		mov edx, offset itemName4
+ 000006A9  EB 05	     3		jmp print??0006
+ 000006AB		     3	default??0006:
+ 000006AB  BA 0000001B R     3		mov edx, offset defaultName
+ 000006B0		     3	print??0006:
+ 000006B0  E8 00000000 E   *	    call   WriteString
+ 000006B5  BA 00000469 R     2	mov edx,offset blank
+ 000006BA  E8 00000000 E     2	call WriteString
+ 000006BF  8B 5B 10	     2	mov eBx,[ebx].item.next
+ 000006C2  41		     2	inc ecx
+ 000006C3  83 FB 00	     2	cmp ebx,null
+ 000006C6  75 9E	     2	jne DO1??0005
+ 000006C8  61		     2	popAD
+ 000006C9  E8 00000000 E     2		call ReadDec
+ 000006CE  8B C8	     2		mov ecx, eax
+ 000006D0  83 F9 00	     1	cmp ecx,0
+ 000006D3  74 51	     1		je item0
+ 000006D5  83 F9 01	     1	cmp ecx,1
+ 000006D8  0F 84 000001AF    1		je item1
+ 000006DE  83 F9 02	     1	cmp ecx,2
+ 000006E1  0F 84 0000030D    1		je item2
+ 000006E7  83 F9 03	     1	cmp ecx,3
+ 000006EA  0F 84 0000046B    1		je item3
+ 000006F0  83 F9 04	     1	cmp ecx,4
+ 000006F3  0F 84 000005C9    1		je item4
+ 000006F9  83 F9 05	     1	cmp ecx,5
+ 000006FC  0F 84 00000727    1		je item5
+ 00000702  83 F9 06	     1	cmp ecx,6
+ 00000705  0F 84 00000885    1		je item6
+ 0000070B  83 F9 07	     1	cmp ecx,7
+ 0000070E  0F 84 000009E3    1		je item7
+ 00000714  83 F9 08	     1	cmp ecx,8
+ 00000717  0F 84 00000B41    1		je item8
+ 0000071D  83 F9 09	     1	cmp ecx,9
+ 00000720  0F 84 00000C9F    1		je item9
+ 00000726		     1	item0:
+ 00000726  BB 0000033B R     1		mov ebx,offset i1 ;//storing item for use
+ 0000072B  BA 00000390 R     2	mov edx, offset exitTitle
+ 00000730  E8 00000000 E     2	call WriteString
+ 00000735  BA 0000039B R     2	mov edx, offset discardTitle
+ 0000073A  E8 00000000 E     2	call WriteString
+ 0000073F  BA 000003A9 R     2	mov edx, offset equipTitle
+ 00000744  E8 00000000 E     2	call WriteString
+ 00000749  BA 000003B5 R     2	mov edx, offset infoTitle
+ 0000074E  E8 00000000 E     2	call WriteString
+ 00000753  E8 00000000 E     3		call ReadDec
+ 00000758  8B C8	     3		mov ecx, eax
+ 0000075A  83 F9 00	     2	cmp ecx,0
+ 0000075D  74 18	     2	je exit??0008
+ 0000075F  83 F9 01	     2	cmp ecx,1
+ 00000762  74 18	     2	je removeItem??0008
+ 00000764  83 F9 02	     2	cmp ecx,2
+ 00000767  74 2C	     2	je equipItem??0008
+ 00000769  83 F9 03	     2	cmp ecx,3
+ 0000076C  0F 84 000000A9    2	je infoItem??0008
+ 00000772  E9 00000111	     2	jmp endCase??0008
+ 00000777		     2	exit??0008:
+ 00000777  E9 0000010C	     2		jmp endCase??0008
+ 0000077C		     2	removeItem??0008:
+ 0000077C  C7 03 00000000    3	mov [ebx].item.itemCode,null
+ 00000782  C7 43 08	     3	mov [ebx].item.sellValue,0
+	   00000000
+ 00000789  C7 43 04	     3	mov [ebx].item.buyValue,0
+	   00000000
+ 00000790  E9 000000F3	     2		jmp endCase??0008
+ 00000795		     2	equipItem??0008:
+ 00000795  8B 13	     3	mov edx, [ebx].item.itemCode
+ 00000797  89 15 0000006A R  3	mov c1.weaponCode, edx
+ 0000079D  8B 53 14	     3	mov edx, [ebx].item.combatValue
+ 000007A0  89 15 00000076 R  3	mov c1.weaponDamage, edx
+ 000007A6  8B 53 04	     3	mov edx, [ebx].item.buyValue
+ 000007A9  89 15 0000006E R  3	mov c1.weaponBuyValue,edx
+ 000007AF  8B 53 08	     3	mov edx,[ebx].item.sellValue
+ 000007B2  89 15 00000072 R  3	mov c1.weaponsellValue,edx
+ 000007B8  C7 03 00000000    4	mov [ebx].item.itemCode,null
+ 000007BE  C7 43 08	     4	mov [ebx].item.sellValue,0
+	   00000000
+ 000007C5  C7 43 04	     4	mov [ebx].item.buyValue,0
+	   00000000
+ 000007CC  60		     4	pushAD
+ 000007CD  FF 05 0000004A R  4	inc c1.brawn   ;// sets primary attributes
+ 000007D3  FF 05 0000004E R  4	inc c1.agility
+ 000007D9  FF 05 00000052 R  4	inc c1.mind   
+ 000007DF  FF 05 00000056 R  4	inc c1.fortune
+ 000007E5  A1 0000004A R     4	mov eax, c1.brawn ;// maxHP & hp initialize = brawn*2
+ 000007EA  D1 E0	     4	sal eax,1 ;// multiply by 2
+ 000007EC  A3 0000005A R     4	mov c1.hpMax,eax
+ 000007F1  A3 0000005E R     4	mov c1.hp,eax
+ 000007F6  A1 0000004A R     4	mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+ 000007FB  D1 F8	     4	sar eax,1;//divide by 2
+ 000007FD  03 05 00000076 R  4	add eax,c1.weaponDamage
+ 00000803  A3 00000062 R     4	mov c1.damageMin,eax
+ 00000808  8B 1D 0000004E R  4	mov ebx,c1.agility
+ 0000080E  C1 FB 02	     4	sar ebx,2;//divide by 4
+ 00000811  03 C3	     4	add eax,ebx
+ 00000813  A3 00000066 R     4	mov c1.damageMax,eax
+ 00000818  61		     4	popAD
+ 00000819  EB 6D	     2		jmp endCase??0008
+ 0000081B		     2	infoItem??0008:
+ 0000081B  E8 00000000 E     2		call clrscr
+ 00000820  BA 00000469 R     3	mov edx, offset blank
+ 00000825  E8 00000000 E     3	call WriteString
+ 0000082A  BA 000003E1 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 0000082F  E8 00000000 E     3	call WriteString
+ 00000834  8B 43 04	     3	mov eax, [ebx].item.buyValue
+ 00000837  E8 00000000 E     3	call WriteDec
+ 0000083C  BA 00000469 R     3	mov edx, offset blank
+ 00000841  E8 00000000 E     3	call WriteString
+ 00000846  BA 000003D2 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 0000084B  E8 00000000 E     3	call WriteString
+ 00000850  8B 43 08	     3	mov eax, [ebx].item.SellValue
+ 00000853  E8 00000000 E     3	call WriteDec
+ 00000858  BA 00000469 R     3	mov edx, offset blank
+ 0000085D  E8 00000000 E     3	call WriteString
+ 00000862  BA 000003EF R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 00000867  E8 00000000 E     3	call WriteString
+ 0000086C  8B 43 14	     3	mov eax, [ebx].item.combatValue
+ 0000086F  E8 00000000 E     3	call WriteDec
+ 00000874  BA 00000469 R     3	mov edx, offset blank
+ 00000879  E8 00000000 E     3	call WriteString
+ 0000087E  B8 000007D0	     2		mov eax,2000
+ 00000883  E8 00000000 E     2		call Delay
+ 00000888		     2	endCase??0008:
+ 00000888  E9 00000C9C	     1		jmp endInventory
+ 0000088D		     1	item1:
+ 0000088D  BB 0000031F R     1		mov ebx,offset i2 ;//storing item for use
+ 00000892  BA 00000390 R     2	mov edx, offset exitTitle
+ 00000897  E8 00000000 E     2	call WriteString
+ 0000089C  BA 0000039B R     2	mov edx, offset discardTitle
+ 000008A1  E8 00000000 E     2	call WriteString
+ 000008A6  BA 000003A9 R     2	mov edx, offset equipTitle
+ 000008AB  E8 00000000 E     2	call WriteString
+ 000008B0  BA 000003B5 R     2	mov edx, offset infoTitle
+ 000008B5  E8 00000000 E     2	call WriteString
+ 000008BA  E8 00000000 E     3		call ReadDec
+ 000008BF  8B C8	     3		mov ecx, eax
+ 000008C1  83 F9 00	     2	cmp ecx,0
+ 000008C4  74 18	     2	je exit??000A
+ 000008C6  83 F9 01	     2	cmp ecx,1
+ 000008C9  74 18	     2	je removeItem??000A
+ 000008CB  83 F9 02	     2	cmp ecx,2
+ 000008CE  74 2C	     2	je equipItem??000A
+ 000008D0  83 F9 03	     2	cmp ecx,3
+ 000008D3  0F 84 000000A9    2	je infoItem??000A
+ 000008D9  E9 00000111	     2	jmp endCase??000A
+ 000008DE		     2	exit??000A:
+ 000008DE  E9 0000010C	     2		jmp endCase??000A
+ 000008E3		     2	removeItem??000A:
+ 000008E3  C7 03 00000000    3	mov [ebx].item.itemCode,null
+ 000008E9  C7 43 08	     3	mov [ebx].item.sellValue,0
+	   00000000
+ 000008F0  C7 43 04	     3	mov [ebx].item.buyValue,0
+	   00000000
+ 000008F7  E9 000000F3	     2		jmp endCase??000A
+ 000008FC		     2	equipItem??000A:
+ 000008FC  8B 13	     3	mov edx, [ebx].item.itemCode
+ 000008FE  89 15 0000006A R  3	mov c1.weaponCode, edx
+ 00000904  8B 53 14	     3	mov edx, [ebx].item.combatValue
+ 00000907  89 15 00000076 R  3	mov c1.weaponDamage, edx
+ 0000090D  8B 53 04	     3	mov edx, [ebx].item.buyValue
+ 00000910  89 15 0000006E R  3	mov c1.weaponBuyValue,edx
+ 00000916  8B 53 08	     3	mov edx,[ebx].item.sellValue
+ 00000919  89 15 00000072 R  3	mov c1.weaponsellValue,edx
+ 0000091F  C7 03 00000000    4	mov [ebx].item.itemCode,null
+ 00000925  C7 43 08	     4	mov [ebx].item.sellValue,0
+	   00000000
+ 0000092C  C7 43 04	     4	mov [ebx].item.buyValue,0
+	   00000000
+ 00000933  60		     4	pushAD
+ 00000934  FF 05 0000004A R  4	inc c1.brawn   ;// sets primary attributes
+ 0000093A  FF 05 0000004E R  4	inc c1.agility
+ 00000940  FF 05 00000052 R  4	inc c1.mind   
+ 00000946  FF 05 00000056 R  4	inc c1.fortune
+ 0000094C  A1 0000004A R     4	mov eax, c1.brawn ;// maxHP & hp initialize = brawn*2
+ 00000951  D1 E0	     4	sal eax,1 ;// multiply by 2
+ 00000953  A3 0000005A R     4	mov c1.hpMax,eax
+ 00000958  A3 0000005E R     4	mov c1.hp,eax
+ 0000095D  A1 0000004A R     4	mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+ 00000962  D1 F8	     4	sar eax,1;//divide by 2
+ 00000964  03 05 00000076 R  4	add eax,c1.weaponDamage
+ 0000096A  A3 00000062 R     4	mov c1.damageMin,eax
+ 0000096F  8B 1D 0000004E R  4	mov ebx,c1.agility
+ 00000975  C1 FB 02	     4	sar ebx,2;//divide by 4
+ 00000978  03 C3	     4	add eax,ebx
+ 0000097A  A3 00000066 R     4	mov c1.damageMax,eax
+ 0000097F  61		     4	popAD
+ 00000980  EB 6D	     2		jmp endCase??000A
+ 00000982		     2	infoItem??000A:
+ 00000982  E8 00000000 E     2		call clrscr
+ 00000987  BA 00000469 R     3	mov edx, offset blank
+ 0000098C  E8 00000000 E     3	call WriteString
+ 00000991  BA 000003E1 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00000996  E8 00000000 E     3	call WriteString
+ 0000099B  8B 43 04	     3	mov eax, [ebx].item.buyValue
+ 0000099E  E8 00000000 E     3	call WriteDec
+ 000009A3  BA 00000469 R     3	mov edx, offset blank
+ 000009A8  E8 00000000 E     3	call WriteString
+ 000009AD  BA 000003D2 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 000009B2  E8 00000000 E     3	call WriteString
+ 000009B7  8B 43 08	     3	mov eax, [ebx].item.SellValue
+ 000009BA  E8 00000000 E     3	call WriteDec
+ 000009BF  BA 00000469 R     3	mov edx, offset blank
+ 000009C4  E8 00000000 E     3	call WriteString
+ 000009C9  BA 000003EF R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 000009CE  E8 00000000 E     3	call WriteString
+ 000009D3  8B 43 14	     3	mov eax, [ebx].item.combatValue
+ 000009D6  E8 00000000 E     3	call WriteDec
+ 000009DB  BA 00000469 R     3	mov edx, offset blank
+ 000009E0  E8 00000000 E     3	call WriteString
+ 000009E5  B8 000007D0	     2		mov eax,2000
+ 000009EA  E8 00000000 E     2		call Delay
+ 000009EF		     2	endCase??000A:
+ 000009EF  E9 00000B35	     1		jmp endInventory
+ 000009F4		     1	item2:
+ 000009F4  BB 00000303 R     1		mov ebx,offset i3 ;//storing item for use
+ 000009F9  BA 00000390 R     2	mov edx, offset exitTitle
+ 000009FE  E8 00000000 E     2	call WriteString
+ 00000A03  BA 0000039B R     2	mov edx, offset discardTitle
+ 00000A08  E8 00000000 E     2	call WriteString
+ 00000A0D  BA 000003A9 R     2	mov edx, offset equipTitle
+ 00000A12  E8 00000000 E     2	call WriteString
+ 00000A17  BA 000003B5 R     2	mov edx, offset infoTitle
+ 00000A1C  E8 00000000 E     2	call WriteString
+ 00000A21  E8 00000000 E     3		call ReadDec
+ 00000A26  8B C8	     3		mov ecx, eax
+ 00000A28  83 F9 00	     2	cmp ecx,0
+ 00000A2B  74 18	     2	je exit??000C
+ 00000A2D  83 F9 01	     2	cmp ecx,1
+ 00000A30  74 18	     2	je removeItem??000C
+ 00000A32  83 F9 02	     2	cmp ecx,2
+ 00000A35  74 2C	     2	je equipItem??000C
+ 00000A37  83 F9 03	     2	cmp ecx,3
+ 00000A3A  0F 84 000000A9    2	je infoItem??000C
+ 00000A40  E9 00000111	     2	jmp endCase??000C
+ 00000A45		     2	exit??000C:
+ 00000A45  E9 0000010C	     2		jmp endCase??000C
+ 00000A4A		     2	removeItem??000C:
+ 00000A4A  C7 03 00000000    3	mov [ebx].item.itemCode,null
+ 00000A50  C7 43 08	     3	mov [ebx].item.sellValue,0
+	   00000000
+ 00000A57  C7 43 04	     3	mov [ebx].item.buyValue,0
+	   00000000
+ 00000A5E  E9 000000F3	     2		jmp endCase??000C
+ 00000A63		     2	equipItem??000C:
+ 00000A63  8B 13	     3	mov edx, [ebx].item.itemCode
+ 00000A65  89 15 0000006A R  3	mov c1.weaponCode, edx
+ 00000A6B  8B 53 14	     3	mov edx, [ebx].item.combatValue
+ 00000A6E  89 15 00000076 R  3	mov c1.weaponDamage, edx
+ 00000A74  8B 53 04	     3	mov edx, [ebx].item.buyValue
+ 00000A77  89 15 0000006E R  3	mov c1.weaponBuyValue,edx
+ 00000A7D  8B 53 08	     3	mov edx,[ebx].item.sellValue
+ 00000A80  89 15 00000072 R  3	mov c1.weaponsellValue,edx
+ 00000A86  C7 03 00000000    4	mov [ebx].item.itemCode,null
+ 00000A8C  C7 43 08	     4	mov [ebx].item.sellValue,0
+	   00000000
+ 00000A93  C7 43 04	     4	mov [ebx].item.buyValue,0
+	   00000000
+ 00000A9A  60		     4	pushAD
+ 00000A9B  FF 05 0000004A R  4	inc c1.brawn   ;// sets primary attributes
+ 00000AA1  FF 05 0000004E R  4	inc c1.agility
+ 00000AA7  FF 05 00000052 R  4	inc c1.mind   
+ 00000AAD  FF 05 00000056 R  4	inc c1.fortune
+ 00000AB3  A1 0000004A R     4	mov eax, c1.brawn ;// maxHP & hp initialize = brawn*2
+ 00000AB8  D1 E0	     4	sal eax,1 ;// multiply by 2
+ 00000ABA  A3 0000005A R     4	mov c1.hpMax,eax
+ 00000ABF  A3 0000005E R     4	mov c1.hp,eax
+ 00000AC4  A1 0000004A R     4	mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+ 00000AC9  D1 F8	     4	sar eax,1;//divide by 2
+ 00000ACB  03 05 00000076 R  4	add eax,c1.weaponDamage
+ 00000AD1  A3 00000062 R     4	mov c1.damageMin,eax
+ 00000AD6  8B 1D 0000004E R  4	mov ebx,c1.agility
+ 00000ADC  C1 FB 02	     4	sar ebx,2;//divide by 4
+ 00000ADF  03 C3	     4	add eax,ebx
+ 00000AE1  A3 00000066 R     4	mov c1.damageMax,eax
+ 00000AE6  61		     4	popAD
+ 00000AE7  EB 6D	     2		jmp endCase??000C
+ 00000AE9		     2	infoItem??000C:
+ 00000AE9  E8 00000000 E     2		call clrscr
+ 00000AEE  BA 00000469 R     3	mov edx, offset blank
+ 00000AF3  E8 00000000 E     3	call WriteString
+ 00000AF8  BA 000003E1 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00000AFD  E8 00000000 E     3	call WriteString
+ 00000B02  8B 43 04	     3	mov eax, [ebx].item.buyValue
+ 00000B05  E8 00000000 E     3	call WriteDec
+ 00000B0A  BA 00000469 R     3	mov edx, offset blank
+ 00000B0F  E8 00000000 E     3	call WriteString
+ 00000B14  BA 000003D2 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00000B19  E8 00000000 E     3	call WriteString
+ 00000B1E  8B 43 08	     3	mov eax, [ebx].item.SellValue
+ 00000B21  E8 00000000 E     3	call WriteDec
+ 00000B26  BA 00000469 R     3	mov edx, offset blank
+ 00000B2B  E8 00000000 E     3	call WriteString
+ 00000B30  BA 000003EF R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 00000B35  E8 00000000 E     3	call WriteString
+ 00000B3A  8B 43 14	     3	mov eax, [ebx].item.combatValue
+ 00000B3D  E8 00000000 E     3	call WriteDec
+ 00000B42  BA 00000469 R     3	mov edx, offset blank
+ 00000B47  E8 00000000 E     3	call WriteString
+ 00000B4C  B8 000007D0	     2		mov eax,2000
+ 00000B51  E8 00000000 E     2		call Delay
+ 00000B56		     2	endCase??000C:
+ 00000B56  E9 000009CE	     1		jmp endInventory
+ 00000B5B		     1	item3:
+ 00000B5B  BB 000002E7 R     1		mov ebx,offset i4 ;//storing item for use
+ 00000B60  BA 00000390 R     2	mov edx, offset exitTitle
+ 00000B65  E8 00000000 E     2	call WriteString
+ 00000B6A  BA 0000039B R     2	mov edx, offset discardTitle
+ 00000B6F  E8 00000000 E     2	call WriteString
+ 00000B74  BA 000003A9 R     2	mov edx, offset equipTitle
+ 00000B79  E8 00000000 E     2	call WriteString
+ 00000B7E  BA 000003B5 R     2	mov edx, offset infoTitle
+ 00000B83  E8 00000000 E     2	call WriteString
+ 00000B88  E8 00000000 E     3		call ReadDec
+ 00000B8D  8B C8	     3		mov ecx, eax
+ 00000B8F  83 F9 00	     2	cmp ecx,0
+ 00000B92  74 18	     2	je exit??000E
+ 00000B94  83 F9 01	     2	cmp ecx,1
+ 00000B97  74 18	     2	je removeItem??000E
+ 00000B99  83 F9 02	     2	cmp ecx,2
+ 00000B9C  74 2C	     2	je equipItem??000E
+ 00000B9E  83 F9 03	     2	cmp ecx,3
+ 00000BA1  0F 84 000000A9    2	je infoItem??000E
+ 00000BA7  E9 00000111	     2	jmp endCase??000E
+ 00000BAC		     2	exit??000E:
+ 00000BAC  E9 0000010C	     2		jmp endCase??000E
+ 00000BB1		     2	removeItem??000E:
+ 00000BB1  C7 03 00000000    3	mov [ebx].item.itemCode,null
+ 00000BB7  C7 43 08	     3	mov [ebx].item.sellValue,0
+	   00000000
+ 00000BBE  C7 43 04	     3	mov [ebx].item.buyValue,0
+	   00000000
+ 00000BC5  E9 000000F3	     2		jmp endCase??000E
+ 00000BCA		     2	equipItem??000E:
+ 00000BCA  8B 13	     3	mov edx, [ebx].item.itemCode
+ 00000BCC  89 15 0000006A R  3	mov c1.weaponCode, edx
+ 00000BD2  8B 53 14	     3	mov edx, [ebx].item.combatValue
+ 00000BD5  89 15 00000076 R  3	mov c1.weaponDamage, edx
+ 00000BDB  8B 53 04	     3	mov edx, [ebx].item.buyValue
+ 00000BDE  89 15 0000006E R  3	mov c1.weaponBuyValue,edx
+ 00000BE4  8B 53 08	     3	mov edx,[ebx].item.sellValue
+ 00000BE7  89 15 00000072 R  3	mov c1.weaponsellValue,edx
+ 00000BED  C7 03 00000000    4	mov [ebx].item.itemCode,null
+ 00000BF3  C7 43 08	     4	mov [ebx].item.sellValue,0
+	   00000000
+ 00000BFA  C7 43 04	     4	mov [ebx].item.buyValue,0
+	   00000000
+ 00000C01  60		     4	pushAD
+ 00000C02  FF 05 0000004A R  4	inc c1.brawn   ;// sets primary attributes
+ 00000C08  FF 05 0000004E R  4	inc c1.agility
+ 00000C0E  FF 05 00000052 R  4	inc c1.mind   
+ 00000C14  FF 05 00000056 R  4	inc c1.fortune
+ 00000C1A  A1 0000004A R     4	mov eax, c1.brawn ;// maxHP & hp initialize = brawn*2
+ 00000C1F  D1 E0	     4	sal eax,1 ;// multiply by 2
+ 00000C21  A3 0000005A R     4	mov c1.hpMax,eax
+ 00000C26  A3 0000005E R     4	mov c1.hp,eax
+ 00000C2B  A1 0000004A R     4	mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+ 00000C30  D1 F8	     4	sar eax,1;//divide by 2
+ 00000C32  03 05 00000076 R  4	add eax,c1.weaponDamage
+ 00000C38  A3 00000062 R     4	mov c1.damageMin,eax
+ 00000C3D  8B 1D 0000004E R  4	mov ebx,c1.agility
+ 00000C43  C1 FB 02	     4	sar ebx,2;//divide by 4
+ 00000C46  03 C3	     4	add eax,ebx
+ 00000C48  A3 00000066 R     4	mov c1.damageMax,eax
+ 00000C4D  61		     4	popAD
+ 00000C4E  EB 6D	     2		jmp endCase??000E
+ 00000C50		     2	infoItem??000E:
+ 00000C50  E8 00000000 E     2		call clrscr
+ 00000C55  BA 00000469 R     3	mov edx, offset blank
+ 00000C5A  E8 00000000 E     3	call WriteString
+ 00000C5F  BA 000003E1 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00000C64  E8 00000000 E     3	call WriteString
+ 00000C69  8B 43 04	     3	mov eax, [ebx].item.buyValue
+ 00000C6C  E8 00000000 E     3	call WriteDec
+ 00000C71  BA 00000469 R     3	mov edx, offset blank
+ 00000C76  E8 00000000 E     3	call WriteString
+ 00000C7B  BA 000003D2 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00000C80  E8 00000000 E     3	call WriteString
+ 00000C85  8B 43 08	     3	mov eax, [ebx].item.SellValue
+ 00000C88  E8 00000000 E     3	call WriteDec
+ 00000C8D  BA 00000469 R     3	mov edx, offset blank
+ 00000C92  E8 00000000 E     3	call WriteString
+ 00000C97  BA 000003EF R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 00000C9C  E8 00000000 E     3	call WriteString
+ 00000CA1  8B 43 14	     3	mov eax, [ebx].item.combatValue
+ 00000CA4  E8 00000000 E     3	call WriteDec
+ 00000CA9  BA 00000469 R     3	mov edx, offset blank
+ 00000CAE  E8 00000000 E     3	call WriteString
+ 00000CB3  B8 000007D0	     2		mov eax,2000
+ 00000CB8  E8 00000000 E     2		call Delay
+ 00000CBD		     2	endCase??000E:
+ 00000CBD  E9 00000867	     1		jmp endInventory
+ 00000CC2		     1	item4:
+ 00000CC2  BB 000002CB R     1		mov ebx,offset i5 ;//storing item for use
+ 00000CC7  BA 00000390 R     2	mov edx, offset exitTitle
+ 00000CCC  E8 00000000 E     2	call WriteString
+ 00000CD1  BA 0000039B R     2	mov edx, offset discardTitle
+ 00000CD6  E8 00000000 E     2	call WriteString
+ 00000CDB  BA 000003A9 R     2	mov edx, offset equipTitle
+ 00000CE0  E8 00000000 E     2	call WriteString
+ 00000CE5  BA 000003B5 R     2	mov edx, offset infoTitle
+ 00000CEA  E8 00000000 E     2	call WriteString
+ 00000CEF  E8 00000000 E     3		call ReadDec
+ 00000CF4  8B C8	     3		mov ecx, eax
+ 00000CF6  83 F9 00	     2	cmp ecx,0
+ 00000CF9  74 18	     2	je exit??0010
+ 00000CFB  83 F9 01	     2	cmp ecx,1
+ 00000CFE  74 18	     2	je removeItem??0010
+ 00000D00  83 F9 02	     2	cmp ecx,2
+ 00000D03  74 2C	     2	je equipItem??0010
+ 00000D05  83 F9 03	     2	cmp ecx,3
+ 00000D08  0F 84 000000A9    2	je infoItem??0010
+ 00000D0E  E9 00000111	     2	jmp endCase??0010
+ 00000D13		     2	exit??0010:
+ 00000D13  E9 0000010C	     2		jmp endCase??0010
+ 00000D18		     2	removeItem??0010:
+ 00000D18  C7 03 00000000    3	mov [ebx].item.itemCode,null
+ 00000D1E  C7 43 08	     3	mov [ebx].item.sellValue,0
+	   00000000
+ 00000D25  C7 43 04	     3	mov [ebx].item.buyValue,0
+	   00000000
+ 00000D2C  E9 000000F3	     2		jmp endCase??0010
+ 00000D31		     2	equipItem??0010:
+ 00000D31  8B 13	     3	mov edx, [ebx].item.itemCode
+ 00000D33  89 15 0000006A R  3	mov c1.weaponCode, edx
+ 00000D39  8B 53 14	     3	mov edx, [ebx].item.combatValue
+ 00000D3C  89 15 00000076 R  3	mov c1.weaponDamage, edx
+ 00000D42  8B 53 04	     3	mov edx, [ebx].item.buyValue
+ 00000D45  89 15 0000006E R  3	mov c1.weaponBuyValue,edx
+ 00000D4B  8B 53 08	     3	mov edx,[ebx].item.sellValue
+ 00000D4E  89 15 00000072 R  3	mov c1.weaponsellValue,edx
+ 00000D54  C7 03 00000000    4	mov [ebx].item.itemCode,null
+ 00000D5A  C7 43 08	     4	mov [ebx].item.sellValue,0
+	   00000000
+ 00000D61  C7 43 04	     4	mov [ebx].item.buyValue,0
+	   00000000
+ 00000D68  60		     4	pushAD
+ 00000D69  FF 05 0000004A R  4	inc c1.brawn   ;// sets primary attributes
+ 00000D6F  FF 05 0000004E R  4	inc c1.agility
+ 00000D75  FF 05 00000052 R  4	inc c1.mind   
+ 00000D7B  FF 05 00000056 R  4	inc c1.fortune
+ 00000D81  A1 0000004A R     4	mov eax, c1.brawn ;// maxHP & hp initialize = brawn*2
+ 00000D86  D1 E0	     4	sal eax,1 ;// multiply by 2
+ 00000D88  A3 0000005A R     4	mov c1.hpMax,eax
+ 00000D8D  A3 0000005E R     4	mov c1.hp,eax
+ 00000D92  A1 0000004A R     4	mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+ 00000D97  D1 F8	     4	sar eax,1;//divide by 2
+ 00000D99  03 05 00000076 R  4	add eax,c1.weaponDamage
+ 00000D9F  A3 00000062 R     4	mov c1.damageMin,eax
+ 00000DA4  8B 1D 0000004E R  4	mov ebx,c1.agility
+ 00000DAA  C1 FB 02	     4	sar ebx,2;//divide by 4
+ 00000DAD  03 C3	     4	add eax,ebx
+ 00000DAF  A3 00000066 R     4	mov c1.damageMax,eax
+ 00000DB4  61		     4	popAD
+ 00000DB5  EB 6D	     2		jmp endCase??0010
+ 00000DB7		     2	infoItem??0010:
+ 00000DB7  E8 00000000 E     2		call clrscr
+ 00000DBC  BA 00000469 R     3	mov edx, offset blank
+ 00000DC1  E8 00000000 E     3	call WriteString
+ 00000DC6  BA 000003E1 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00000DCB  E8 00000000 E     3	call WriteString
+ 00000DD0  8B 43 04	     3	mov eax, [ebx].item.buyValue
+ 00000DD3  E8 00000000 E     3	call WriteDec
+ 00000DD8  BA 00000469 R     3	mov edx, offset blank
+ 00000DDD  E8 00000000 E     3	call WriteString
+ 00000DE2  BA 000003D2 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00000DE7  E8 00000000 E     3	call WriteString
+ 00000DEC  8B 43 08	     3	mov eax, [ebx].item.SellValue
+ 00000DEF  E8 00000000 E     3	call WriteDec
+ 00000DF4  BA 00000469 R     3	mov edx, offset blank
+ 00000DF9  E8 00000000 E     3	call WriteString
+ 00000DFE  BA 000003EF R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 00000E03  E8 00000000 E     3	call WriteString
+ 00000E08  8B 43 14	     3	mov eax, [ebx].item.combatValue
+ 00000E0B  E8 00000000 E     3	call WriteDec
+ 00000E10  BA 00000469 R     3	mov edx, offset blank
+ 00000E15  E8 00000000 E     3	call WriteString
+ 00000E1A  B8 000007D0	     2		mov eax,2000
+ 00000E1F  E8 00000000 E     2		call Delay
+ 00000E24		     2	endCase??0010:
+ 00000E24  E9 00000700	     1		jmp endInventory
+ 00000E29		     1	item5:
+ 00000E29  BB 000002AF R     1		mov ebx,offset i6 ;//storing item for use
+ 00000E2E  BA 00000390 R     2	mov edx, offset exitTitle
+ 00000E33  E8 00000000 E     2	call WriteString
+ 00000E38  BA 0000039B R     2	mov edx, offset discardTitle
+ 00000E3D  E8 00000000 E     2	call WriteString
+ 00000E42  BA 000003A9 R     2	mov edx, offset equipTitle
+ 00000E47  E8 00000000 E     2	call WriteString
+ 00000E4C  BA 000003B5 R     2	mov edx, offset infoTitle
+ 00000E51  E8 00000000 E     2	call WriteString
+ 00000E56  E8 00000000 E     3		call ReadDec
+ 00000E5B  8B C8	     3		mov ecx, eax
+ 00000E5D  83 F9 00	     2	cmp ecx,0
+ 00000E60  74 18	     2	je exit??0012
+ 00000E62  83 F9 01	     2	cmp ecx,1
+ 00000E65  74 18	     2	je removeItem??0012
+ 00000E67  83 F9 02	     2	cmp ecx,2
+ 00000E6A  74 2C	     2	je equipItem??0012
+ 00000E6C  83 F9 03	     2	cmp ecx,3
+ 00000E6F  0F 84 000000A9    2	je infoItem??0012
+ 00000E75  E9 00000111	     2	jmp endCase??0012
+ 00000E7A		     2	exit??0012:
+ 00000E7A  E9 0000010C	     2		jmp endCase??0012
+ 00000E7F		     2	removeItem??0012:
+ 00000E7F  C7 03 00000000    3	mov [ebx].item.itemCode,null
+ 00000E85  C7 43 08	     3	mov [ebx].item.sellValue,0
+	   00000000
+ 00000E8C  C7 43 04	     3	mov [ebx].item.buyValue,0
+	   00000000
+ 00000E93  E9 000000F3	     2		jmp endCase??0012
+ 00000E98		     2	equipItem??0012:
 
- 000005B6				end_switch:
- 000005B6  E9 FFFFFAAC			jmp while_main ;//default
+ 00000E98  8B 13	     3	mov edx, [ebx].item.itemCode
+ 00000E9A  89 15 0000006A R  3	mov c1.weaponCode, edx
+ 00000EA0  8B 53 14	     3	mov edx, [ebx].item.combatValue
+ 00000EA3  89 15 00000076 R  3	mov c1.weaponDamage, edx
+ 00000EA9  8B 53 04	     3	mov edx, [ebx].item.buyValue
+ 00000EAC  89 15 0000006E R  3	mov c1.weaponBuyValue,edx
+ 00000EB2  8B 53 08	     3	mov edx,[ebx].item.sellValue
+ 00000EB5  89 15 00000072 R  3	mov c1.weaponsellValue,edx
+ 00000EBB  C7 03 00000000    4	mov [ebx].item.itemCode,null
+ 00000EC1  C7 43 08	     4	mov [ebx].item.sellValue,0
+	   00000000
+ 00000EC8  C7 43 04	     4	mov [ebx].item.buyValue,0
+	   00000000
+ 00000ECF  60		     4	pushAD
+ 00000ED0  FF 05 0000004A R  4	inc c1.brawn   ;// sets primary attributes
+ 00000ED6  FF 05 0000004E R  4	inc c1.agility
+ 00000EDC  FF 05 00000052 R  4	inc c1.mind   
+ 00000EE2  FF 05 00000056 R  4	inc c1.fortune
+ 00000EE8  A1 0000004A R     4	mov eax, c1.brawn ;// maxHP & hp initialize = brawn*2
+ 00000EED  D1 E0	     4	sal eax,1 ;// multiply by 2
+ 00000EEF  A3 0000005A R     4	mov c1.hpMax,eax
+ 00000EF4  A3 0000005E R     4	mov c1.hp,eax
+ 00000EF9  A1 0000004A R     4	mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+ 00000EFE  D1 F8	     4	sar eax,1;//divide by 2
+ 00000F00  03 05 00000076 R  4	add eax,c1.weaponDamage
+ 00000F06  A3 00000062 R     4	mov c1.damageMin,eax
+ 00000F0B  8B 1D 0000004E R  4	mov ebx,c1.agility
+ 00000F11  C1 FB 02	     4	sar ebx,2;//divide by 4
+ 00000F14  03 C3	     4	add eax,ebx
+ 00000F16  A3 00000066 R     4	mov c1.damageMax,eax
+ 00000F1B  61		     4	popAD
+ 00000F1C  EB 6D	     2		jmp endCase??0012
+ 00000F1E		     2	infoItem??0012:
+ 00000F1E  E8 00000000 E     2		call clrscr
+ 00000F23  BA 00000469 R     3	mov edx, offset blank
+ 00000F28  E8 00000000 E     3	call WriteString
+ 00000F2D  BA 000003E1 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00000F32  E8 00000000 E     3	call WriteString
+ 00000F37  8B 43 04	     3	mov eax, [ebx].item.buyValue
+ 00000F3A  E8 00000000 E     3	call WriteDec
+ 00000F3F  BA 00000469 R     3	mov edx, offset blank
+ 00000F44  E8 00000000 E     3	call WriteString
+ 00000F49  BA 000003D2 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00000F4E  E8 00000000 E     3	call WriteString
+ 00000F53  8B 43 08	     3	mov eax, [ebx].item.SellValue
+ 00000F56  E8 00000000 E     3	call WriteDec
+ 00000F5B  BA 00000469 R     3	mov edx, offset blank
+ 00000F60  E8 00000000 E     3	call WriteString
+ 00000F65  BA 000003EF R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 00000F6A  E8 00000000 E     3	call WriteString
+ 00000F6F  8B 43 14	     3	mov eax, [ebx].item.combatValue
+ 00000F72  E8 00000000 E     3	call WriteDec
+ 00000F77  BA 00000469 R     3	mov edx, offset blank
+ 00000F7C  E8 00000000 E     3	call WriteString
+ 00000F81  B8 000007D0	     2		mov eax,2000
+ 00000F86  E8 00000000 E     2		call Delay
+ 00000F8B		     2	endCase??0012:
+ 00000F8B  E9 00000599	     1		jmp endInventory
+ 00000F90		     1	item6:
+ 00000F90  BB 00000293 R     1		mov ebx,offset i7 ;//storing item for use
+ 00000F95  BA 00000390 R     2	mov edx, offset exitTitle
+ 00000F9A  E8 00000000 E     2	call WriteString
+ 00000F9F  BA 0000039B R     2	mov edx, offset discardTitle
+ 00000FA4  E8 00000000 E     2	call WriteString
+ 00000FA9  BA 000003A9 R     2	mov edx, offset equipTitle
+ 00000FAE  E8 00000000 E     2	call WriteString
+ 00000FB3  BA 000003B5 R     2	mov edx, offset infoTitle
+ 00000FB8  E8 00000000 E     2	call WriteString
+ 00000FBD  E8 00000000 E     3		call ReadDec
+ 00000FC2  8B C8	     3		mov ecx, eax
+ 00000FC4  83 F9 00	     2	cmp ecx,0
+ 00000FC7  74 18	     2	je exit??0014
+ 00000FC9  83 F9 01	     2	cmp ecx,1
+ 00000FCC  74 18	     2	je removeItem??0014
+ 00000FCE  83 F9 02	     2	cmp ecx,2
+ 00000FD1  74 2C	     2	je equipItem??0014
+ 00000FD3  83 F9 03	     2	cmp ecx,3
+ 00000FD6  0F 84 000000A9    2	je infoItem??0014
+ 00000FDC  E9 00000111	     2	jmp endCase??0014
+ 00000FE1		     2	exit??0014:
+ 00000FE1  E9 0000010C	     2		jmp endCase??0014
+ 00000FE6		     2	removeItem??0014:
+ 00000FE6  C7 03 00000000    3	mov [ebx].item.itemCode,null
+ 00000FEC  C7 43 08	     3	mov [ebx].item.sellValue,0
+	   00000000
+ 00000FF3  C7 43 04	     3	mov [ebx].item.buyValue,0
+	   00000000
+ 00000FFA  E9 000000F3	     2		jmp endCase??0014
+ 00000FFF		     2	equipItem??0014:
+ 00000FFF  8B 13	     3	mov edx, [ebx].item.itemCode
+ 00001001  89 15 0000006A R  3	mov c1.weaponCode, edx
+ 00001007  8B 53 14	     3	mov edx, [ebx].item.combatValue
+ 0000100A  89 15 00000076 R  3	mov c1.weaponDamage, edx
+ 00001010  8B 53 04	     3	mov edx, [ebx].item.buyValue
+ 00001013  89 15 0000006E R  3	mov c1.weaponBuyValue,edx
+ 00001019  8B 53 08	     3	mov edx,[ebx].item.sellValue
+ 0000101C  89 15 00000072 R  3	mov c1.weaponsellValue,edx
+ 00001022  C7 03 00000000    4	mov [ebx].item.itemCode,null
+ 00001028  C7 43 08	     4	mov [ebx].item.sellValue,0
+	   00000000
+ 0000102F  C7 43 04	     4	mov [ebx].item.buyValue,0
+	   00000000
+ 00001036  60		     4	pushAD
+ 00001037  FF 05 0000004A R  4	inc c1.brawn   ;// sets primary attributes
+ 0000103D  FF 05 0000004E R  4	inc c1.agility
+ 00001043  FF 05 00000052 R  4	inc c1.mind   
+ 00001049  FF 05 00000056 R  4	inc c1.fortune
+ 0000104F  A1 0000004A R     4	mov eax, c1.brawn ;// maxHP & hp initialize = brawn*2
+ 00001054  D1 E0	     4	sal eax,1 ;// multiply by 2
+ 00001056  A3 0000005A R     4	mov c1.hpMax,eax
+ 0000105B  A3 0000005E R     4	mov c1.hp,eax
+ 00001060  A1 0000004A R     4	mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+ 00001065  D1 F8	     4	sar eax,1;//divide by 2
+ 00001067  03 05 00000076 R  4	add eax,c1.weaponDamage
+ 0000106D  A3 00000062 R     4	mov c1.damageMin,eax
+ 00001072  8B 1D 0000004E R  4	mov ebx,c1.agility
+ 00001078  C1 FB 02	     4	sar ebx,2;//divide by 4
+ 0000107B  03 C3	     4	add eax,ebx
+ 0000107D  A3 00000066 R     4	mov c1.damageMax,eax
+ 00001082  61		     4	popAD
+ 00001083  EB 6D	     2		jmp endCase??0014
+ 00001085		     2	infoItem??0014:
+ 00001085  E8 00000000 E     2		call clrscr
+ 0000108A  BA 00000469 R     3	mov edx, offset blank
+ 0000108F  E8 00000000 E     3	call WriteString
+ 00001094  BA 000003E1 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00001099  E8 00000000 E     3	call WriteString
+ 0000109E  8B 43 04	     3	mov eax, [ebx].item.buyValue
+ 000010A1  E8 00000000 E     3	call WriteDec
+ 000010A6  BA 00000469 R     3	mov edx, offset blank
+ 000010AB  E8 00000000 E     3	call WriteString
+ 000010B0  BA 000003D2 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 000010B5  E8 00000000 E     3	call WriteString
+ 000010BA  8B 43 08	     3	mov eax, [ebx].item.SellValue
+ 000010BD  E8 00000000 E     3	call WriteDec
+ 000010C2  BA 00000469 R     3	mov edx, offset blank
+ 000010C7  E8 00000000 E     3	call WriteString
+ 000010CC  BA 000003EF R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 000010D1  E8 00000000 E     3	call WriteString
+ 000010D6  8B 43 14	     3	mov eax, [ebx].item.combatValue
+ 000010D9  E8 00000000 E     3	call WriteDec
+ 000010DE  BA 00000469 R     3	mov edx, offset blank
+ 000010E3  E8 00000000 E     3	call WriteString
+ 000010E8  B8 000007D0	     2		mov eax,2000
+ 000010ED  E8 00000000 E     2		call Delay
+ 000010F2		     2	endCase??0014:
+ 000010F2  E9 00000432	     1		jmp endInventory
+ 000010F7		     1	item7:
+ 000010F7  BB 00000277 R     1		mov ebx,offset i8 ;//storing item for use
+ 000010FC  BA 00000390 R     2	mov edx, offset exitTitle
+ 00001101  E8 00000000 E     2	call WriteString
+ 00001106  BA 0000039B R     2	mov edx, offset discardTitle
+ 0000110B  E8 00000000 E     2	call WriteString
+ 00001110  BA 000003A9 R     2	mov edx, offset equipTitle
+ 00001115  E8 00000000 E     2	call WriteString
+ 0000111A  BA 000003B5 R     2	mov edx, offset infoTitle
+ 0000111F  E8 00000000 E     2	call WriteString
+ 00001124  E8 00000000 E     3		call ReadDec
+ 00001129  8B C8	     3		mov ecx, eax
+ 0000112B  83 F9 00	     2	cmp ecx,0
+ 0000112E  74 18	     2	je exit??0016
+ 00001130  83 F9 01	     2	cmp ecx,1
+ 00001133  74 18	     2	je removeItem??0016
+ 00001135  83 F9 02	     2	cmp ecx,2
+ 00001138  74 2C	     2	je equipItem??0016
+ 0000113A  83 F9 03	     2	cmp ecx,3
+ 0000113D  0F 84 000000A9    2	je infoItem??0016
+ 00001143  E9 00000111	     2	jmp endCase??0016
+ 00001148		     2	exit??0016:
+ 00001148  E9 0000010C	     2		jmp endCase??0016
+ 0000114D		     2	removeItem??0016:
+ 0000114D  C7 03 00000000    3	mov [ebx].item.itemCode,null
+ 00001153  C7 43 08	     3	mov [ebx].item.sellValue,0
+	   00000000
+ 0000115A  C7 43 04	     3	mov [ebx].item.buyValue,0
+	   00000000
+ 00001161  E9 000000F3	     2		jmp endCase??0016
+ 00001166		     2	equipItem??0016:
+ 00001166  8B 13	     3	mov edx, [ebx].item.itemCode
+ 00001168  89 15 0000006A R  3	mov c1.weaponCode, edx
+ 0000116E  8B 53 14	     3	mov edx, [ebx].item.combatValue
+ 00001171  89 15 00000076 R  3	mov c1.weaponDamage, edx
+ 00001177  8B 53 04	     3	mov edx, [ebx].item.buyValue
+ 0000117A  89 15 0000006E R  3	mov c1.weaponBuyValue,edx
+ 00001180  8B 53 08	     3	mov edx,[ebx].item.sellValue
+ 00001183  89 15 00000072 R  3	mov c1.weaponsellValue,edx
+ 00001189  C7 03 00000000    4	mov [ebx].item.itemCode,null
+ 0000118F  C7 43 08	     4	mov [ebx].item.sellValue,0
+	   00000000
+ 00001196  C7 43 04	     4	mov [ebx].item.buyValue,0
+	   00000000
+ 0000119D  60		     4	pushAD
+ 0000119E  FF 05 0000004A R  4	inc c1.brawn   ;// sets primary attributes
+ 000011A4  FF 05 0000004E R  4	inc c1.agility
+ 000011AA  FF 05 00000052 R  4	inc c1.mind   
+ 000011B0  FF 05 00000056 R  4	inc c1.fortune
+ 000011B6  A1 0000004A R     4	mov eax, c1.brawn ;// maxHP & hp initialize = brawn*2
+ 000011BB  D1 E0	     4	sal eax,1 ;// multiply by 2
+ 000011BD  A3 0000005A R     4	mov c1.hpMax,eax
+ 000011C2  A3 0000005E R     4	mov c1.hp,eax
+ 000011C7  A1 0000004A R     4	mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+ 000011CC  D1 F8	     4	sar eax,1;//divide by 2
+ 000011CE  03 05 00000076 R  4	add eax,c1.weaponDamage
+ 000011D4  A3 00000062 R     4	mov c1.damageMin,eax
+ 000011D9  8B 1D 0000004E R  4	mov ebx,c1.agility
+ 000011DF  C1 FB 02	     4	sar ebx,2;//divide by 4
+ 000011E2  03 C3	     4	add eax,ebx
+ 000011E4  A3 00000066 R     4	mov c1.damageMax,eax
+ 000011E9  61		     4	popAD
+ 000011EA  EB 6D	     2		jmp endCase??0016
+ 000011EC		     2	infoItem??0016:
+ 000011EC  E8 00000000 E     2		call clrscr
+ 000011F1  BA 00000469 R     3	mov edx, offset blank
+ 000011F6  E8 00000000 E     3	call WriteString
+ 000011FB  BA 000003E1 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00001200  E8 00000000 E     3	call WriteString
+ 00001205  8B 43 04	     3	mov eax, [ebx].item.buyValue
+ 00001208  E8 00000000 E     3	call WriteDec
+ 0000120D  BA 00000469 R     3	mov edx, offset blank
+ 00001212  E8 00000000 E     3	call WriteString
+ 00001217  BA 000003D2 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 0000121C  E8 00000000 E     3	call WriteString
+ 00001221  8B 43 08	     3	mov eax, [ebx].item.SellValue
+ 00001224  E8 00000000 E     3	call WriteDec
+ 00001229  BA 00000469 R     3	mov edx, offset blank
+ 0000122E  E8 00000000 E     3	call WriteString
+ 00001233  BA 000003EF R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 00001238  E8 00000000 E     3	call WriteString
+ 0000123D  8B 43 14	     3	mov eax, [ebx].item.combatValue
+ 00001240  E8 00000000 E     3	call WriteDec
+ 00001245  BA 00000469 R     3	mov edx, offset blank
+ 0000124A  E8 00000000 E     3	call WriteString
+ 0000124F  B8 000007D0	     2		mov eax,2000
+ 00001254  E8 00000000 E     2		call Delay
+ 00001259		     2	endCase??0016:
+ 00001259  E9 000002CB	     1		jmp endInventory
+ 0000125E		     1	item8:
+ 0000125E  BB 0000025B R     1		mov ebx,offset i9 ;//storing item for use
+ 00001263  BA 00000390 R     2	mov edx, offset exitTitle
+ 00001268  E8 00000000 E     2	call WriteString
+ 0000126D  BA 0000039B R     2	mov edx, offset discardTitle
+ 00001272  E8 00000000 E     2	call WriteString
+ 00001277  BA 000003A9 R     2	mov edx, offset equipTitle
+ 0000127C  E8 00000000 E     2	call WriteString
+ 00001281  BA 000003B5 R     2	mov edx, offset infoTitle
+ 00001286  E8 00000000 E     2	call WriteString
+ 0000128B  E8 00000000 E     3		call ReadDec
+ 00001290  8B C8	     3		mov ecx, eax
+ 00001292  83 F9 00	     2	cmp ecx,0
+ 00001295  74 18	     2	je exit??0018
+ 00001297  83 F9 01	     2	cmp ecx,1
+ 0000129A  74 18	     2	je removeItem??0018
+ 0000129C  83 F9 02	     2	cmp ecx,2
+ 0000129F  74 2C	     2	je equipItem??0018
+ 000012A1  83 F9 03	     2	cmp ecx,3
+ 000012A4  0F 84 000000A9    2	je infoItem??0018
+ 000012AA  E9 00000111	     2	jmp endCase??0018
+ 000012AF		     2	exit??0018:
+ 000012AF  E9 0000010C	     2		jmp endCase??0018
+ 000012B4		     2	removeItem??0018:
+ 000012B4  C7 03 00000000    3	mov [ebx].item.itemCode,null
+ 000012BA  C7 43 08	     3	mov [ebx].item.sellValue,0
+	   00000000
+ 000012C1  C7 43 04	     3	mov [ebx].item.buyValue,0
+	   00000000
+ 000012C8  E9 000000F3	     2		jmp endCase??0018
+ 000012CD		     2	equipItem??0018:
+ 000012CD  8B 13	     3	mov edx, [ebx].item.itemCode
+ 000012CF  89 15 0000006A R  3	mov c1.weaponCode, edx
+ 000012D5  8B 53 14	     3	mov edx, [ebx].item.combatValue
+ 000012D8  89 15 00000076 R  3	mov c1.weaponDamage, edx
+ 000012DE  8B 53 04	     3	mov edx, [ebx].item.buyValue
+ 000012E1  89 15 0000006E R  3	mov c1.weaponBuyValue,edx
+ 000012E7  8B 53 08	     3	mov edx,[ebx].item.sellValue
+ 000012EA  89 15 00000072 R  3	mov c1.weaponsellValue,edx
+ 000012F0  C7 03 00000000    4	mov [ebx].item.itemCode,null
+ 000012F6  C7 43 08	     4	mov [ebx].item.sellValue,0
+	   00000000
+ 000012FD  C7 43 04	     4	mov [ebx].item.buyValue,0
+	   00000000
+ 00001304  60		     4	pushAD
+ 00001305  FF 05 0000004A R  4	inc c1.brawn   ;// sets primary attributes
+ 0000130B  FF 05 0000004E R  4	inc c1.agility
+ 00001311  FF 05 00000052 R  4	inc c1.mind   
+ 00001317  FF 05 00000056 R  4	inc c1.fortune
+ 0000131D  A1 0000004A R     4	mov eax, c1.brawn ;// maxHP & hp initialize = brawn*2
+ 00001322  D1 E0	     4	sal eax,1 ;// multiply by 2
+ 00001324  A3 0000005A R     4	mov c1.hpMax,eax
+ 00001329  A3 0000005E R     4	mov c1.hp,eax
+ 0000132E  A1 0000004A R     4	mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+ 00001333  D1 F8	     4	sar eax,1;//divide by 2
+ 00001335  03 05 00000076 R  4	add eax,c1.weaponDamage
+ 0000133B  A3 00000062 R     4	mov c1.damageMin,eax
+ 00001340  8B 1D 0000004E R  4	mov ebx,c1.agility
+ 00001346  C1 FB 02	     4	sar ebx,2;//divide by 4
+ 00001349  03 C3	     4	add eax,ebx
+ 0000134B  A3 00000066 R     4	mov c1.damageMax,eax
+ 00001350  61		     4	popAD
+ 00001351  EB 6D	     2		jmp endCase??0018
+ 00001353		     2	infoItem??0018:
+ 00001353  E8 00000000 E     2		call clrscr
+ 00001358  BA 00000469 R     3	mov edx, offset blank
+ 0000135D  E8 00000000 E     3	call WriteString
+ 00001362  BA 000003E1 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00001367  E8 00000000 E     3	call WriteString
+ 0000136C  8B 43 04	     3	mov eax, [ebx].item.buyValue
+ 0000136F  E8 00000000 E     3	call WriteDec
+ 00001374  BA 00000469 R     3	mov edx, offset blank
+ 00001379  E8 00000000 E     3	call WriteString
+ 0000137E  BA 000003D2 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00001383  E8 00000000 E     3	call WriteString
+ 00001388  8B 43 08	     3	mov eax, [ebx].item.SellValue
+ 0000138B  E8 00000000 E     3	call WriteDec
+ 00001390  BA 00000469 R     3	mov edx, offset blank
+ 00001395  E8 00000000 E     3	call WriteString
+ 0000139A  BA 000003EF R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 0000139F  E8 00000000 E     3	call WriteString
+ 000013A4  8B 43 14	     3	mov eax, [ebx].item.combatValue
+ 000013A7  E8 00000000 E     3	call WriteDec
+ 000013AC  BA 00000469 R     3	mov edx, offset blank
+ 000013B1  E8 00000000 E     3	call WriteString
+ 000013B6  B8 000007D0	     2		mov eax,2000
+ 000013BB  E8 00000000 E     2		call Delay
+ 000013C0		     2	endCase??0018:
+ 000013C0  E9 00000164	     1		jmp endInventory
+ 000013C5		     1	item9:
+ 000013C5  BB 0000023F R     1		mov ebx,offset i10 ;//storing item for use
+ 000013CA  BA 00000390 R     2	mov edx, offset exitTitle
+ 000013CF  E8 00000000 E     2	call WriteString
+ 000013D4  BA 0000039B R     2	mov edx, offset discardTitle
+ 000013D9  E8 00000000 E     2	call WriteString
+ 000013DE  BA 000003A9 R     2	mov edx, offset equipTitle
+ 000013E3  E8 00000000 E     2	call WriteString
+ 000013E8  BA 000003B5 R     2	mov edx, offset infoTitle
+ 000013ED  E8 00000000 E     2	call WriteString
+ 000013F2  E8 00000000 E     3		call ReadDec
+ 000013F7  8B C8	     3		mov ecx, eax
+ 000013F9  83 F9 00	     2	cmp ecx,0
+ 000013FC  74 18	     2	je exit??001A
+ 000013FE  83 F9 01	     2	cmp ecx,1
+ 00001401  74 18	     2	je removeItem??001A
+ 00001403  83 F9 02	     2	cmp ecx,2
+ 00001406  74 2C	     2	je equipItem??001A
+ 00001408  83 F9 03	     2	cmp ecx,3
+ 0000140B  0F 84 000000A9    2	je infoItem??001A
+ 00001411  E9 00000111	     2	jmp endCase??001A
+ 00001416		     2	exit??001A:
+ 00001416  E9 0000010C	     2		jmp endCase??001A
+ 0000141B		     2	removeItem??001A:
+ 0000141B  C7 03 00000000    3	mov [ebx].item.itemCode,null
+ 00001421  C7 43 08	     3	mov [ebx].item.sellValue,0
+	   00000000
+ 00001428  C7 43 04	     3	mov [ebx].item.buyValue,0
+	   00000000
+ 0000142F  E9 000000F3	     2		jmp endCase??001A
+ 00001434		     2	equipItem??001A:
+ 00001434  8B 13	     3	mov edx, [ebx].item.itemCode
+ 00001436  89 15 0000006A R  3	mov c1.weaponCode, edx
+ 0000143C  8B 53 14	     3	mov edx, [ebx].item.combatValue
+ 0000143F  89 15 00000076 R  3	mov c1.weaponDamage, edx
+ 00001445  8B 53 04	     3	mov edx, [ebx].item.buyValue
+ 00001448  89 15 0000006E R  3	mov c1.weaponBuyValue,edx
+ 0000144E  8B 53 08	     3	mov edx,[ebx].item.sellValue
+ 00001451  89 15 00000072 R  3	mov c1.weaponsellValue,edx
+ 00001457  C7 03 00000000    4	mov [ebx].item.itemCode,null
+ 0000145D  C7 43 08	     4	mov [ebx].item.sellValue,0
+	   00000000
+ 00001464  C7 43 04	     4	mov [ebx].item.buyValue,0
+	   00000000
+ 0000146B  60		     4	pushAD
+ 0000146C  FF 05 0000004A R  4	inc c1.brawn   ;// sets primary attributes
+ 00001472  FF 05 0000004E R  4	inc c1.agility
+ 00001478  FF 05 00000052 R  4	inc c1.mind   
+ 0000147E  FF 05 00000056 R  4	inc c1.fortune
+ 00001484  A1 0000004A R     4	mov eax, c1.brawn ;// maxHP & hp initialize = brawn*2
+ 00001489  D1 E0	     4	sal eax,1 ;// multiply by 2
+ 0000148B  A3 0000005A R     4	mov c1.hpMax,eax
+ 00001490  A3 0000005E R     4	mov c1.hp,eax
+ 00001495  A1 0000004A R     4	mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+ 0000149A  D1 F8	     4	sar eax,1;//divide by 2
+ 0000149C  03 05 00000076 R  4	add eax,c1.weaponDamage
+ 000014A2  A3 00000062 R     4	mov c1.damageMin,eax
+ 000014A7  8B 1D 0000004E R  4	mov ebx,c1.agility
+ 000014AD  C1 FB 02	     4	sar ebx,2;//divide by 4
+ 000014B0  03 C3	     4	add eax,ebx
+ 000014B2  A3 00000066 R     4	mov c1.damageMax,eax
+ 000014B7  61		     4	popAD
+ 000014B8  EB 6D	     2		jmp endCase??001A
+ 000014BA		     2	infoItem??001A:
+ 000014BA  E8 00000000 E     2		call clrscr
+ 000014BF  BA 00000469 R     3	mov edx, offset blank
+ 000014C4  E8 00000000 E     3	call WriteString
+ 000014C9  BA 000003E1 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 000014CE  E8 00000000 E     3	call WriteString
+ 000014D3  8B 43 04	     3	mov eax, [ebx].item.buyValue
+ 000014D6  E8 00000000 E     3	call WriteDec
+ 000014DB  BA 00000469 R     3	mov edx, offset blank
+ 000014E0  E8 00000000 E     3	call WriteString
+ 000014E5  BA 000003D2 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 000014EA  E8 00000000 E     3	call WriteString
+ 000014EF  8B 43 08	     3	mov eax, [ebx].item.SellValue
+ 000014F2  E8 00000000 E     3	call WriteDec
+ 000014F7  BA 00000469 R     3	mov edx, offset blank
+ 000014FC  E8 00000000 E     3	call WriteString
+ 00001501  BA 000003EF R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 00001506  E8 00000000 E     3	call WriteString
+ 0000150B  8B 43 14	     3	mov eax, [ebx].item.combatValue
+ 0000150E  E8 00000000 E     3	call WriteDec
+ 00001513  BA 00000469 R     3	mov edx, offset blank
+ 00001518  E8 00000000 E     3	call WriteString
+ 0000151D  B8 000007D0	     2		mov eax,2000
+ 00001522  E8 00000000 E     2		call Delay
+ 00001527		     2	endCase??001A:
+ 00001527  EB 00	     1		jmp endInventory
+ 00001529		     1	endInventory:
+ 00001529  E8 00000000 E     1	call clrscr
+ 0000152E  E9 000000BC				jmp end_switch
+ 00001533				dequip:
+						mDequip
+ 00001533  83 3D 0000006A R  1	cmp c1.weaponCode,0
+	   00
+ 0000153A  0F 84 000000AD    1	je nothingEquipped??001C
+ 00001540  BB 0000033B R     1	mov ebx, offset i1
+ 00001545		     1	notEmpty??001C:
+ 00001545  83 3B 00	     1	cmp [ebx].item.itemCode,0
+ 00001548  74 0F	     1	je isEmpty??001C 
+ 0000154A  83 7B 10 00	     1	cmp [ebx].item.next,null
+ 0000154E  0F 84 00000099    1	je inventoryFull??001C
+ 00001554  8B 5B 10	     1	mov ebx,[ebx].item.next
+ 00001557  EB EC	     1	jmp notEmpty??001C
+ 00001559		     1	isEmpty??001C:
+ 00001559  A1 0000006A R     1	mov eax, c1.weaponCode
+ 0000155E  89 03	     1	mov [ebx].item.itemCode,eax
+ 00001560  C7 05 0000006A R  1	mov c1.weaponCode,0
+	   00000000
+ 0000156A  A1 0000006E R     1	mov eax, c1.weaponBuyValue
+ 0000156F  89 43 04	     1	mov [ebx].item.buyValue,eax
+ 00001572  C7 05 0000006E R  1	mov c1.weaponBuyValue,0
+	   00000000
+ 0000157C  A1 00000072 R     1	mov eax, c1.weaponSellValue
+ 00001581  89 43 08	     1	mov [ebx].item.sellValue,eax
+ 00001584  C7 05 00000072 R  1	mov c1.weaponSellValue,0
+	   00000000
+ 0000158E  A1 00000076 R     1	mov eax, c1.weaponDamage
+ 00001593  89 43 14	     1	mov [ebx].item.combatValue,eax
+ 00001596  C7 05 00000076 R  1	mov c1.weaponDamage,0
+	   00000000
+ 000015A0  60		     2	pushAD
+ 000015A1  FF 05 0000004A R  2	inc c1.brawn   ;// sets primary attributes
+ 000015A7  FF 05 0000004E R  2	inc c1.agility
+ 000015AD  FF 05 00000052 R  2	inc c1.mind   
+ 000015B3  FF 05 00000056 R  2	inc c1.fortune
+ 000015B9  A1 0000004A R     2	mov eax, c1.brawn ;// maxHP & hp initialize = brawn*2
+ 000015BE  D1 E0	     2	sal eax,1 ;// multiply by 2
+ 000015C0  A3 0000005A R     2	mov c1.hpMax,eax
+ 000015C5  A3 0000005E R     2	mov c1.hp,eax
+ 000015CA  A1 0000004A R     2	mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+ 000015CF  D1 F8	     2	sar eax,1;//divide by 2
+ 000015D1  03 05 00000076 R  2	add eax,c1.weaponDamage
+ 000015D7  A3 00000062 R     2	mov c1.damageMin,eax
+ 000015DC  8B 1D 0000004E R  2	mov ebx,c1.agility
+ 000015E2  C1 FB 02	     2	sar ebx,2;//divide by 4
+ 000015E5  03 C3	     2	add eax,ebx
+ 000015E7  A3 00000066 R     2	mov c1.damageMax,eax
+ 000015EC  61		     2	popAD
+ 000015ED		     1	inventoryFull??001C:
+ 000015ED		     1	nothingEquipped??001C:
+ 000015ED  EB 00				jmp end_switch
+ 000015EF				end_switch:
+ 000015EF  E9 FFFFEA79			jmp while_main ;//default
 
 
- 000005BB			endwhile_main:
+ 000015F4			endwhile_main:
 					
 					invoke ExitProcess, 0
- 000005BB  6A 00	   *	    push   +000000000h
- 000005BD  E8 00000000 E   *	    call   ExitProcess
+ 000015F4  6A 00	   *	    push   +000000000h
+ 000015F6  E8 00000000 E   *	    call   ExitProcess
 
- 000005C2			main endp
+ 000015FB			main endp
 
 				end main
-Microsoft (R) Macro Assembler Version 14.13.26129.0	    03/28/18 20:48:20
+Microsoft (R) Macro Assembler Version 14.13.26129.0	    04/01/18 19:09:59
 main.asm						     Symbols 2 - 1
 
 
@@ -1054,12 +2609,21 @@ Macros:
                 N a m e                 Type
 
 _get_input . . . . . . . . . . .	Proc
+mAddItem . . . . . . . . . . . .	Proc
 mCombat  . . . . . . . . . . . .	Proc
+mDequip  . . . . . . . . . . . .	Proc
+mDisplayInventory  . . . . . . .	Proc
+mDisplayItemInfo . . . . . . . .	Proc
+mEquip . . . . . . . . . . . . .	Proc
 mGetCharacterName  . . . . . . .	Proc
+mGetItemName . . . . . . . . . .	Proc
 mInitializeCharacter . . . . . .	Proc
 mInitializeEnemy . . . . . . . .	Proc
+mInventory . . . . . . . . . . .	Proc
 mLevelUp . . . . . . . . . . . .	Proc
 mPrintCharacterSheet . . . . . .	Proc
+mRemoveItem  . . . . . . . . . .	Proc
+mitemOptions . . . . . . . . . .	Proc
 
 
 Structures and Unions:
@@ -1142,22 +2706,26 @@ SYSTEMTIME . . . . . . . . . . .	 00000010
   wMilliseconds  . . . . . . . .	 0000000E	 Word
 WINDOW_BUFFER_SIZE_RECORD  . . .	 00000004
   dwSize . . . . . . . . . . . .	 00000000	 DWord
-character  . . . . . . . . . . .	 00000040
+character  . . . . . . . . . . .	 0000004E
   xPos . . . . . . . . . . . . .	 00000000	 DWord
   yPos . . . . . . . . . . . . .	 00000004	 DWord
   characterName  . . . . . . . .	 00000008	 Byte
-  level  . . . . . . . . . . . .	 00000010	 DWord
-  exp  . . . . . . . . . . . . .	 00000014	 DWord
-  expToNext  . . . . . . . . . .	 00000018	 DWord
-  brawn  . . . . . . . . . . . .	 0000001C	 DWord
-  agility  . . . . . . . . . . .	 00000020	 DWord
-  mind . . . . . . . . . . . . .	 00000024	 DWord
-  fortune  . . . . . . . . . . .	 00000028	 DWord
-  hpMax  . . . . . . . . . . . .	 0000002C	 DWord
-  hp . . . . . . . . . . . . . .	 00000030	 DWord
-  damageMin  . . . . . . . . . .	 00000034	 DWord
-  damageMax  . . . . . . . . . .	 00000038	 DWord
-  defence  . . . . . . . . . . .	 0000003C	 DWord
+  level  . . . . . . . . . . . .	 0000000E	 DWord
+  exp  . . . . . . . . . . . . .	 00000012	 DWord
+  expToNext  . . . . . . . . . .	 00000016	 DWord
+  brawn  . . . . . . . . . . . .	 0000001A	 DWord
+  agility  . . . . . . . . . . .	 0000001E	 DWord
+  mind . . . . . . . . . . . . .	 00000022	 DWord
+  fortune  . . . . . . . . . . .	 00000026	 DWord
+  hpMax  . . . . . . . . . . . .	 0000002A	 DWord
+  hp . . . . . . . . . . . . . .	 0000002E	 DWord
+  damageMin  . . . . . . . . . .	 00000032	 DWord
+  damageMax  . . . . . . . . . .	 00000036	 DWord
+  weaponCode . . . . . . . . . .	 0000003A	 DWord
+  weaponBuyValue . . . . . . . .	 0000003E	 DWord
+  weaponSellValue  . . . . . . .	 00000042	 DWord
+  weaponDamage . . . . . . . . .	 00000046	 DWord
+  defence  . . . . . . . . . . .	 0000004A	 DWord
 enemy  . . . . . . . . . . . . .	 00000020
   enemyName  . . . . . . . . . .	 00000000	 Byte
   hpMax  . . . . . . . . . . . .	 00000008	 DWord
@@ -1166,6 +2734,14 @@ enemy  . . . . . . . . . . . . .	 00000020
   damageMax  . . . . . . . . . .	 00000014	 DWord
   defence  . . . . . . . . . . .	 00000018	 DWord
   expReward  . . . . . . . . . .	 0000001C	 DWord
+item . . . . . . . . . . . . . .	 0000001C
+  itemCode . . . . . . . . . . .	 00000000	 DWord
+  buyValue . . . . . . . . . . .	 00000004	 DWord
+  sellValue  . . . . . . . . . .	 00000008	 DWord
+  prev . . . . . . . . . . . . .	 0000000C	 DWord
+  next . . . . . . . . . . . . .	 00000010	 DWord
+  combatValue  . . . . . . . . .	 00000014	 DWord
+  itemType . . . . . . . . . . .	 00000018	 DWord
 
 
 Segments and Groups:
@@ -1174,8 +2750,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000241 DWord	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000005C2 DWord	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000046D DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000015FB DWord	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -1282,29 +2858,112 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000005C2 Public STDCALL
-  while_main . . . . . . . . . .	L Near	 00000067 _TEXT	
-  character_sheet  . . . . . . .	L Near	 000000CA _TEXT	
-  combat . . . . . . . . . . . .	L Near	 0000029D _TEXT	
-  WHILE_COMBAT??0001 . . . . . .	L Near	 00000313 _TEXT	
-  AND_COMBAT1??0001  . . . . . .	L Near	 00000321 _TEXT	
-  AND_COMBAT2??0001  . . . . . .	L Near	 0000032F _TEXT	
-  AND_COMBAT_TRUE??0001  . . . .	L Near	 0000033D _TEXT	
-  attack . . . . . . . . . . . .	L Near	 0000046D _TEXT	
-  enemy_dead . . . . . . . . . .	L Near	 00000493 _TEXT	
-  flee . . . . . . . . . . . . .	L Near	 0000049C _TEXT	
-  end_switch??0001 . . . . . . .	L Near	 000004A3 _TEXT	
-  character_dead . . . . . . . .	L Near	 000004C9 _TEXT	
-  character_not_dead . . . . . .	L Near	 000004D0 _TEXT	
-  AND_FALSE_COMBAT??0001 . . . .	L Near	 000004D5 _TEXT	
-  not_escape . . . . . . . . . .	L Near	 000004EA _TEXT	
-  not_playerDefeated . . . . . .	L Near	 000004FF _TEXT	
-  eventDetermined  . . . . . . .	L Near	 00000514 _TEXT	
-  levelUp  . . . . . . . . . . .	L Near	 00000529 _TEXT	
-  notEnough  . . . . . . . . . .	L Near	 0000059A _TEXT	
-  leveledUp  . . . . . . . . . .	L Near	 000005B3 _TEXT	
-  end_switch . . . . . . . . . .	L Near	 000005B6 _TEXT	
-  endwhile_main  . . . . . . . .	L Near	 000005BB _TEXT	
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000015FB Public STDCALL
+  while_main . . . . . . . . . .	L Near	 0000006D _TEXT	
+  character_sheet  . . . . . . .	L Near	 000000F6 _TEXT	
+  item0??0001  . . . . . . . . .	L Near	 000002DE _TEXT	
+  item1??0001  . . . . . . . . .	L Near	 000002E5 _TEXT	
+  item2??0001  . . . . . . . . .	L Near	 000002EC _TEXT	
+  item3??0001  . . . . . . . . .	L Near	 000002F3 _TEXT	
+  default??0001  . . . . . . . .	L Near	 000002FA _TEXT	
+  print??0001  . . . . . . . . .	L Near	 000002FF _TEXT	
+  combat . . . . . . . . . . . .	L Near	 00000314 _TEXT	
+  WHILE_COMBAT??0002 . . . . . .	L Near	 0000038A _TEXT	
+  AND_COMBAT1??0002  . . . . . .	L Near	 00000398 _TEXT	
+  AND_COMBAT2??0002  . . . . . .	L Near	 000003A6 _TEXT	
+  AND_COMBAT_TRUE??0002  . . . .	L Near	 000003B4 _TEXT	
+  attack . . . . . . . . . . . .	L Near	 000004E4 _TEXT	
+  enemy_dead . . . . . . . . . .	L Near	 0000050A _TEXT	
+  flee . . . . . . . . . . . . .	L Near	 00000513 _TEXT	
+  end_switch??0002 . . . . . . .	L Near	 0000051A _TEXT	
+  character_dead . . . . . . . .	L Near	 00000540 _TEXT	
+  character_not_dead . . . . . .	L Near	 00000547 _TEXT	
+  AND_FALSE_COMBAT??0002 . . . .	L Near	 0000054C _TEXT	
+  not_escape . . . . . . . . . .	L Near	 00000561 _TEXT	
+  not_playerDefeated . . . . . .	L Near	 00000576 _TEXT	
+  notEmpty??0004 . . . . . . . .	L Near	 0000058A _TEXT	
+  isEmpty??0004  . . . . . . . .	L Near	 0000059A _TEXT	
+  inventoryFull??0004  . . . . .	L Near	 0000059E _TEXT	
+  eventDetermined  . . . . . . .	L Near	 000005A9 _TEXT	
+  levelUp  . . . . . . . . . . .	L Near	 000005BE _TEXT	
+  notEnough  . . . . . . . . . .	L Near	 00000635 _TEXT	
+  leveledUp  . . . . . . . . . .	L Near	 0000064E _TEXT	
+  inventory  . . . . . . . . . .	L Near	 00000654 _TEXT	
+  DO1??0005  . . . . . . . . . .	L Near	 00000666 _TEXT	
+  item0??0006  . . . . . . . . .	L Near	 0000068F _TEXT	
+  item1??0006  . . . . . . . . .	L Near	 00000696 _TEXT	
+  item2??0006  . . . . . . . . .	L Near	 0000069D _TEXT	
+  item3??0006  . . . . . . . . .	L Near	 000006A4 _TEXT	
+  default??0006  . . . . . . . .	L Near	 000006AB _TEXT	
+  print??0006  . . . . . . . . .	L Near	 000006B0 _TEXT	
+  item0  . . . . . . . . . . . .	L Near	 00000726 _TEXT	
+  exit??0008 . . . . . . . . . .	L Near	 00000777 _TEXT	
+  removeItem??0008 . . . . . . .	L Near	 0000077C _TEXT	
+  equipItem??0008  . . . . . . .	L Near	 00000795 _TEXT	
+  infoItem??0008 . . . . . . . .	L Near	 0000081B _TEXT	
+  endCase??0008  . . . . . . . .	L Near	 00000888 _TEXT	
+  item1  . . . . . . . . . . . .	L Near	 0000088D _TEXT	
+  exit??000A . . . . . . . . . .	L Near	 000008DE _TEXT	
+  removeItem??000A . . . . . . .	L Near	 000008E3 _TEXT	
+  equipItem??000A  . . . . . . .	L Near	 000008FC _TEXT	
+  infoItem??000A . . . . . . . .	L Near	 00000982 _TEXT	
+  endCase??000A  . . . . . . . .	L Near	 000009EF _TEXT	
+  item2  . . . . . . . . . . . .	L Near	 000009F4 _TEXT	
+  exit??000C . . . . . . . . . .	L Near	 00000A45 _TEXT	
+  removeItem??000C . . . . . . .	L Near	 00000A4A _TEXT	
+  equipItem??000C  . . . . . . .	L Near	 00000A63 _TEXT	
+  infoItem??000C . . . . . . . .	L Near	 00000AE9 _TEXT	
+  endCase??000C  . . . . . . . .	L Near	 00000B56 _TEXT	
+  item3  . . . . . . . . . . . .	L Near	 00000B5B _TEXT	
+  exit??000E . . . . . . . . . .	L Near	 00000BAC _TEXT	
+  removeItem??000E . . . . . . .	L Near	 00000BB1 _TEXT	
+  equipItem??000E  . . . . . . .	L Near	 00000BCA _TEXT	
+  infoItem??000E . . . . . . . .	L Near	 00000C50 _TEXT	
+  endCase??000E  . . . . . . . .	L Near	 00000CBD _TEXT	
+  item4  . . . . . . . . . . . .	L Near	 00000CC2 _TEXT	
+  exit??0010 . . . . . . . . . .	L Near	 00000D13 _TEXT	
+  removeItem??0010 . . . . . . .	L Near	 00000D18 _TEXT	
+  equipItem??0010  . . . . . . .	L Near	 00000D31 _TEXT	
+  infoItem??0010 . . . . . . . .	L Near	 00000DB7 _TEXT	
+  endCase??0010  . . . . . . . .	L Near	 00000E24 _TEXT	
+  item5  . . . . . . . . . . . .	L Near	 00000E29 _TEXT	
+  exit??0012 . . . . . . . . . .	L Near	 00000E7A _TEXT	
+  removeItem??0012 . . . . . . .	L Near	 00000E7F _TEXT	
+  equipItem??0012  . . . . . . .	L Near	 00000E98 _TEXT	
+  infoItem??0012 . . . . . . . .	L Near	 00000F1E _TEXT	
+  endCase??0012  . . . . . . . .	L Near	 00000F8B _TEXT	
+  item6  . . . . . . . . . . . .	L Near	 00000F90 _TEXT	
+  exit??0014 . . . . . . . . . .	L Near	 00000FE1 _TEXT	
+  removeItem??0014 . . . . . . .	L Near	 00000FE6 _TEXT	
+  equipItem??0014  . . . . . . .	L Near	 00000FFF _TEXT	
+  infoItem??0014 . . . . . . . .	L Near	 00001085 _TEXT	
+  endCase??0014  . . . . . . . .	L Near	 000010F2 _TEXT	
+  item7  . . . . . . . . . . . .	L Near	 000010F7 _TEXT	
+  exit??0016 . . . . . . . . . .	L Near	 00001148 _TEXT	
+  removeItem??0016 . . . . . . .	L Near	 0000114D _TEXT	
+  equipItem??0016  . . . . . . .	L Near	 00001166 _TEXT	
+  infoItem??0016 . . . . . . . .	L Near	 000011EC _TEXT	
+  endCase??0016  . . . . . . . .	L Near	 00001259 _TEXT	
+  item8  . . . . . . . . . . . .	L Near	 0000125E _TEXT	
+  exit??0018 . . . . . . . . . .	L Near	 000012AF _TEXT	
+  removeItem??0018 . . . . . . .	L Near	 000012B4 _TEXT	
+  equipItem??0018  . . . . . . .	L Near	 000012CD _TEXT	
+  infoItem??0018 . . . . . . . .	L Near	 00001353 _TEXT	
+  endCase??0018  . . . . . . . .	L Near	 000013C0 _TEXT	
+  item9  . . . . . . . . . . . .	L Near	 000013C5 _TEXT	
+  exit??001A . . . . . . . . . .	L Near	 00001416 _TEXT	
+  removeItem??001A . . . . . . .	L Near	 0000141B _TEXT	
+  equipItem??001A  . . . . . . .	L Near	 00001434 _TEXT	
+  infoItem??001A . . . . . . . .	L Near	 000014BA _TEXT	
+  endCase??001A  . . . . . . . .	L Near	 00001527 _TEXT	
+  endInventory . . . . . . . . .	L Near	 00001529 _TEXT	
+  dequip . . . . . . . . . . . .	L Near	 00001533 _TEXT	
+  notEmpty??001C . . . . . . . .	L Near	 00001545 _TEXT	
+  isEmpty??001C  . . . . . . . .	L Near	 00001559 _TEXT	
+  inventoryFull??001C  . . . . .	L Near	 000015ED _TEXT	
+  nothingEquipped??001C  . . . .	L Near	 000015ED _TEXT	
+  end_switch . . . . . . . . . .	L Near	 000015EF _TEXT	
+  endwhile_main  . . . . . . . .	L Near	 000015F4 _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -1324,7 +2983,7 @@ Symbols:
 @fardata . . . . . . . . . . . .	Text   	 FLAT
 @stack . . . . . . . . . . . . .	Text   	 FLAT
 ALT_MASK . . . . . . . . . . . .	Number	 00000003h   
-C1 . . . . . . . . . . . . . . .	character  00000004 _DATA	
+C1 . . . . . . . . . . . . . . .	character  00000030 _DATA	
 CAPSLOCK_ON  . . . . . . . . . .	Number	 00000080h   
 CREATE_ALWAYS  . . . . . . . . .	Number	 00000002h   
 CREATE_NEW . . . . . . . . . . .	Number	 00000001h   
@@ -1524,41 +3183,68 @@ VK_UP  . . . . . . . . . . . . .	Number	 00000026h
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
-agilityTitle . . . . . . . . . .	Byte	 000000A6 _DATA	
-attackTitle  . . . . . . . . . .	Byte	 00000191 _DATA	
+agilityTitle . . . . . . . . . .	Byte	 000000E0 _DATA	
+attackTitle  . . . . . . . . . .	Byte	 000001D5 _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
-blank  . . . . . . . . . . . . .	Byte	 0000023D _DATA	
+blank  . . . . . . . . . . . . .	Byte	 00000469 _DATA	
 blue . . . . . . . . . . . . . .	Number	 00000001h   
-brawnTitle . . . . . . . . . . .	Byte	 0000009D _DATA	
+brawnTitle . . . . . . . . . . .	Byte	 000000D7 _DATA	
 brown  . . . . . . . . . . . . .	Number	 00000006h   
-characterSheetTitle  . . . . . .	Byte	 00000044 _DATA	
-characterSheet . . . . . . . . .	Byte	 00000210 _DATA	
-combatAttributesTitle  . . . . .	Byte	 000000C4 _DATA	
-combatMenuTitle  . . . . . . . .	Byte	 00000145 _DATA	
-combatOptionsMenuTitle . . . . .	Byte	 0000017C _DATA	
-combatTitle  . . . . . . . . . .	Byte	 00000224 _DATA	
-command1 . . . . . . . . . . . .	Byte	 000000F7 _DATA	
+characterSheetTitle  . . . . . .	Byte	 0000007E _DATA	
+characterSheet . . . . . . . . .	Byte	 00000424 _DATA	
+combatAttributesTitle  . . . . .	Byte	 000000FE _DATA	
+combatMenuTitle  . . . . . . . .	Byte	 00000189 _DATA	
+combatOptionsMenuTitle . . . . .	Byte	 000001C0 _DATA	
+combatTitle  . . . . . . . . . .	Byte	 00000438 _DATA	
+command1 . . . . . . . . . . . .	Byte	 0000013B _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
-damageTitle  . . . . . . . . . .	Byte	 000000E2 _DATA	
-defenceTitle . . . . . . . . . .	Byte	 000000EC _DATA	
-e1 . . . . . . . . . . . . . . .	enemy	 00000122 _DATA	
-enemyDamageTitle . . . . . . . .	Byte	 0000016C _DATA	
-enemyDefeatedEvent . . . . . . .	Byte	 000001CA _DATA	
-enemyDefeated  . . . . . . . . .	Byte	 00000144 _DATA	
-enemyHPTitle . . . . . . . . . .	Byte	 00000160 _DATA	
-enemyNameTitle . . . . . . . . .	Byte	 00000152 _DATA	
-escapeEvent  . . . . . . . . . .	Byte	 000001A7 _DATA	
-escape . . . . . . . . . . . . .	Byte	 00000142 _DATA	
+damageTitle  . . . . . . . . . .	Byte	 0000011C _DATA	
+defaultName  . . . . . . . . . .	Byte	 0000001B _DATA	
+defenceTitle . . . . . . . . . .	Byte	 00000126 _DATA	
+dequipTitle  . . . . . . . . . .	Byte	 0000045E _DATA	
+discardTitle . . . . . . . . . .	Byte	 0000039B _DATA	
+e1 . . . . . . . . . . . . . . .	enemy	 00000166 _DATA	
+enemyDamageTitle . . . . . . . .	Byte	 000001B0 _DATA	
+enemyDefeatedEvent . . . . . . .	Byte	 0000020E _DATA	
+enemyDefeated  . . . . . . . . .	Byte	 00000188 _DATA	
+enemyHPTitle . . . . . . . . . .	Byte	 000001A4 _DATA	
+enemyNameTitle . . . . . . . . .	Byte	 00000196 _DATA	
+equipTitle . . . . . . . . . . .	Byte	 000003A9 _DATA	
+equippedWeaponTitle  . . . . . .	Byte	 00000131 _DATA	
+escapeEvent  . . . . . . . . . .	Byte	 000001EB _DATA	
+escape . . . . . . . . . . . . .	Byte	 00000186 _DATA	
+exitTitle  . . . . . . . . . . .	Byte	 00000390 _DATA	
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
-expTitle . . . . . . . . . . . .	Byte	 0000007D _DATA	
-fleeTitle  . . . . . . . . . . .	Byte	 0000019D _DATA	
-fortuneTitle . . . . . . . . . .	Byte	 000000B9 _DATA	
+expTitle . . . . . . . . . . . .	Byte	 000000B7 _DATA	
+fleeTitle  . . . . . . . . . . .	Byte	 000001E1 _DATA	
+fortuneTitle . . . . . . . . . .	Byte	 000000F3 _DATA	
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
-hpTitle  . . . . . . . . . . . .	Byte	 000000DC _DATA	
-input_state  . . . . . . . . . .	DWord	 00000000 _DATA	
-levelTitle . . . . . . . . . . .	Byte	 00000074 _DATA	
-levelUpTitle . . . . . . . . . .	Byte	 0000022F _DATA	
+hpTitle  . . . . . . . . . . . .	Byte	 00000116 _DATA	
+i10  . . . . . . . . . . . . . .	item	 0000023F _DATA	
+i1 . . . . . . . . . . . . . . .	item	 0000033B _DATA	
+i2 . . . . . . . . . . . . . . .	item	 0000031F _DATA	
+i3 . . . . . . . . . . . . . . .	item	 00000303 _DATA	
+i4 . . . . . . . . . . . . . . .	item	 000002E7 _DATA	
+i5 . . . . . . . . . . . . . . .	item	 000002CB _DATA	
+i6 . . . . . . . . . . . . . . .	item	 000002AF _DATA	
+i7 . . . . . . . . . . . . . . .	item	 00000293 _DATA	
+i8 . . . . . . . . . . . . . . .	item	 00000277 _DATA	
+i9 . . . . . . . . . . . . . . .	item	 0000025B _DATA	
+infoTitle  . . . . . . . . . . .	Byte	 000003B5 _DATA	
+input_state  . . . . . . . . . .	DWord	 0000002C _DATA	
+inventoryTitle . . . . . . . . .	Byte	 00000450 _DATA	
+itemBuyValueTitle  . . . . . . .	Byte	 000003E1 _DATA	
+itemCombatValueTitle . . . . . .	Byte	 000003EF _DATA	
+itemName1  . . . . . . . . . . .	Byte	 00000000 _DATA	
+itemName2  . . . . . . . . . . .	Byte	 00000007 _DATA	
+itemName3  . . . . . . . . . . .	Byte	 0000000D _DATA	
+itemName4  . . . . . . . . . . .	Byte	 00000015 _DATA	
+itemNameTitle  . . . . . . . . .	Byte	 000003C4 _DATA	
+itemSellValueTitle . . . . . . .	Byte	 000003D2 _DATA	
+itemType . . . . . . . . . . . .	Byte	 000003FF _DATA	
+levelTitle . . . . . . . . . . .	Byte	 000000AE _DATA	
+levelUpTitle . . . . . . . . . .	Byte	 00000443 _DATA	
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
 lightGray  . . . . . . . . . . .	Number	 00000007h   
@@ -1566,19 +3252,22 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
-mainMenuTitle  . . . . . . . . .	Byte	 000001FB _DATA	
-mindTitle  . . . . . . . . . . .	Byte	 000000B1 _DATA	
-nameTitle  . . . . . . . . . . .	Byte	 0000006B _DATA	
-notEnoughResponse  . . . . . . .	Byte	 000001E3 _DATA	
-playerDefeatedEvent  . . . . . .	Byte	 000001B6 _DATA	
-playerDefeated . . . . . . . . .	Byte	 00000143 _DATA	
-primaryAttributesTitle . . . . .	Byte	 00000084 _DATA	
-quitTitle  . . . . . . . . . . .	Byte	 00000207 _DATA	
+mainMenuTitle  . . . . . . . . .	Byte	 0000040F _DATA	
+mindTitle  . . . . . . . . . . .	Byte	 000000EB _DATA	
+nameTitle  . . . . . . . . . . .	Byte	 000000A5 _DATA	
+notEnoughResponse  . . . . . . .	Byte	 00000227 _DATA	
+playerDefeatedEvent  . . . . . .	Byte	 000001FA _DATA	
+playerDefeated . . . . . . . . .	Byte	 00000187 _DATA	
+primaryAttributesTitle . . . . .	Byte	 000000BE _DATA	
+quitTitle  . . . . . . . . . . .	Byte	 0000041B _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
+selectItemTitle  . . . . . . . .	Byte	 0000037B _DATA	
+t1 . . . . . . . . . . . . . . .	item	 00000357 _DATA	
+tempString . . . . . . . . . . .	Byte	 00000373 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
-xPosTitle  . . . . . . . . . . .	Byte	 00000059 _DATA	
-yPosTitle  . . . . . . . . . . .	Byte	 00000062 _DATA	
+xPosTitle  . . . . . . . . . . .	Byte	 00000093 _DATA	
+yPosTitle  . . . . . . . . . . .	Byte	 0000009C _DATA	
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   
 
 	   1 Warnings

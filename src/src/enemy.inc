@@ -1,6 +1,6 @@
-e1 enemy{"Boglin",1,1,1,1}
+e1 enemy{"Boglin",1,1,1,1,1,1}
 
-
+;//initialize emeny
 mInitializeEnemy MACRO
 pushAD
 

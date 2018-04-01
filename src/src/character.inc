@@ -19,6 +19,7 @@ combatAttributesTitle byte "--Combat Attributes--"  , 13, 10, 0
 hpTitle             byte "HP:"                      , 0 , 10, 0
 damageTitle         byte "Damage:"                  , 0 , 10, 0
 defenceTitle        byte "Defence:"                 , 0 , 10, 0
+equippedWeaponTitle byte "Weapon:"                  , 0 , 10, 0
 
 command1 byte "Enter character name. Up to 8 Characters"  , 13, 10, 0
 
@@ -130,6 +131,10 @@ call WriteDec
 mov edx, offset blank
 invoke WriteString
 
+mov edx, offset equippedWeaponTitle
+invoke WriteString
+mov eax, c1.weaponCode
+mGetItemName
 
 mov edx, offset blank
 invoke WriteString
@@ -137,6 +142,7 @@ invoke WriteString
 popAD
 endm
 
+;//gets character name
 mGetCharacterName MACRO
 pushAD
 
@@ -149,6 +155,7 @@ call ReadString
 popAD
 endm
 
+;//initializes character
 mInitializeCharacter MACRO ;//prints character sheet
 pushAD
 
@@ -159,20 +166,21 @@ inc c1.agility
 inc c1.mind   
 inc c1.fortune
 
-mov eax, c1.brawn ;// maxHP & hp initiliaze = brawn*2
+mov eax, c1.brawn ;// maxHP & hp initialize = brawn*2
 sal eax,1 ;// multiply by 2
 mov c1.hpMax,eax
 mov c1.hp,eax
 
 mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
 sar eax,1;//divide by 2
+add eax,c1.weaponDamage
 mov c1.damageMin,eax
 mov ebx,c1.agility
 sar ebx,2;//divide by 4
 add eax,ebx
 mov c1.damageMax,eax
 
-
 popAD
 endm
+
 

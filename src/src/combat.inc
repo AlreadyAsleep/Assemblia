@@ -177,6 +177,8 @@ not_playerDefeated:
 
 mov edx,offset enemyDefeatedEvent;//will print if enemy was defeated
 invoke WriteString
+mov eax, offset t1
+mAddItem
 
 mov eax,e1.expReward ;//rewarding player exp
 add c1.exp,eax
@@ -185,6 +187,8 @@ eventDetermined:
 
 mov eax,2000
 call Delay
+
+
 
 call Clrscr
 

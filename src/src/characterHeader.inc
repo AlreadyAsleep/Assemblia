@@ -3,7 +3,7 @@ character struct
 
 xPos           DWORD 0
 yPos           DWORD 0
-characterName  db    8 dup (?)
+characterName  db    6 dup (?)
 level          DWORD 0
 exp            DWORD 0
 expToNext      DWORD 0
@@ -17,9 +17,13 @@ hpMax          DWORD 0
 hp             DWORD 0
 damageMin      DWORD 0
 damageMax      DWORD 0
+
+weaponCode      DWORD 0
+weaponBuyValue  DWORD 0
+weaponSellValue DWORD 0
+weaponDamage    DWORD 0
+
+
 defence        DWORD 0
-
-
-
 
 character ends

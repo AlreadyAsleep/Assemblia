@@ -19,8 +19,11 @@
     <None Include="combat.inc" />
     <None Include="enemy.inc" />
     <None Include="enemyHeader.inc" />
+    <None Include="getItemName.inc" />
     <None Include="get_input.inc" />
     <None Include="input_data.inc" />
+    <None Include="inventory.inc" />
+    <None Include="itemHeader.inc" />
     <None Include="levelUp.inc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

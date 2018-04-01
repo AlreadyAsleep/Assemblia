@@ -9,9 +9,10 @@ include irvine32.inc
 
 include characterHeader.inc
 include enemyHeader.inc
+include itemHeader.inc
 
 .data
-
+include getItemName.inc
 include input_data.inc
 include get_input.inc
 
@@ -19,17 +20,19 @@ include character.inc
 include enemy.inc
 include combat.inc
 include levelUp.inc
+include inventory.inc
 
 WriteDec proto
 ReadDec proto
 ExitProcess proto, dwExitCode:dword
 
-mainMenuTitle       byte "Main Menu"        , 13, 10, 0
-quitTitle           byte "0 Quit"           , 13, 10, 0
-characterSheet      byte "1 Character Sheet", 13, 10, 0
-combatTitle         byte "2 Combat"         , 13, 10, 0
-levelUpTitle        byte "3 Level Up:"      , 13, 10, 0
-
+mainMenuTitle    byte "Main Menu"        , 13, 10, 0
+quitTitle        byte "0 Quit"           , 13, 10, 0
+characterSheet   byte "1 Character Sheet", 13, 10, 0
+combatTitle      byte "2 Combat"         , 13, 10, 0
+levelUpTitle     byte "3 Level Up"       , 13, 10, 0
+inventoryTitle   byte "4 Inventory"      , 13, 10, 0
+dequipTitle      byte "5 Dequip"         , 13, 10, 0
 
 
 
@@ -59,6 +62,10 @@ while_main:						;//while( ecx != 0 )
 	call WriteString     
 	mov edx, offset levelUpTitle
 	call WriteString
+	mov edx, offset inventoryTitle
+	call WriteString
+	mov edx, offset dequipTitle
+	call WriteString
 
 	_get_input
 	
@@ -72,6 +79,10 @@ while_main:						;//while( ecx != 0 )
 	je combat
 	cmp ecx, 3
 	je levelUp
+	cmp ecx, 4
+	je inventory
+	cmp ecx, 5
+	je dequip
 	jmp end_switch
 
 	character_sheet:
@@ -83,7 +94,12 @@ while_main:						;//while( ecx != 0 )
 	levelUp:
 		mLevelUp
 		jmp end_switch
-
+	inventory:
+		mInventory
+		jmp end_switch
+	dequip:
+		mDequip
+		jmp end_switch
 	end_switch:
 	jmp while_main ;//default
 
