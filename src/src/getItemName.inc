@@ -4,7 +4,7 @@ itemName2 byte "gun"  , 0 , 10, 0
 itemName3 byte "sword", 0 , 10, 0
 itemName4 byte "axe"  , 0 , 10, 0
 
-defaultName   byte "Item not found", 0 , 10, 0
+defaultName   byte "Empty Slot", 0 , 10, 0
 
 mGetItemName MACRO
 Local L

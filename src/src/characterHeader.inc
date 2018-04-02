@@ -3,7 +3,7 @@ character struct
 
 xPos           DWORD 0
 yPos           DWORD 0
-characterName  db    6 dup (?)
+characterName  db    16 dup (?)
 level          DWORD 0
 exp            DWORD 0
 expToNext      DWORD 0

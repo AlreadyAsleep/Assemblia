@@ -34,6 +34,8 @@ levelUpTitle     byte "3 Level Up"       , 13, 10, 0
 inventoryTitle   byte "4 Inventory"      , 13, 10, 0
 dequipTitle      byte "5 Dequip"         , 13, 10, 0
 
+continueCommand byte "Press Enter to Continue",13, 10, 0
+
 
 
 blank byte " ", 13, 10, 0
@@ -54,25 +56,25 @@ while_main:						;//while( ecx != 0 )
 	
 	mov edx, offset mainMenuTitle ;//Main Menu Display Start
 	call WriteString
-	mov edx, offset quitTitle 
-	call WriteString
-	mov edx, offset characterSheet
-	call WriteString    
-	mov edx, offset combatTitle
-	call WriteString     
-	mov edx, offset levelUpTitle
-	call WriteString
-	mov edx, offset inventoryTitle
-	call WriteString
-	mov edx, offset dequipTitle
-	call WriteString
+		; mov edx, offset quitTitle
+		; call WriteString
+		mov edx, offset characterSheet
+		call WriteString
+		mov edx, offset combatTitle
+		call WriteString
+		mov edx, offset levelUpTitle
+		call WriteString
+		mov edx, offset inventoryTitle
+		call WriteString
+		mov edx, offset dequipTitle
+		call WriteString
 
-	_get_input
-	
-	call Clrscr
+		_get_input
 
-	cmp ecx, 0 ;//switch
-	je endwhile_main
+		call Clrscr
+
+		; cmp ecx, 0;//switch
+	; je endwhile_main
 	cmp ecx, 1
 	je character_sheet
 	cmp ecx, 2
@@ -104,7 +106,7 @@ while_main:						;//while( ecx != 0 )
 	jmp while_main ;//default
 
 
-endwhile_main:
+	; endwhile_main:
 	
 	invoke ExitProcess, 0
 

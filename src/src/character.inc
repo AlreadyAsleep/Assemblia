@@ -21,7 +21,7 @@ damageTitle         byte "Damage:"                  , 0 , 10, 0
 defenceTitle        byte "Defence:"                 , 0 , 10, 0
 equippedWeaponTitle byte "Weapon:"                  , 0 , 10, 0
 
-command1 byte "Enter character name. Up to 8 Characters"  , 13, 10, 0
+command1 byte "Enter character name. Up to 15 Characters"  , 13, 10, 0
 
 mPrintCharacterSheet MACRO ;//prints character sheet 
 pushAD
@@ -139,6 +139,11 @@ mGetItemName
 mov edx, offset blank
 invoke WriteString
 
+mov edx, offset continueCommand
+invoke WriteString
+_get_input
+call clrscr
+
 popAD
 endm
 
@@ -151,6 +156,8 @@ invoke WriteString
 mov edx, offset c1.characterName
 mov ecx, SIZEOF c1.characterName
 call ReadString
+
+call clrscr
 
 popAD
 endm
