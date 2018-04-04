@@ -1,12 +1,13 @@
 
-C1 character {0,0,"Name",1,0,100,4,4,4,4,5,5,1,3,}
+C1 character {0,0,"Name",1,0,100,0,4,4,4,4,5,5,1,3,}
 
 characterSheetTitle byte "--CharacterSheet--"       , 13, 10, 0
 xPosTitle           byte "xPos: "                   , 0 , 10, 0
 yPosTitle           byte "yPos: "                   , 0 , 10, 0
 nameTitle           byte "Name: "                   , 0 , 10, 0
-levelTitle          byte "Level:"                   , 0 , 10, 0
-expTitle            byte "Exp:"                     , 0 , 10, 0
+levelTitle          byte "Level: "                  , 0 , 10, 0
+expTitle            byte "Exp: "                    , 0 , 10, 0
+goldTitle           byte "Gold: "                   , 0 , 10, 0
 
 
 primaryAttributesTitle byte "--Primary Attributes--", 13, 10, 0
@@ -67,6 +68,14 @@ mov eax, c1.expToNext
 call WriteDec
 mov edx, offset blank
 invoke WriteString
+
+mov edx, offset goldTitle
+invoke WriteString
+mov eax, c1.Gold
+call WriteDec
+mov edx, offset blank
+invoke WriteString
+
 
 mov edx, offset primaryAttributesTitle ;//prints primary attributes header
 invoke WriteString

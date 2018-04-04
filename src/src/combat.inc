@@ -177,8 +177,17 @@ not_playerDefeated:
 
 mov edx,offset enemyDefeatedEvent;//will print if enemy was defeated
 invoke WriteString
-mov eax, offset t1
+
+mov eax, offset t1 ;//adds axe to inventory
 mAddItem
+
+mov eax, c1.level
+mov ecx,10
+mul ecx
+call RandomRange
+mov ebx,c1.gold
+add ebx,eax
+mov c1.gold,ebx
 
 mov eax,e1.expReward ;//rewarding player exp
 add c1.exp,eax

@@ -12,13 +12,13 @@ i3 item {1,1,2,i2,i4,5,"W"}
 i2 item {2,1,2,i1,i3,10,"W"}
 i1 item {3,1,2,null,i2,3,"A"}
 
-t1 item {4,1,2,NULL,NULL}
+t1 item {4,1,2,NULL,NULL,3}
 
 tempString  db    8 dup (?)
 
 selectItemTitle byte "--Select an Item--", 13, 10, 0
 
-exitTitle    byte "0 Exit: "      , 13, 10, 0
+
 discardTitle byte "1 Discard: "   , 13, 10, 0
 equipTitle   byte "2 Equip: "     , 13, 10, 0
 infoTitle    byte "3 Item Info "  , 13, 10, 0
@@ -29,13 +29,14 @@ itemBuyValueTitle    byte "Buy Value: "      , 0, 10, 0
 itemCombatValueTitle byte "Combat Value:"    , 0, 10, 0
 itemType             byte "Item Type:   "    , 0, 10, 0
 
+inventoryFullTitle   byte "INVENTORY FULL"   , 0, 10, 0
+
 ;//displays inventory
 mDisplayInventory MACRO
 Local L
 pushAD
 
 xor ecx,ecx
-mov eBx, offset i1
 DO1&L:
 
 mov eax,ecx
@@ -61,6 +62,7 @@ mInventory MACRO
 mov edx, offset selectItemTitle
 call WriteString
 
+mov eBx, offset i1
 mDisplayInventory
 _get_input
 
@@ -145,7 +147,7 @@ call WriteString
 
 _get_input
 
-cmp ecx,0
+cmp ecx,909
 je exit&L
 cmp ecx,1
 je removeItem&L
@@ -186,9 +188,18 @@ endm;//mRemoveItem
 
 ;//equips item
 mEquip MACRO
+Local L
 
 ;//ebx is item being equipped
 
+cmp c1.weaponCode,0
+je notEquipped&L
+
+mov edx,ebx
+mDequip
+mov ebx,edx
+
+notEquipped&L:
 mov edx, [ebx].item.itemCode
 mov c1.weaponCode, edx
 mov edx, [ebx].item.combatValue
@@ -266,8 +277,18 @@ mov eax, c1.weaponDamage
 mov [ebx].item.combatValue,eax
 mov c1.weaponDamage,0
 mInitializeCharacter
+jmp nothingEquipped&L
+
 
 inventoryFull&L:
+
+mov edx, offset inventoryFullTitle
+invoke WriteString
+
+mov eax, 1500
+call Delay
+call clrscr
+
 nothingEquipped&L:
 
 endm
@@ -291,7 +312,26 @@ isEmpty&L:
 mov ecx, [eax].item.itemCode
 mov [ebx].item.itemCode,ecx
 
+mov ecx, [eax].item.buyValue
+mov [ebx].item.buyValue,ecx
+
+mov ecx, [eax].item.sellValue
+mov [ebx].item.sellValue,ecx
+
+mov ecx, [eax].item.combatValue
+mov [ebx].item.combatValue,ecx
+
+jmp end&L
+
 inventoryFull&L:
+mov edx, offset inventoryFullTitle
+invoke WriteString
+
+mov eax, 1500
+call Delay
+call clrscr
+
+end&L:
 
 endm
 

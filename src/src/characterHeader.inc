@@ -7,6 +7,7 @@ characterName  db    16 dup (?)
 level          DWORD 0
 exp            DWORD 0
 expToNext      DWORD 0
+gold           DWORD 0
 
 brawn          DWORD 1 ;//Primary Attributes
 agility        DWORD 1
