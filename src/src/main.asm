@@ -2,6 +2,12 @@
 ;// Authors: Thomas and Ben
 ;// Since: 3/16/18
 
+
+;includelib libcmt.lib
+;includelib libvcruntime.lib
+;includelib libucrt.lib
+;includelib legacy_stdio_definitions.lib
+
 .386
 .model stdcall, flat
 .stack 4096
@@ -42,12 +48,13 @@ exitTitle    byte "909 Exit: ", 13, 10, 0
 
 blank byte " ", 13, 10, 0
 
-
+save_character proto C character: ptr byte,  filename: ptr byte
+test_print_num proto C
 
 
 .code
 
-main proc
+main proc C
 
 mGetCharacterName
 mInitializeCharacter
@@ -116,9 +123,11 @@ while_main:						;//while( ecx != 0 )
 
 
 	 endwhile_main:
+
+	
 	
 	invoke ExitProcess, 0
 
 main endp
 
-end main
+end
