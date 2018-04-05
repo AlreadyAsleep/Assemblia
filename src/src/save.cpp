@@ -1,6 +1,8 @@
 # include <iostream>// std library for console IO
 # include <fstream> // std library for file IO
 
+# define WRITE_SIZE 1024
+
 
 using namespace std;
 
@@ -18,10 +20,10 @@ extern "C" int test_print_num()
 extern "C" void save_character(char* character, char* filename)
 {
 	ofstream file;
-	//ofstream file;
-	//file.open(filename);
-	//file << character;
-	//file.close();
+	cout << "Saving..." << endl;
+	file.open(filename, ios::trunc | ios::binary);
+	file.write(character, WRITE_SIZE);
+	file.close();
 };
 
 

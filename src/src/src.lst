@@ -1,10 +1,12 @@
-Microsoft (R) Macro Assembler Version 14.13.26129.0	    04/03/18 20:42:29
+Microsoft (R) Macro Assembler Version 14.12.25834.0	    04/05/18 13:19:15
 main.asm						     Page 1 - 1
 
 
 				;// Main.asm - The file that contains the main game loop and launcher
 				;// Authors: Thomas and Ben
 				;// Since: 3/16/18
+
+
 
 				.386
 				.model stdcall, flat
@@ -32,35 +34,39 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 
 				include characterHeader.inc
 			      C ;// structure of character object
- 0000005C		      C character struct 
+ 00000081		      C character struct 
 			      C 
  00000000  00000000	      C xPos           DWORD 0
  00000004  00000000	      C yPos           DWORD 0
  00000008  00000010 [	      C characterName  db    16 dup (?)
 	    00
 	   ]
- 2800000B  00000000	      C level          DWORD 0
- 2800000F  00000000	      C exp            DWORD 0
- 28000013  00000000	      C expToNext      DWORD 0
- 28000017  00000000	      C gold           DWORD 0
+ 0000000B  00000000	      C level          DWORD 0
+ 0000000F  00000000	      C exp            DWORD 0
+ 00000013  00000000	      C expToNext      DWORD 0
+ 00000017  00000000	      C gold           DWORD 0
 			      C 
- 2800001B  00000001	      C brawn          DWORD 1 ;//Primary Attributes
- 2800001F  00000001	      C agility        DWORD 1
- 28000023  00000001	      C mind           DWORD 1
- 28000027  00000001	      C fortune        DWORD 1
+ 0000001B  00000001	      C brawn          DWORD 1 ;//Primary Attributes
+ 0000001F  00000001	      C agility        DWORD 1
+ 00000023  00000001	      C mind           DWORD 1
+ 00000027  00000001	      C fortune        DWORD 1
 			      C 
- 2800002B  00000000	      C hpMax          DWORD 0
- 2800002F  00000000	      C hp             DWORD 0
- 28000033  00000000	      C damageMin      DWORD 0
- 28000037  00000000	      C damageMax      DWORD 0
+ 0000002B  00000000	      C hpMax          DWORD 0
+ 0000002F  00000000	      C hp             DWORD 0
+ 00000033  00000000	      C damageMin      DWORD 0
+ 00000037  00000000	      C damageMax      DWORD 0
 			      C 
- 2800003B  00000000	      C weaponCode      DWORD 0
- 2800003F  00000000	      C weaponBuyValue  DWORD 0
- 28000043  00000000	      C weaponSellValue DWORD 0
- 28000047  00000000	      C weaponDamage    DWORD 0
+ 0000003B  00000000	      C weaponCode      DWORD 0
+ 0000003F  00000000	      C weaponBuyValue  DWORD 0
+ 00000043  00000000	      C weaponSellValue DWORD 0
+ 00000047  00000000	      C weaponDamage    DWORD 0
 			      C 
 			      C 
- 2800004B  00000000	      C defence        DWORD 0
+ 0000004B  00000000	      C defence        DWORD 0
+			      C 
+ 0000004F  00000025 [	      C char_pad byte 37 dup (0) ;// pad character struct to 128 bytes
+	    00
+	   ]
 			      C 
 			      C character ends
 			      C 
@@ -198,58 +204,61 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 	   00000000
 	   00000000
 	   00000000
+	   00000025 [
+	    00
+	   ]
 			      C 
- 00000088 2D 2D 43 68 61      C characterSheetTitle byte "--CharacterSheet--"       , 13, 10, 0
+ 000000AD 2D 2D 43 68 61      C characterSheetTitle byte "--CharacterSheet--"       , 13, 10, 0
 	   72 61 63 74 65
 	   72 53 68 65 65
 	   74 2D 2D 0D 0A
 	   00
- 0000009D 78 50 6F 73 3A      C xPosTitle           byte "xPos: "                   , 0 , 10, 0
+ 000000C2 78 50 6F 73 3A      C xPosTitle           byte "xPos: "                   , 0 , 10, 0
 	   20 00 0A 00
- 000000A6 79 50 6F 73 3A      C yPosTitle           byte "yPos: "                   , 0 , 10, 0
+ 000000CB 79 50 6F 73 3A      C yPosTitle           byte "yPos: "                   , 0 , 10, 0
 	   20 00 0A 00
- 000000AF 4E 61 6D 65 3A      C nameTitle           byte "Name: "                   , 0 , 10, 0
+ 000000D4 4E 61 6D 65 3A      C nameTitle           byte "Name: "                   , 0 , 10, 0
 	   20 00 0A 00
- 000000B8 4C 65 76 65 6C      C levelTitle          byte "Level: "                  , 0 , 10, 0
+ 000000DD 4C 65 76 65 6C      C levelTitle          byte "Level: "                  , 0 , 10, 0
 	   3A 20 00 0A 00
- 000000C2 45 78 70 3A 20      C expTitle            byte "Exp: "                    , 0 , 10, 0
+ 000000E7 45 78 70 3A 20      C expTitle            byte "Exp: "                    , 0 , 10, 0
 	   00 0A 00
- 000000CA 47 6F 6C 64 3A      C goldTitle           byte "Gold: "                   , 0 , 10, 0
+ 000000EF 47 6F 6C 64 3A      C goldTitle           byte "Gold: "                   , 0 , 10, 0
 	   20 00 0A 00
 			      C 
 			      C 
- 000000D3 2D 2D 50 72 69      C primaryAttributesTitle byte "--Primary Attributes--", 13, 10, 0
+ 000000F8 2D 2D 50 72 69      C primaryAttributesTitle byte "--Primary Attributes--", 13, 10, 0
 	   6D 61 72 79 20
 	   41 74 74 72 69
 	   62 75 74 65 73
 	   2D 2D 0D 0A 00
- 000000EC 42 72 61 77 6E      C brawnTitle          byte "Brawn:"                   , 0 , 10, 0
+ 00000111 42 72 61 77 6E      C brawnTitle          byte "Brawn:"                   , 0 , 10, 0
 	   3A 00 0A 00
- 000000F5 41 67 69 6C 69      C agilityTitle        byte "Agility:"                 , 0 , 10, 0
+ 0000011A 41 67 69 6C 69      C agilityTitle        byte "Agility:"                 , 0 , 10, 0
 	   74 79 3A 00 0A
 	   00
- 00000100 4D 69 6E 64 3A      C mindTitle           byte "Mind:"                    , 0 , 10, 0
+ 00000125 4D 69 6E 64 3A      C mindTitle           byte "Mind:"                    , 0 , 10, 0
 	   00 0A 00
- 00000108 46 6F 72 74 75      C fortuneTitle        byte "Fortune:"                 , 0 , 10, 0
+ 0000012D 46 6F 72 74 75      C fortuneTitle        byte "Fortune:"                 , 0 , 10, 0
 	   6E 65 3A 00 0A
 	   00
 			      C 
- 00000113 2D 2D 43 6F 6D      C combatAttributesTitle byte "--Combat Attributes--"  , 13, 10, 0
+ 00000138 2D 2D 43 6F 6D      C combatAttributesTitle byte "--Combat Attributes--"  , 13, 10, 0
 	   62 61 74 20 41
 	   74 74 72 69 62
 	   75 74 65 73 2D
 	   2D 0D 0A 00
- 0000012B 48 50 3A 00 0A      C hpTitle             byte "HP:"                      , 0 , 10, 0
+ 00000150 48 50 3A 00 0A      C hpTitle             byte "HP:"                      , 0 , 10, 0
 	   00
- 00000131 44 61 6D 61 67      C damageTitle         byte "Damage:"                  , 0 , 10, 0
+ 00000156 44 61 6D 61 67      C damageTitle         byte "Damage:"                  , 0 , 10, 0
 	   65 3A 00 0A 00
- 0000013B 44 65 66 65 6E      C defenceTitle        byte "Defence:"                 , 0 , 10, 0
+ 00000160 44 65 66 65 6E      C defenceTitle        byte "Defence:"                 , 0 , 10, 0
 	   63 65 3A 00 0A
 	   00
- 00000146 57 65 61 70 6F      C equippedWeaponTitle byte "Weapon:"                  , 0 , 10, 0
+ 0000016B 57 65 61 70 6F      C equippedWeaponTitle byte "Weapon:"                  , 0 , 10, 0
 	   6E 3A 00 0A 00
 			      C 
- 00000150 45 6E 74 65 72      C command1 byte "Enter character name. Up to 15 Characters"  , 13, 10, 0
+ 00000175 45 6E 74 65 72      C command1 byte "Enter character name. Up to 15 Characters"  , 13, 10, 0
 	   20 63 68 61 72
 	   61 63 74 65 72
 	   20 6E 61 6D 65
@@ -434,10 +443,25 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C popAD
 			      C endm
 			      C 
+			      C _write_char_to_buffer MACRO ;// writes the character struct to the save buffer
+			      C 	Local L
+			      C 	pushAD
+			      C 	mov esi, offset C1
+			      C 	mov edi, offset save_write_buffer
+			      C 	mov al, [esi]	
+			      C 	mov ecx, 128 ;// sizeof(character)
+			      C while$L:
+			      C 	stosb ;// inc edi and mov [edi], al
+			      C 	inc esi
+			      C 	mov al, [esi]
+			      C 	loop while$L
+			      C 
+			      C 	popAD
+			      C endm
 			      C 
 			      C 
 				include enemy.inc
- 0000017C 42 6F 67 6C 69      C e1 enemy{"Boglin",1,1,1,1,1,1}
+ 000001A1 42 6F 67 6C 69      C e1 enemy{"Boglin",1,1,1,1,1,1}
 	   6E
 	   00000002 [
 	    00
@@ -481,44 +505,44 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C endm
 			      C 
 				include combat.inc
- 0000019C 00		      C escape         byte 0
- 0000019D 00		      C playerDefeated byte 0
- 0000019E 00		      C enemyDefeated  byte 0
+ 000001C1 00		      C escape         byte 0
+ 000001C2 00		      C playerDefeated byte 0
+ 000001C3 00		      C enemyDefeated  byte 0
 			      C 
- 0000019F 2D 2D 43 4F 4D      C combatMenuTitle  byte "--COMBAT--"   , 13, 10, 0
+ 000001C4 2D 2D 43 4F 4D      C combatMenuTitle  byte "--COMBAT--"   , 13, 10, 0
 	   42 41 54 2D 2D
 	   0D 0A 00
- 000001AC 45 6E 65 6D 79      C enemyNameTitle   byte "Enemy Name:"  , 0 , 10, 0
+ 000001D1 45 6E 65 6D 79      C enemyNameTitle   byte "Enemy Name:"  , 0 , 10, 0
 	   20 4E 61 6D 65
 	   3A 00 0A 00
- 000001BA 45 6E 65 6D 79      C enemyHPTitle     byte "Enemy HP:"    , 0 , 10, 0
+ 000001DF 45 6E 65 6D 79      C enemyHPTitle     byte "Enemy HP:"    , 0 , 10, 0
 	   20 48 50 3A 00
 	   0A 00
- 000001C6 45 6E 65 6D 79      C enemyDamageTitle byte "Enemy Damage:", 0 , 10, 0
+ 000001EB 45 6E 65 6D 79      C enemyDamageTitle byte "Enemy Damage:", 0 , 10, 0
 	   20 44 61 6D 61
 	   67 65 3A 00 0A
 	   00
 			      C 
 			      C 
- 000001D6 2D 2D 43 6F 6D      C combatOptionsMenuTitle byte "--Combat Options--", 13, 10, 0
+ 000001FB 2D 2D 43 6F 6D      C combatOptionsMenuTitle byte "--Combat Options--", 13, 10, 0
 	   62 61 74 20 4F
 	   70 74 69 6F 6E
 	   73 2D 2D 0D 0A
 	   00
- 000001EB 30 3A 20 41 74      C attackTitle            byte "0: Attack"         , 13, 10, 0
+ 00000210 30 3A 20 41 74      C attackTitle            byte "0: Attack"         , 13, 10, 0
 	   74 61 63 6B 0D
 	   0A 00
- 000001F7 31 3A 20 46 6C      C fleeTitle              byte "1: Flee"           , 13, 10, 0
+ 0000021C 31 3A 20 46 6C      C fleeTitle              byte "1: Flee"           , 13, 10, 0
 	   65 65 0D 0A 00
 			      C 
- 00000201 59 6F 75 20 45      C escapeEvent          byte "You Escaped!"          , 13, 10, 0
+ 00000226 59 6F 75 20 45      C escapeEvent          byte "You Escaped!"          , 13, 10, 0
 	   73 63 61 70 65
 	   64 21 0D 0A 00
- 00000210 59 6F 75 20 77      C playerDefeatedEvent  byte "You were defeated"     , 13, 10, 0
+ 00000235 59 6F 75 20 77      C playerDefeatedEvent  byte "You were defeated"     , 13, 10, 0
 	   65 72 65 20 64
 	   65 66 65 61 74
 	   65 64 0D 0A 00
- 00000224 59 6F 75 20 44      C enemyDefeatedEvent   byte "You Defeated the Enemy", 13, 10, 0
+ 00000249 59 6F 75 20 44      C enemyDefeatedEvent   byte "You Defeated the Enemy", 13, 10, 0
 	   65 66 65 61 74
 	   65 64 20 74 68
 	   65 20 45 6E 65
@@ -714,12 +738,12 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C 
 				include levelUp.inc
 			      C ;//level up class
- 0000023D 4E 6F 74 20 65      C notEnoughResponse byte "Not enough experience", 13, 10, 0
+ 00000262 4E 6F 74 20 65      C notEnoughResponse byte "Not enough experience", 13, 10, 0
 	   6E 6F 75 67 68
 	   20 65 78 70 65
 	   72 69 65 6E 63
 	   65 0D 0A 00
- 00000255 59 6F 75 20 6C      C leveledUpResponse byte "You leveled up!"      , 13, 10, 0
+ 0000027A 59 6F 75 20 6C      C leveledUpResponse byte "You leveled up!"      , 13, 10, 0
 	   65 76 65 6C 65
 	   64 20 75 70 21
 	   0D 0A 00
@@ -769,78 +793,78 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C ;//inventory using linked list
 			      C ;//linked list of 10 items 
 			      C 
- 00000267 00000000	      C i10 item {0,0,0,i9,null}
+ 0000028C 00000000	      C i10 item {0,0,0,i9,null}
 	   00000000
 	   00000000
-	   00000283 R
+	   000002A8 R
 	   00000000
 	   00000000
 	   00000000
- 00000283 00000000	      C i9 item {0,0,0,i8,i10}
+ 000002A8 00000000	      C i9 item {0,0,0,i8,i10}
 	   00000000
 	   00000000
-	   0000029F R
-	   00000267 R
+	   000002C4 R
+	   0000028C R
 	   00000000
 	   00000000
- 0000029F 00000000	      C i8 item {0,0,0,i7,i9}
+ 000002C4 00000000	      C i8 item {0,0,0,i7,i9}
 	   00000000
 	   00000000
-	   000002BB R
-	   00000283 R
+	   000002E0 R
+	   000002A8 R
 	   00000000
 	   00000000
- 000002BB 00000000	      C i7 item {0,0,0,i6,i8}
+ 000002E0 00000000	      C i7 item {0,0,0,i6,i8}
 	   00000000
 	   00000000
-	   000002D7 R
-	   0000029F R
+	   000002FC R
+	   000002C4 R
 	   00000000
 	   00000000
- 000002D7 00000000	      C i6 item {0,0,0,i5,i7}
+ 000002FC 00000000	      C i6 item {0,0,0,i5,i7}
 	   00000000
 	   00000000
-	   000002F3 R
-	   000002BB R
+	   00000318 R
+	   000002E0 R
 	   00000000
 	   00000000
- 000002F3 00000000	      C i5 item {0,0,0,i4,i6}
+ 00000318 00000000	      C i5 item {0,0,0,i4,i6}
 	   00000000
 	   00000000
-	   0000030F R
-	   000002D7 R
+	   00000334 R
+	   000002FC R
 	   00000000
 	   00000000
- 0000030F 00000000	      C i4 item {0,0,0,i3,i5}
+ 00000334 00000000	      C i4 item {0,0,0,i3,i5}
 	   00000000
 	   00000000
-	   0000032B R
-	   000002F3 R
+	   00000350 R
+	   00000318 R
 	   00000000
 	   00000000
- 0000032B 00000001	      C i3 item {1,1,2,i2,i4,5,"W"}
+ 00000350 00000001	      C i3 item {1,1,2,i2,i4,5,"W"}
 	   00000001
 	   00000002
-	   00000347 R
-	   0000030F R
+	   0000036C R
+	   00000334 R
 	   00000005
 	   00000057
- 00000347 00000002	      C i2 item {2,1,2,i1,i3,10,"W"}
+ 0000036C 00000002	      C i2 item {2,1,2,i1,i3,10,"W"}
 	   00000001
 	   00000002
-	   00000363 R
-	   0000032B R
+	   00000388 R
+	   00000350 R
 	   0000000A
 	   00000057
- 00000363 00000003	      C i1 item {3,1,2,null,i2,3,"A"}
+ 00000388 00000003	      C i1 item {3,1,2,null,i2,3,"A"}
 	   00000001
 	   00000002
 	   00000000
-	   00000347 R
+	   0000036C R
 	   00000003
 	   00000041
 			      C 
- 0000037F 00000004	      C t1 item {4,1,2,NULL,NULL,3}
+ 000003A4 00000004	      C t1 item {4,1,2,NULL,NULL,3}
 	   00000001
 	   00000002
 	   00000000
@@ -848,46 +872,46 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 	   00000003
 	   00000000
 			      C 
- 0000039B  00000008 [	      C tempString  db    8 dup (?)
+ 000003C0  00000008 [	      C tempString  db    8 dup (?)
 	    00
 	   ]
 			      C 
- 000003A3 2D 2D 53 65 6C      C selectItemTitle byte "--Select an Item--", 13, 10, 0
+ 000003C8 2D 2D 53 65 6C      C selectItemTitle byte "--Select an Item--", 13, 10, 0
 	   65 63 74 20 61
 	   6E 20 49 74 65
 	   6D 2D 2D 0D 0A
 	   00
 			      C 
 			      C 
- 000003B8 31 20 44 69 73      C discardTitle byte "1 Discard: "   , 13, 10, 0
+ 000003DD 31 20 44 69 73      C discardTitle byte "1 Discard: "   , 13, 10, 0
 	   63 61 72 64 3A
 	   20 0D 0A 00
- 000003C6 32 20 45 71 75      C equipTitle   byte "2 Equip: "     , 13, 10, 0
+ 000003EB 32 20 45 71 75      C equipTitle   byte "2 Equip: "     , 13, 10, 0
 	   69 70 3A 20 0D
 	   0A 00
- 000003D2 33 20 49 74 65      C infoTitle    byte "3 Item Info "  , 13, 10, 0
+ 000003F7 33 20 49 74 65      C infoTitle    byte "3 Item Info "  , 13, 10, 0
 	   6D 20 49 6E 66
 	   6F 20 0D 0A 00
 			      C 
- 000003E1 49 74 65 6D 20      C itemNameTitle        byte "Item Name: "      , 0, 10, 0
+ 00000406 49 74 65 6D 20      C itemNameTitle        byte "Item Name: "      , 0, 10, 0
 	   4E 61 6D 65 3A
 	   20 00 0A 00
- 000003EF 53 65 6C 6C 20      C itemSellValueTitle   byte "Sell Value: "     , 0, 10, 0
+ 00000414 53 65 6C 6C 20      C itemSellValueTitle   byte "Sell Value: "     , 0, 10, 0
 	   56 61 6C 75 65
 	   3A 20 00 0A 00
- 000003FE 42 75 79 20 56      C itemBuyValueTitle    byte "Buy Value: "      , 0, 10, 0
+ 00000423 42 75 79 20 56      C itemBuyValueTitle    byte "Buy Value: "      , 0, 10, 0
 	   61 6C 75 65 3A
 	   20 00 0A 00
- 0000040C 43 6F 6D 62 61      C itemCombatValueTitle byte "Combat Value:"    , 0, 10, 0
+ 00000431 43 6F 6D 62 61      C itemCombatValueTitle byte "Combat Value:"    , 0, 10, 0
 	   74 20 56 61 6C
 	   75 65 3A 00 0A
 	   00
- 0000041C 49 74 65 6D 20      C itemType             byte "Item Type:   "    , 0, 10, 0
+ 00000441 49 74 65 6D 20      C itemType             byte "Item Type:   "    , 0, 10, 0
 	   54 79 70 65 3A
 	   20 20 20 00 0A
 	   00
 			      C 
- 0000042C 49 4E 56 45 4E      C inventoryFullTitle   byte "INVENTORY FULL"   , 0, 10, 0
+ 00000451 49 4E 56 45 4E      C inventoryFullTitle   byte "INVENTORY FULL"   , 0, 10, 0
 	   54 4F 52 59 20
 	   46 55 4C 4C 00
 	   0A 00
@@ -1198,93 +1222,93 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 			      C 
 			      C 
 				include shop.inc
- 0000043D 00000000	      C s10 item {0,0,0,s9,null}
+ 00000462 00000000	      C s10 item {0,0,0,s9,null}
 	   00000000
 	   00000000
-	   00000459 R
+	   0000047E R
 	   00000000
 	   00000000
 	   00000000
- 00000459 00000000	      C s9 item {0,0,0,s8,s10}
+ 0000047E 00000000	      C s9 item {0,0,0,s8,s10}
 	   00000000
 	   00000000
-	   00000475 R
-	   0000043D R
+	   0000049A R
+	   00000462 R
 	   00000000
 	   00000000
- 00000475 00000000	      C s8 item {0,0,0,s7,s9}
+ 0000049A 00000000	      C s8 item {0,0,0,s7,s9}
 	   00000000
 	   00000000
-	   00000491 R
-	   00000459 R
+	   000004B6 R
+	   0000047E R
 	   00000000
 	   00000000
- 00000491 00000000	      C s7 item {0,0,0,s6,s8}
+ 000004B6 00000000	      C s7 item {0,0,0,s6,s8}
 	   00000000
 	   00000000
-	   000004AD R
-	   00000475 R
+	   000004D2 R
+	   0000049A R
 	   00000000
 	   00000000
- 000004AD 00000000	      C s6 item {0,0,0,s5,s7}
+ 000004D2 00000000	      C s6 item {0,0,0,s5,s7}
 	   00000000
 	   00000000
-	   000004C9 R
-	   00000491 R
+	   000004EE R
+	   000004B6 R
 	   00000000
 	   00000000
- 000004C9 00000000	      C s5 item {0,0,0,s4,s6}
+ 000004EE 00000000	      C s5 item {0,0,0,s4,s6}
 	   00000000
 	   00000000
-	   000004E5 R
-	   000004AD R
+	   0000050A R
+	   000004D2 R
 	   00000000
 	   00000000
- 000004E5 00000000	      C s4 item {0,0,0,s3,s5}
+ 0000050A 00000000	      C s4 item {0,0,0,s3,s5}
 	   00000000
 	   00000000
-	   00000501 R
-	   000004C9 R
+	   00000526 R
+	   000004EE R
 	   00000000
 	   00000000
- 00000501 00000001	      C s3 item {1,1,2,s2,s4,5,"W"}
+ 00000526 00000001	      C s3 item {1,1,2,s2,s4,5,"W"}
 	   00000001
 	   00000002
-	   0000051D R
-	   000004E5 R
+	   00000542 R
+	   0000050A R
 	   00000005
 	   00000057
- 0000051D 00000001	      C s2 item {1,1,2,s1,s3,10,"W"}
+ 00000542 00000001	      C s2 item {1,1,2,s1,s3,10,"W"}
 	   00000001
 	   00000002
-	   00000539 R
-	   00000501 R
+	   0000055E R
+	   00000526 R
 	   0000000A
 	   00000057
- 00000539 00000003	      C s1 item {3,1,2,null,s2,3,"A"}
+ 0000055E 00000003	      C s1 item {3,1,2,null,s2,3,"A"}
 	   00000001
 	   00000002
 	   00000000
-	   0000051D R
+	   00000542 R
 	   00000003
 	   00000041
 			      C 
- 00000555 2D 2D 53 48 4F      C shopMenuTitle    byte "--SHOP--"        , 13, 10, 0
+ 0000057A 2D 2D 53 48 4F      C shopMenuTitle    byte "--SHOP--"        , 13, 10, 0
 	   50 2D 2D 0D 0A
 	   00
 			      C 
- 00000560 31 30 20 53 77      C sellModeTitle byte "10 Switch to Sell Mode" , 13, 10, 0
+ 00000585 31 30 20 53 77      C sellModeTitle byte "10 Switch to Sell Mode" , 13, 10, 0
 	   69 74 63 68 20
 	   74 6F 20 53 65
 	   6C 6C 20 4D 6F
 	   64 65 0D 0A 00
- 00000579 32 20 42 75 79      C buyTitle      byte "2 Buy:"                 , 13, 10, 0
+ 0000059E 32 20 42 75 79      C buyTitle      byte "2 Buy:"                 , 13, 10, 0
 	   3A 0D 0A 00
 			      C 
- 00000582 31 20 53 65 6C      C sellTitle  byte "1 Sell:"  , 13, 10, 0
+ 000005A7 31 20 53 65 6C      C sellTitle  byte "1 Sell:"  , 13, 10, 0
 	   6C 3A 0D 0A 00
 			      C 
- 0000058C 4E 6F 74 20 45      C notEnoughGoldTitle byte "Not Enough Gold" , 13, 10, 0
+ 000005B1 4E 6F 74 20 45      C notEnoughGoldTitle byte "Not Enough Gold" , 13, 10, 0
 	   6E 6F 75 67 68
 	   20 47 6F 6C 64
 	   0D 0A 00
@@ -1540,54 +1564,98 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 				ReadDec proto
 				ExitProcess proto, dwExitCode:dword
 
- 0000059E 4D 61 69 6E 20	mainMenuTitle    byte "Main Menu"        , 13, 10, 0
+ 000005C3 4D 61 69 6E 20	mainMenuTitle    byte "Main Menu"        , 13, 10, 0
 	   4D 65 6E 75 0D
 	   0A 00
- 000005AA 39 30 39 20 51	quitTitle        byte "909 Quit"           , 13, 10, 0
+ 000005CF 39 30 39 20 51	quitTitle        byte "909 Quit"           , 13, 10, 0
 	   75 69 74 0D 0A
 	   00
- 000005B5 31 20 43 68 61	characterSheet   byte "1 Character Sheet", 13, 10, 0
+ 000005DA 31 20 43 68 61	characterSheet   byte "1 Character Sheet", 13, 10, 0
 	   72 61 63 74 65
 	   72 20 53 68 65
 	   65 74 0D 0A 00
- 000005C9 32 20 43 6F 6D	combatTitle      byte "2 Combat"         , 13, 10, 0
+ 000005EE 32 20 43 6F 6D	combatTitle      byte "2 Combat"         , 13, 10, 0
 	   62 61 74 0D 0A
 	   00
- 000005D4 33 20 4C 65 76	levelUpTitle     byte "3 Level Up"       , 13, 10, 0
+ 000005F9 33 20 4C 65 76	levelUpTitle     byte "3 Level Up"       , 13, 10, 0
 	   65 6C 20 55 70
 	   0D 0A 00
- 000005E1 34 20 49 6E 76	inventoryTitle   byte "4 Inventory"      , 13, 10, 0
+ 00000606 34 20 49 6E 76	inventoryTitle   byte "4 Inventory"      , 13, 10, 0
 	   65 6E 74 6F 72
 	   79 0D 0A 00
- 000005EF 35 20 44 65 71	dequipTitle      byte "5 Dequip"         , 13, 10, 0
+ 00000614 35 20 44 65 71	dequipTitle      byte "5 Dequip"         , 13, 10, 0
 	   75 69 70 0D 0A
 	   00
- 000005FA 36 20 53 68 6F	shopTitle        byte "6 Shop"           , 13, 10, 0
+ 0000061F 36 20 53 68 6F	shopTitle        byte "6 Shop"           , 13, 10, 0
 	   70 0D 0A 00
 
- 00000603 50 72 65 73 73	continueCommand byte "Press Enter to Continue",13, 10, 0
+ 00000628 50 72 65 73 73	continueCommand byte "Press Enter to Continue",13, 10, 0
 	   20 45 6E 74 65
 	   72 20 74 6F 20
 	   43 6F 6E 74 69
 	   6E 75 65 0D 0A
 	   00
 
- 0000061D 39 30 39 20 45	exitTitle    byte "909 Exit: ", 13, 10, 0
+ 00000642 39 30 39 20 45	exitTitle    byte "909 Exit: ", 13, 10, 0
 	   78 69 74 3A 20
 	   0D 0A 00
 
- 0000062A 20 0D 0A 00		blank byte " ", 13, 10, 0
+ 0000064F 20 0D 0A 00		blank byte " ", 13, 10, 0
 
+				save_character proto C character: ptr byte,  filename: ptr byte
+				test_print_num proto C
 
+				include save_vars.inc
+ = 00000400		      C save_write_len equ 1024
+			      C 
+ 00000653 2E 2E 2F 70 6C      C save_file byte "../player.save", 0
+	   61 79 65 72 2E
+	   73 61 76 65 00
+ 00000662  00000400 [	      C save_write_buffer byte save_write_len dup (?), 0
+	    00
+	   ] 00
+			      C ;// first 128 bytes are for character
+			      C 
+			      C 
+			      C 
+			      C _test_save macro
+			      C 	Local L	
+			      C 	pushad
+			      C 	mov esi, offset save_write_buffer
+			      C 	mov edi, 0
+			      C 	mov ecx, save_write_len
+			      C 	mov eax, 060h
+			      C while$L:	
+			      C 	mov [esi][edi], al
+			      C 	inc edi
+			      C 	loop while$L
+			      C 
+			      C 	invoke save_character, addr save_write_buffer, addr save_file
+			      C 	popad
+			      C endm	
+			      C 
+			      C _save_char macro
+			      C 	Local L
+			      C 	pushad
+			      C 	
+			      C 	_write_char_to_buffer ;// found in character.inc
+			      C 
+			      C 	invoke save_character, addr save_write_buffer, addr save_file ;//  found in save.cpp
+			      C 
+			      C 	popad
+			      C endm
+			      C 
+			      C    
+			      C 
 
 
  00000000			.code
 
- 00000000			main proc
+ 00000000			main proc C
 
 				mGetCharacterName
  00000000  60		     1	pushAD
- 00000001  BA 00000150 R     1	mov edx, offset command1 ;//Player inputs character name
+ 00000001  BA 00000175 R     1	mov edx, offset command1 ;//Player inputs character name
  00000006  E8 00000000 E   *	    call   WriteString
  0000000B  BA 00000034 R     1	mov edx, offset c1.characterName
  00000010  B9 00000010	     1	mov ecx, SIZEOF c1.characterName
@@ -1618,21 +1686,21 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000072			while_main:						;//while( ecx != 0 )
 
 					
- 00000072  BA 0000059E R		mov edx, offset mainMenuTitle ;//Main Menu Display Start
+ 00000072  BA 000005C3 R		mov edx, offset mainMenuTitle ;//Main Menu Display Start
  00000077  E8 00000000 E		call WriteString
- 0000007C  BA 000005AA R			mov edx, offset quitTitle
+ 0000007C  BA 000005CF R			mov edx, offset quitTitle
  00000081  E8 00000000 E			call WriteString
- 00000086  BA 000005B5 R			mov edx, offset characterSheet
+ 00000086  BA 000005DA R			mov edx, offset characterSheet
  0000008B  E8 00000000 E			call WriteString
- 00000090  BA 000005C9 R			mov edx, offset combatTitle
+ 00000090  BA 000005EE R			mov edx, offset combatTitle
  00000095  E8 00000000 E			call WriteString
- 0000009A  BA 000005D4 R			mov edx, offset levelUpTitle
+ 0000009A  BA 000005F9 R			mov edx, offset levelUpTitle
  0000009F  E8 00000000 E			call WriteString
- 000000A4  BA 000005E1 R			mov edx, offset inventoryTitle
+ 000000A4  BA 00000606 R			mov edx, offset inventoryTitle
  000000A9  E8 00000000 E			call WriteString
- 000000AE  BA 000005EF R			mov edx, offset dequipTitle
+ 000000AE  BA 00000614 R			mov edx, offset dequipTitle
  000000B3  E8 00000000 E			call WriteString
- 000000B8  BA 000005FA R			mov edx, offset shopTitle
+ 000000B8  BA 0000061F R			mov edx, offset shopTitle
  000000BD  E8 00000000 E			call WriteString
 
 						_get_input
@@ -1642,7 +1710,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000000C9  E8 00000000 E			call Clrscr
 
  000000CE  81 F9 0000038D		cmp ecx, 909;//switch
- 000000D4  0F 84 00002F55		je endwhile_main
+ 000000D4  0F 84 00002F82		je endwhile_main
  000000DA  83 F9 01			cmp ecx, 1
  000000DD  74 32			je character_sheet
  000000DF  83 F9 02			cmp ecx, 2
@@ -1660,33 +1728,33 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000111				character_sheet:
 						mPrintCharacterSheet
  00000111  60		     1	pushAD
- 00000112  BA 00000088 R     1	mov edx, offset characterSheetTitle ;//prints a header
+ 00000112  BA 000000AD R     1	mov edx, offset characterSheetTitle ;//prints a header
  00000117  E8 00000000 E   *	    call   WriteString
- 0000011C  BA 0000009D R     1	mov edx, offset xPosTitle ;// prints x position
+ 0000011C  BA 000000C2 R     1	mov edx, offset xPosTitle ;// prints x position
  00000121  E8 00000000 E   *	    call   WriteString
  00000126  A1 0000002C R     1	mov eax, c1.xPos
  0000012B  E8 00000000 E     1	call WriteDec
- 00000130  BA 0000062A R     1	mov edx, offset blank
+ 00000130  BA 0000064F R     1	mov edx, offset blank
  00000135  E8 00000000 E   *	    call   WriteString
- 0000013A  BA 000000A6 R     1	mov edx, offset yPosTitle ;// prints y position
+ 0000013A  BA 000000CB R     1	mov edx, offset yPosTitle ;// prints y position
  0000013F  E8 00000000 E   *	    call   WriteString
  00000144  A1 00000030 R     1	mov eax, c1.yPos
  00000149  E8 00000000 E     1	call WriteDec
- 0000014E  BA 0000062A R     1	mov edx, offset blank
+ 0000014E  BA 0000064F R     1	mov edx, offset blank
  00000153  E8 00000000 E   *	    call   WriteString
- 00000158  BA 000000AF R     1	mov edx, offset nameTitle ;// prints character name
+ 00000158  BA 000000D4 R     1	mov edx, offset nameTitle ;// prints character name
  0000015D  E8 00000000 E   *	    call   WriteString
  00000162  BA 00000034 R     1	mov edx, offset c1.CharacterName
  00000167  E8 00000000 E     1	Call WriteString
- 0000016C  BA 0000062A R     1	mov edx, offset blank
+ 0000016C  BA 0000064F R     1	mov edx, offset blank
  00000171  E8 00000000 E   *	    call   WriteString
- 00000176  BA 000000B8 R     1	mov edx, offset levelTitle ;//prints character level
+ 00000176  BA 000000DD R     1	mov edx, offset levelTitle ;//prints character level
  0000017B  E8 00000000 E   *	    call   WriteString
  00000180  A1 00000044 R     1	mov eax, c1.level
  00000185  E8 00000000 E     1	call WriteDec
- 0000018A  BA 0000062A R     1	mov edx, offset blank
+ 0000018A  BA 0000064F R     1	mov edx, offset blank
  0000018F  E8 00000000 E   *	    call   WriteString
- 00000194  BA 000000C2 R     1	mov edx, offset expTitle ;//prints character exp
+ 00000194  BA 000000E7 R     1	mov edx, offset expTitle ;//prints character exp
  00000199  E8 00000000 E   *	    call   WriteString
  0000019E  A1 00000048 R     1	mov eax, c1.exp
  000001A3  E8 00000000 E     1	call WriteDec
@@ -1694,43 +1762,43 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000001AD  E8 00000000 E     1	call WriteChar
  000001B2  A1 0000004C R     1	mov eax, c1.expToNext
  000001B7  E8 00000000 E     1	call WriteDec
- 000001BC  BA 0000062A R     1	mov edx, offset blank
+ 000001BC  BA 0000064F R     1	mov edx, offset blank
  000001C1  E8 00000000 E   *	    call   WriteString
- 000001C6  BA 000000CA R     1	mov edx, offset goldTitle
+ 000001C6  BA 000000EF R     1	mov edx, offset goldTitle
  000001CB  E8 00000000 E   *	    call   WriteString
  000001D0  A1 00000050 R     1	mov eax, c1.Gold
  000001D5  E8 00000000 E     1	call WriteDec
- 000001DA  BA 0000062A R     1	mov edx, offset blank
+ 000001DA  BA 0000064F R     1	mov edx, offset blank
  000001DF  E8 00000000 E   *	    call   WriteString
- 000001E4  BA 000000D3 R     1	mov edx, offset primaryAttributesTitle ;//prints primary attributes header
+ 000001E4  BA 000000F8 R     1	mov edx, offset primaryAttributesTitle ;//prints primary attributes header
  000001E9  E8 00000000 E   *	    call   WriteString
- 000001EE  BA 000000EC R     1	mov edx, offset brawnTitle ;//prints character brawn
+ 000001EE  BA 00000111 R     1	mov edx, offset brawnTitle ;//prints character brawn
  000001F3  E8 00000000 E   *	    call   WriteString
  000001F8  A1 00000054 R     1	mov eax, c1.brawn
  000001FD  E8 00000000 E     1	call WriteDec
- 00000202  BA 0000062A R     1	mov edx, offset blank
+ 00000202  BA 0000064F R     1	mov edx, offset blank
  00000207  E8 00000000 E   *	    call   WriteString
- 0000020C  BA 000000F5 R     1	mov edx, offset agilityTitle ;//prints character agility
+ 0000020C  BA 0000011A R     1	mov edx, offset agilityTitle ;//prints character agility
  00000211  E8 00000000 E   *	    call   WriteString
  00000216  A1 00000058 R     1	mov eax, c1.agility
  0000021B  E8 00000000 E     1	call WriteDec
- 00000220  BA 0000062A R     1	mov edx, offset blank
+ 00000220  BA 0000064F R     1	mov edx, offset blank
  00000225  E8 00000000 E   *	    call   WriteString
- 0000022A  BA 00000100 R     1	mov edx, offset mindTitle ;//prints character mind
+ 0000022A  BA 00000125 R     1	mov edx, offset mindTitle ;//prints character mind
  0000022F  E8 00000000 E   *	    call   WriteString
  00000234  A1 0000005C R     1	mov eax, c1.mind
  00000239  E8 00000000 E     1	call WriteDec
- 0000023E  BA 0000062A R     1	mov edx, offset blank
+ 0000023E  BA 0000064F R     1	mov edx, offset blank
  00000243  E8 00000000 E   *	    call   WriteString
- 00000248  BA 00000108 R     1	mov edx, offset fortuneTitle ;//prints character fortune
+ 00000248  BA 0000012D R     1	mov edx, offset fortuneTitle ;//prints character fortune
  0000024D  E8 00000000 E   *	    call   WriteString
  00000252  A1 00000060 R     1	mov eax, c1.fortune
  00000257  E8 00000000 E     1	call WriteDec
- 0000025C  BA 0000062A R     1	mov edx, offset blank
+ 0000025C  BA 0000064F R     1	mov edx, offset blank
  00000261  E8 00000000 E   *	    call   WriteString
- 00000266  BA 00000113 R     1	mov edx, offset combatAttributesTitle ;//prints primary attributes header
+ 00000266  BA 00000138 R     1	mov edx, offset combatAttributesTitle ;//prints primary attributes header
  0000026B  E8 00000000 E   *	    call   WriteString
- 00000270  BA 0000012B R     1	mov edx, offset hpTitle ;//prints character hp
+ 00000270  BA 00000150 R     1	mov edx, offset hpTitle ;//prints character hp
  00000275  E8 00000000 E   *	    call   WriteString
  0000027A  A1 00000068 R     1	mov eax, c1.hp
  0000027F  E8 00000000 E     1	call WriteDec
@@ -1738,9 +1806,9 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000289  E8 00000000 E     1	call WriteChar
  0000028E  A1 00000064 R     1	mov eax, c1.hpMax
  00000293  E8 00000000 E     1	call WriteDec
- 00000298  BA 0000062A R     1	mov edx, offset blank
+ 00000298  BA 0000064F R     1	mov edx, offset blank
  0000029D  E8 00000000 E   *	    call   WriteString
- 000002A2  BA 00000131 R     1	mov edx, offset damageTitle ;//prints character damage
+ 000002A2  BA 00000156 R     1	mov edx, offset damageTitle ;//prints character damage
  000002A7  E8 00000000 E   *	    call   WriteString
  000002AC  A1 0000006C R     1	mov eax, c1.damageMin
  000002B1  E8 00000000 E     1	call WriteDec
@@ -1748,15 +1816,15 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000002BB  E8 00000000 E     1	call WriteChar
  000002C0  A1 00000070 R     1	mov eax, c1.damageMax
  000002C5  E8 00000000 E     1	call WriteDec
- 000002CA  BA 0000062A R     1	mov edx, offset blank
+ 000002CA  BA 0000064F R     1	mov edx, offset blank
  000002CF  E8 00000000 E   *	    call   WriteString
- 000002D4  BA 0000013B R     1	mov edx, offset defenceTitle ;//prints character defence
+ 000002D4  BA 00000160 R     1	mov edx, offset defenceTitle ;//prints character defence
  000002D9  E8 00000000 E   *	    call   WriteString
  000002DE  A1 00000084 R     1	mov eax, c1.defence
  000002E3  E8 00000000 E     1	call WriteDec
- 000002E8  BA 0000062A R     1	mov edx, offset blank
+ 000002E8  BA 0000064F R     1	mov edx, offset blank
  000002ED  E8 00000000 E   *	    call   WriteString
- 000002F2  BA 00000146 R     1	mov edx, offset equippedWeaponTitle
+ 000002F2  BA 0000016B R     1	mov edx, offset equippedWeaponTitle
  000002F7  E8 00000000 E   *	    call   WriteString
  000002FC  A1 00000074 R     1	mov eax, c1.weaponCode
  00000301  83 F8 01	     2	cmp eax,1
@@ -1784,9 +1852,9 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000333  BA 0000001B R     2		mov edx, offset defaultName
  00000338		     2	print??0001:
  00000338  E8 00000000 E   *	    call   WriteString
- 0000033D  BA 0000062A R     1	mov edx, offset blank
+ 0000033D  BA 0000064F R     1	mov edx, offset blank
  00000342  E8 00000000 E   *	    call   WriteString
- 00000347  BA 00000603 R     1	mov edx, offset continueCommand
+ 00000347  BA 00000628 R     1	mov edx, offset continueCommand
  0000034C  E8 00000000 E   *	    call   WriteString
  00000351  E8 00000000 E     2		call ReadDec
  00000356  8B C8	     2		mov ecx, eax
@@ -1802,77 +1870,77 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000370  E8 00000000 E     2	call RandomRange
  00000375  40		     2	inc eax
  00000376  F7 E3	     2	mul ebx
- 00000378  A3 00000184 R     2	mov e1.hpMax,eax
- 0000037D  A3 00000188 R     2	mov e1.hp,eax
+ 00000378  A3 000001A9 R     2	mov e1.hpMax,eax
+ 0000037D  A3 000001AD R     2	mov e1.hp,eax
  00000382  B8 00000002	     2	mov eax, 2 ;//initialize enemy damage
  00000387  E8 00000000 E     2	call RandomRange
  0000038C  40		     2	inc eax
  0000038D  03 C3	     2	add eax,ebx
- 0000038F  A3 0000018C R     2	mov e1.damageMin,eax
+ 0000038F  A3 000001B1 R     2	mov e1.damageMin,eax
  00000394  8B C8	     2	mov ecx,eax
  00000396  B8 00000002	     2	mov eax,2
  0000039B  E8 00000000 E     2	call RandomRange
  000003A0  40		     2	inc eax
  000003A1  03 C1	     2	add eax,ecx
- 000003A3  A3 00000190 R     2	mov e1.damageMax,eax
- 000003A8  A1 00000184 R     2	mov eax,e1.hpMax ;//initialize expReward
+ 000003A3  A3 000001B5 R     2	mov e1.damageMax,eax
+ 000003A8  A1 000001A9 R     2	mov eax,e1.hpMax ;//initialize expReward
  000003AD  BB 0000000A	     2	mov ebx,10
  000003B2  F7 E3	     2	mul ebx
- 000003B4  A3 00000198 R     2	mov e1.expReward ,eax
+ 000003B4  A3 000001BD R     2	mov e1.expReward ,eax
  000003B9  61		     2	popAD
  000003BA  A1 00000064 R     1	mov eax,c1.hpMax
  000003BF  A3 00000068 R     1	mov c1.hp,eax
- 000003C4  C6 05 0000019C R  1	mov escape        ,0 ;//combat end conditions
+ 000003C4  C6 05 000001C1 R  1	mov escape        ,0 ;//combat end conditions
 	   00
- 000003CB  C6 05 0000019D R  1	mov playerDefeated,0
+ 000003CB  C6 05 000001C2 R  1	mov playerDefeated,0
 	   00
- 000003D2  C6 05 0000019E R  1	mov enemyDefeated ,0
+ 000003D2  C6 05 000001C3 R  1	mov enemyDefeated ,0
 	   00
  000003D9		     1	WHILE_COMBAT??0003:    ;//disgusting triple & while statement
- 000003D9  80 3D 0000019C R  1	cmp escape,0       ;//while &
+ 000003D9  80 3D 000001C1 R  1	cmp escape,0       ;//while &
 	   00
  000003E0  74 05	     1	je AND_COMBAT1??0003
  000003E2  E9 000001B4	     1	jmp AND_FALSE_COMBAT??0003
- 000003E7  80 3D 0000019D R  1	AND_COMBAT1??0003: cmp playerDefeated,0
+ 000003E7  80 3D 000001C2 R  1	AND_COMBAT1??0003: cmp playerDefeated,0
 	   00
  000003EE  74 05	     1	je AND_COMBAT2??0003
  000003F0  E9 000001A6	     1	jmp AND_FALSE_COMBAT??0003
- 000003F5  80 3D 0000019E R  1	AND_COMBAT2??0003: cmp enemyDefeated,0
+ 000003F5  80 3D 000001C3 R  1	AND_COMBAT2??0003: cmp enemyDefeated,0
 	   00
  000003FC  74 05	     1	je AND_COMBAT_TRUE??0003
  000003FE  E9 00000198	     1	jmp AND_FALSE_COMBAT??0003
  00000403		     1	AND_COMBAT_TRUE??0003:
- 00000403  BA 0000019F R     1		mov edx, offset combatMenuTitle
+ 00000403  BA 000001C4 R     1		mov edx, offset combatMenuTitle
  00000408  E8 00000000 E   *	    call   WriteString
- 0000040D  BA 000001AC R     1		mov edx, offset enemyNameTitle ;//prints enemy name
+ 0000040D  BA 000001D1 R     1		mov edx, offset enemyNameTitle ;//prints enemy name
  00000412  E8 00000000 E   *	    call   WriteString
- 00000417  BA 0000017C R     1		mov edx, offset e1.enemyName
+ 00000417  BA 000001A1 R     1		mov edx, offset e1.enemyName
  0000041C  E8 00000000 E   *	    call   WriteString
- 00000421  BA 0000062A R     1		mov edx, offset blank
+ 00000421  BA 0000064F R     1		mov edx, offset blank
  00000426  E8 00000000 E   *	    call   WriteString
- 0000042B  BA 000001BA R     1		mov edx, offset enemyHpTitle ;//prints enemy hp
+ 0000042B  BA 000001DF R     1		mov edx, offset enemyHpTitle ;//prints enemy hp
  00000430  E8 00000000 E   *	    call   WriteString
- 00000435  A1 00000188 R     1		mov eax, e1.hp
+ 00000435  A1 000001AD R     1		mov eax, e1.hp
  0000043A  E8 00000000 E     1		call WriteDec
  0000043F  B8 0000002F	     1		mov eax,'/'
  00000444  E8 00000000 E     1		call WriteChar
- 00000449  A1 00000184 R     1		mov eax, e1.hpMax
+ 00000449  A1 000001A9 R     1		mov eax, e1.hpMax
  0000044E  E8 00000000 E     1		call WriteDec
- 00000453  BA 0000062A R     1		mov edx, offset blank
+ 00000453  BA 0000064F R     1		mov edx, offset blank
  00000458  E8 00000000 E   *	    call   WriteString
- 0000045D  BA 000001C6 R     1		mov edx, offset enemyDamageTitle ;//prints enemy damage
+ 0000045D  BA 000001EB R     1		mov edx, offset enemyDamageTitle ;//prints enemy damage
  00000462  E8 00000000 E   *	    call   WriteString
- 00000467  A1 0000018C R     1		mov eax, e1.damageMin
+ 00000467  A1 000001B1 R     1		mov eax, e1.damageMin
  0000046C  E8 00000000 E     1		call WriteDec
  00000471  B8 0000002D	     1		mov eax,'-'
  00000476  E8 00000000 E     1		call WriteChar
- 0000047B  A1 00000190 R     1		mov eax, e1.damageMax
+ 0000047B  A1 000001B5 R     1		mov eax, e1.damageMax
  00000480  E8 00000000 E     1		call WriteDec
- 00000485  BA 0000062A R     1		mov edx, offset blank
+ 00000485  BA 0000064F R     1		mov edx, offset blank
  0000048A  E8 00000000 E   *	    call   WriteString
- 0000048F  BA 00000113 R     1		mov edx, offset combatAttributesTitle ;//prints primary attributes header
+ 0000048F  BA 00000138 R     1		mov edx, offset combatAttributesTitle ;//prints primary attributes header
  00000494  E8 00000000 E   *	    call   WriteString
- 00000499  BA 0000012B R     1		mov edx, offset hpTitle ;//prints character hp
+ 00000499  BA 00000150 R     1		mov edx, offset hpTitle ;//prints character hp
  0000049E  E8 00000000 E   *	    call   WriteString
  000004A3  A1 00000068 R     1		mov eax, c1.hp
  000004A8  E8 00000000 E     1		call WriteDec
@@ -1880,9 +1948,9 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000004B2  E8 00000000 E     1		call WriteChar
  000004B7  A1 00000064 R     1		mov eax, c1.hpMax
  000004BC  E8 00000000 E     1		call WriteDec
- 000004C1  BA 0000062A R     1		mov edx, offset blank
+ 000004C1  BA 0000064F R     1		mov edx, offset blank
  000004C6  E8 00000000 E   *	    call   WriteString
- 000004CB  BA 00000131 R     1		mov edx, offset damageTitle ;//prints character damage
+ 000004CB  BA 00000156 R     1		mov edx, offset damageTitle ;//prints character damage
  000004D0  E8 00000000 E   *	    call   WriteString
  000004D5  A1 0000006C R     1		mov eax, c1.damageMin
  000004DA  E8 00000000 E     1		call WriteDec
@@ -1890,13 +1958,13 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000004E4  E8 00000000 E     1		call WriteChar
  000004E9  A1 00000070 R     1		mov eax, c1.damageMax
  000004EE  E8 00000000 E     1		call WriteDec
- 000004F3  BA 0000062A R     1		mov edx, offset blank
+ 000004F3  BA 0000064F R     1		mov edx, offset blank
  000004F8  E8 00000000 E   *	    call   WriteString
- 000004FD  BA 000001D6 R     1		mov edx, offset combatOptionsMenuTitle ;//prints combat Options
+ 000004FD  BA 000001FB R     1		mov edx, offset combatOptionsMenuTitle ;//prints combat Options
  00000502  E8 00000000 E   *	    call   WriteString
- 00000507  BA 000001EB R     1		mov edx,offset attackTitle
+ 00000507  BA 00000210 R     1		mov edx,offset attackTitle
  0000050C  E8 00000000 E   *	    call   WriteString
- 00000511  BA 000001F7 R     1		mov edx,offset fleeTitle
+ 00000511  BA 0000021C R     1		mov edx,offset fleeTitle
  00000516  E8 00000000 E   *	    call   WriteString
  0000051B  E8 00000000 E     2		call ReadDec
  00000520  8B C8	     2		mov ecx, eax
@@ -1913,21 +1981,21 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000540  40		     1				inc eax
  00000541  E8 00000000 E     1				call RandomRange
  00000546  03 C3	     1				add eax,ebx
- 00000548  29 05 00000188 R  1				sub e1.hp,eax
- 0000054E  83 3D 00000188 R  1				cmp e1.hp,0 ;//check to see if enemy died
+ 00000548  29 05 000001AD R  1				sub e1.hp,eax
+ 0000054E  83 3D 000001AD R  1				cmp e1.hp,0 ;//check to see if enemy died
 	   00
  00000555  7E 02	     1				jle enemy_dead
  00000557  EB 10	     1				jmp end_switch??0003
  00000559		     1				enemy_dead:
- 00000559  C6 05 0000019E R  1					mov enemyDefeated,1
+ 00000559  C6 05 000001C3 R  1					mov enemyDefeated,1
 	   01
  00000560  EB 39	     1					jmp AND_FALSE_COMBAT??0003
  00000562		     1			flee:
- 00000562  C6 05 0000019C R  1				mov escape,1
+ 00000562  C6 05 000001C1 R  1				mov escape,1
 	   01
  00000569		     1			end_switch??0003:
- 00000569  A1 00000190 R     1				mov eax,e1.damageMax;//enemy attacks
- 0000056E  8B 1D 0000018C R  1				mov ebx,e1.damageMin
+ 00000569  A1 000001B5 R     1				mov eax,e1.damageMax;//enemy attacks
+ 0000056E  8B 1D 000001B1 R  1				mov ebx,e1.damageMin
  00000574  2B C3	     1				sub eax,ebx
  00000576  40		     1				inc eax
  00000577  E8 00000000 E     1				call RandomRange
@@ -1938,29 +2006,29 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  0000058B  7E 02	     1				jle character_dead
  0000058D  EB 07	     1				jmp character_not_dead
  0000058F		     1				character_dead:
- 0000058F  C6 05 0000019D R  1					mov playerDefeated,1
+ 0000058F  C6 05 000001C2 R  1					mov playerDefeated,1
 	   01
  00000596		     1				character_not_dead:
  00000596  E9 FFFFFE3E	     1			jmp WHILE_COMBAT??0003;//default
  0000059B		     1	AND_FALSE_COMBAT??0003:
- 0000059B  80 3D 0000019C R  1	cmp escape,0
+ 0000059B  80 3D 000001C1 R  1	cmp escape,0
 	   00
  000005A2  74 0F	     1	je not_escape
- 000005A4  BA 00000201 R     1	mov edx, offset escapeEvent;//will print if player fleed
+ 000005A4  BA 00000226 R     1	mov edx, offset escapeEvent;//will print if player fleed
  000005A9  E8 00000000 E   *	    call   WriteString
  000005AE  E9 00000094	     1	jmp eventDetermined
  000005B3		     1	not_escape:
- 000005B3  80 3D 0000019D R  1	cmp playerDefeated,0
+ 000005B3  80 3D 000001C2 R  1	cmp playerDefeated,0
 	   00
  000005BA  74 0C	     1	je not_playerDefeated
- 000005BC  BA 00000210 R     1	mov edx, offset playerDefeatedEvent;//will print if player was defeated
+ 000005BC  BA 00000235 R     1	mov edx, offset playerDefeatedEvent;//will print if player was defeated
  000005C1  E8 00000000 E   *	    call   WriteString
  000005C6  EB 7F	     1	jmp eventDetermined
  000005C8		     1	not_playerDefeated:
- 000005C8  BA 00000224 R     1	mov edx,offset enemyDefeatedEvent;//will print if enemy was defeated
+ 000005C8  BA 00000249 R     1	mov edx,offset enemyDefeatedEvent;//will print if enemy was defeated
  000005CD  E8 00000000 E   *	    call   WriteString
- 000005D2  B8 0000037F R     1	mov eax, offset t1 ;//adds axe to inventory
- 000005D7  BB 00000363 R     2	mov ebx, offset i1
+ 000005D2  B8 000003A4 R     1	mov eax, offset t1 ;//adds axe to inventory
+ 000005D7  BB 00000388 R     2	mov ebx, offset i1
  000005DC		     2	notEmpty??0005:
  000005DC  83 3B 00	     2	cmp [ebx].item.itemCode,0
  000005DF  74 0B	     2	je isEmpty??0005 
@@ -1979,7 +2047,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000005FF  89 4B 14	     2	mov [ebx].item.combatValue,ecx
  00000602  EB 19	     2	jmp end??0005
  00000604		     2	inventoryFull??0005:
- 00000604  BA 0000042C R     2	mov edx, offset inventoryFullTitle
+ 00000604  BA 00000451 R     2	mov edx, offset inventoryFullTitle
  00000609  E8 00000000 E   *	    call   WriteString
  0000060E  B8 000005DC	     2	mov eax, 1500
  00000613  E8 00000000 E     2	call Delay
@@ -1992,7 +2060,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  0000062E  8B 1D 00000050 R  1	mov ebx,c1.gold
  00000634  03 D8	     1	add ebx,eax
  00000636  89 1D 00000050 R  1	mov c1.gold,ebx
- 0000063C  A1 00000198 R     1	mov eax,e1.expReward ;//rewarding player exp
+ 0000063C  A1 000001BD R     1	mov eax,e1.expReward ;//rewarding player exp
  00000641  01 05 00000048 R  1	add c1.exp,eax
  00000647		     1	eventDetermined:
  00000647  B8 000007D0	     1	mov eax,2000
@@ -2009,7 +2077,6 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  0000066A  7C 7B	     1	jl notEnough
  0000066C  FF 05 00000044 R  1	inc c1.level
  00000672  60		     2	pushAD
-
  00000673  FF 05 00000054 R  2	inc c1.brawn   ;// sets primary attributes
  00000679  FF 05 00000058 R  2	inc c1.agility
  0000067F  FF 05 0000005C R  2	inc c1.mind   
@@ -2031,13 +2098,13 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000006C4  8B 1D 0000004C R  1	mov ebx,c1.expToNext
  000006CA  2B C3	     1	sub eax,ebx
  000006CC  A3 00000048 R     1	mov c1.exp,eax
- 000006D1  BA 00000255 R     1	mov edx,offset leveledUpResponse
+ 000006D1  BA 0000027A R     1	mov edx,offset leveledUpResponse
  000006D6  E8 00000000 E   *	    call   WriteString
  000006DB  B8 000007D0	     1	mov eax,2000
  000006E0  E8 00000000 E     1	call Delay
  000006E5  EB 14	     1	jmp leveledUp
  000006E7		     1	notEnough:
- 000006E7  BA 0000023D R     1	mov edx,offset notEnoughResponse
+ 000006E7  BA 00000262 R     1	mov edx,offset notEnoughResponse
  000006EC  E8 00000000 E   *	    call   WriteString
  000006F1  B8 000007D0	     1	mov eax,2000
  000006F6  E8 00000000 E     1	call Delay
@@ -2047,9 +2114,9 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000701  E9 00002924				jmp end_switch
  00000706				inventory:
 						mInventory
- 00000706  BA 000003A3 R     1	mov edx, offset selectItemTitle
+ 00000706  BA 000003C8 R     1	mov edx, offset selectItemTitle
  0000070B  E8 00000000 E     1	call WriteString
- 00000710  BB 00000363 R     1	mov eBx, offset i1
+ 00000710  BB 00000388 R     1	mov eBx, offset i1
  00000715  60		     2	pushAD
  00000716  33 C9	     2	xor ecx,ecx
  00000718		     2	DO1??0006:
@@ -2083,7 +2150,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  0000075D  BA 0000001B R     3		mov edx, offset defaultName
  00000762		     3	print??0007:
  00000762  E8 00000000 E   *	    call   WriteString
- 00000767  BA 0000062A R     2	mov edx,offset blank
+ 00000767  BA 0000064F R     2	mov edx,offset blank
  0000076C  E8 00000000 E     2	call WriteString
  00000771  8B 5B 10	     2	mov eBx,[ebx].item.next
  00000774  41		     2	inc ecx
@@ -2113,14 +2180,14 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000007CF  83 F9 09	     1	cmp ecx,9
  000007D2  0F 84 000014D0    1		je item9
  000007D8		     1	item0:
- 000007D8  BB 00000363 R     1		mov ebx,offset i1 ;//storing item for use
- 000007DD  BA 0000061D R     2	mov edx, offset exitTitle
+ 000007D8  BB 00000388 R     1		mov ebx,offset i1 ;//storing item for use
+ 000007DD  BA 00000642 R     2	mov edx, offset exitTitle
  000007E2  E8 00000000 E     2	call WriteString
- 000007E7  BA 000003B8 R     2	mov edx, offset discardTitle
+ 000007E7  BA 000003DD R     2	mov edx, offset discardTitle
  000007EC  E8 00000000 E     2	call WriteString
- 000007F1  BA 000003C6 R     2	mov edx, offset equipTitle
+ 000007F1  BA 000003EB R     2	mov edx, offset equipTitle
  000007F6  E8 00000000 E     2	call WriteString
- 000007FB  BA 000003D2 R     2	mov edx, offset infoTitle
+ 000007FB  BA 000003F7 R     2	mov edx, offset infoTitle
  00000800  E8 00000000 E     2	call WriteString
  00000805  E8 00000000 E     3		call ReadDec
  0000080A  8B C8	     3		mov ecx, eax
@@ -2150,7 +2217,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000859  83 3D 00000074 R  4	cmp c1.weaponCode,0
 	   00
  00000860  0F 84 000000C8    4	je nothingEquipped??000C
- 00000866  BB 00000363 R     4	mov ebx, offset i1
+ 00000866  BB 00000388 R     4	mov ebx, offset i1
  0000086B		     4	notEmpty??000C:
  0000086B  83 3B 00	     4	cmp [ebx].item.itemCode,0
  0000086E  74 0F	     4	je isEmpty??000C 
@@ -2195,7 +2262,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000912  61		     5	popAD
  00000913  EB 19	     4	jmp nothingEquipped??000C
  00000915		     4	inventoryFull??000C:
- 00000915  BA 0000042C R     4	mov edx, offset inventoryFullTitle
+ 00000915  BA 00000451 R     4	mov edx, offset inventoryFullTitle
  0000091A  E8 00000000 E   *	    call   WriteString
  0000091F  B8 000005DC	     4	mov eax, 1500
  00000924  E8 00000000 E     4	call Delay
@@ -2237,39 +2304,39 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000009B4  EB 6D	     2		jmp endCase??0009
  000009B6		     2	infoItem??0009:
  000009B6  E8 00000000 E     2		call clrscr
- 000009BB  BA 0000062A R     3	mov edx, offset blank
+ 000009BB  BA 0000064F R     3	mov edx, offset blank
  000009C0  E8 00000000 E     3	call WriteString
- 000009C5  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 000009C5  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  000009CA  E8 00000000 E     3	call WriteString
  000009CF  8B 43 04	     3	mov eax, [ebx].item.buyValue
  000009D2  E8 00000000 E     3	call WriteDec
- 000009D7  BA 0000062A R     3	mov edx, offset blank
+ 000009D7  BA 0000064F R     3	mov edx, offset blank
  000009DC  E8 00000000 E     3	call WriteString
- 000009E1  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 000009E1  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  000009E6  E8 00000000 E     3	call WriteString
  000009EB  8B 43 08	     3	mov eax, [ebx].item.SellValue
  000009EE  E8 00000000 E     3	call WriteDec
- 000009F3  BA 0000062A R     3	mov edx, offset blank
+ 000009F3  BA 0000064F R     3	mov edx, offset blank
  000009F8  E8 00000000 E     3	call WriteString
- 000009FD  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 000009FD  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  00000A02  E8 00000000 E     3	call WriteString
  00000A07  8B 43 14	     3	mov eax, [ebx].item.combatValue
  00000A0A  E8 00000000 E     3	call WriteDec
- 00000A0F  BA 0000062A R     3	mov edx, offset blank
+ 00000A0F  BA 0000064F R     3	mov edx, offset blank
  00000A14  E8 00000000 E     3	call WriteString
  00000A19  B8 000007D0	     2		mov eax,2000
  00000A1E  E8 00000000 E     2		call Delay
  00000A23		     2	endCase??0009:
  00000A23  E9 000014CD	     1		jmp endInventory
  00000A28		     1	item1:
- 00000A28  BB 00000347 R     1		mov ebx,offset i2 ;//storing item for use
- 00000A2D  BA 0000061D R     2	mov edx, offset exitTitle
+ 00000A28  BB 0000036C R     1		mov ebx,offset i2 ;//storing item for use
+ 00000A2D  BA 00000642 R     2	mov edx, offset exitTitle
  00000A32  E8 00000000 E     2	call WriteString
- 00000A37  BA 000003B8 R     2	mov edx, offset discardTitle
+ 00000A37  BA 000003DD R     2	mov edx, offset discardTitle
  00000A3C  E8 00000000 E     2	call WriteString
- 00000A41  BA 000003C6 R     2	mov edx, offset equipTitle
+ 00000A41  BA 000003EB R     2	mov edx, offset equipTitle
  00000A46  E8 00000000 E     2	call WriteString
- 00000A4B  BA 000003D2 R     2	mov edx, offset infoTitle
+ 00000A4B  BA 000003F7 R     2	mov edx, offset infoTitle
  00000A50  E8 00000000 E     2	call WriteString
  00000A55  E8 00000000 E     3		call ReadDec
  00000A5A  8B C8	     3		mov ecx, eax
@@ -2299,7 +2366,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000AA9  83 3D 00000074 R  4	cmp c1.weaponCode,0
 	   00
  00000AB0  0F 84 000000C8    4	je nothingEquipped??0010
- 00000AB6  BB 00000363 R     4	mov ebx, offset i1
+ 00000AB6  BB 00000388 R     4	mov ebx, offset i1
  00000ABB		     4	notEmpty??0010:
  00000ABB  83 3B 00	     4	cmp [ebx].item.itemCode,0
  00000ABE  74 0F	     4	je isEmpty??0010 
@@ -2344,7 +2411,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000B62  61		     5	popAD
  00000B63  EB 19	     4	jmp nothingEquipped??0010
  00000B65		     4	inventoryFull??0010:
- 00000B65  BA 0000042C R     4	mov edx, offset inventoryFullTitle
+ 00000B65  BA 00000451 R     4	mov edx, offset inventoryFullTitle
  00000B6A  E8 00000000 E   *	    call   WriteString
  00000B6F  B8 000005DC	     4	mov eax, 1500
  00000B74  E8 00000000 E     4	call Delay
@@ -2386,39 +2453,39 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000C04  EB 6D	     2		jmp endCase??000D
  00000C06		     2	infoItem??000D:
  00000C06  E8 00000000 E     2		call clrscr
- 00000C0B  BA 0000062A R     3	mov edx, offset blank
+ 00000C0B  BA 0000064F R     3	mov edx, offset blank
  00000C10  E8 00000000 E     3	call WriteString
- 00000C15  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00000C15  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  00000C1A  E8 00000000 E     3	call WriteString
  00000C1F  8B 43 04	     3	mov eax, [ebx].item.buyValue
  00000C22  E8 00000000 E     3	call WriteDec
- 00000C27  BA 0000062A R     3	mov edx, offset blank
+ 00000C27  BA 0000064F R     3	mov edx, offset blank
  00000C2C  E8 00000000 E     3	call WriteString
- 00000C31  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00000C31  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  00000C36  E8 00000000 E     3	call WriteString
  00000C3B  8B 43 08	     3	mov eax, [ebx].item.SellValue
  00000C3E  E8 00000000 E     3	call WriteDec
- 00000C43  BA 0000062A R     3	mov edx, offset blank
+ 00000C43  BA 0000064F R     3	mov edx, offset blank
  00000C48  E8 00000000 E     3	call WriteString
- 00000C4D  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 00000C4D  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  00000C52  E8 00000000 E     3	call WriteString
  00000C57  8B 43 14	     3	mov eax, [ebx].item.combatValue
  00000C5A  E8 00000000 E     3	call WriteDec
- 00000C5F  BA 0000062A R     3	mov edx, offset blank
+ 00000C5F  BA 0000064F R     3	mov edx, offset blank
  00000C64  E8 00000000 E     3	call WriteString
  00000C69  B8 000007D0	     2		mov eax,2000
  00000C6E  E8 00000000 E     2		call Delay
  00000C73		     2	endCase??000D:
  00000C73  E9 0000127D	     1		jmp endInventory
  00000C78		     1	item2:
- 00000C78  BB 0000032B R     1		mov ebx,offset i3 ;//storing item for use
- 00000C7D  BA 0000061D R     2	mov edx, offset exitTitle
+ 00000C78  BB 00000350 R     1		mov ebx,offset i3 ;//storing item for use
+ 00000C7D  BA 00000642 R     2	mov edx, offset exitTitle
  00000C82  E8 00000000 E     2	call WriteString
- 00000C87  BA 000003B8 R     2	mov edx, offset discardTitle
+ 00000C87  BA 000003DD R     2	mov edx, offset discardTitle
  00000C8C  E8 00000000 E     2	call WriteString
- 00000C91  BA 000003C6 R     2	mov edx, offset equipTitle
+ 00000C91  BA 000003EB R     2	mov edx, offset equipTitle
  00000C96  E8 00000000 E     2	call WriteString
- 00000C9B  BA 000003D2 R     2	mov edx, offset infoTitle
+ 00000C9B  BA 000003F7 R     2	mov edx, offset infoTitle
  00000CA0  E8 00000000 E     2	call WriteString
  00000CA5  E8 00000000 E     3		call ReadDec
  00000CAA  8B C8	     3		mov ecx, eax
@@ -2448,7 +2515,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000CF9  83 3D 00000074 R  4	cmp c1.weaponCode,0
 	   00
  00000D00  0F 84 000000C8    4	je nothingEquipped??0014
- 00000D06  BB 00000363 R     4	mov ebx, offset i1
+ 00000D06  BB 00000388 R     4	mov ebx, offset i1
  00000D0B		     4	notEmpty??0014:
  00000D0B  83 3B 00	     4	cmp [ebx].item.itemCode,0
  00000D0E  74 0F	     4	je isEmpty??0014 
@@ -2493,7 +2560,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000DB2  61		     5	popAD
  00000DB3  EB 19	     4	jmp nothingEquipped??0014
  00000DB5		     4	inventoryFull??0014:
- 00000DB5  BA 0000042C R     4	mov edx, offset inventoryFullTitle
+ 00000DB5  BA 00000451 R     4	mov edx, offset inventoryFullTitle
  00000DBA  E8 00000000 E   *	    call   WriteString
  00000DBF  B8 000005DC	     4	mov eax, 1500
  00000DC4  E8 00000000 E     4	call Delay
@@ -2535,39 +2602,39 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000E54  EB 6D	     2		jmp endCase??0011
  00000E56		     2	infoItem??0011:
  00000E56  E8 00000000 E     2		call clrscr
- 00000E5B  BA 0000062A R     3	mov edx, offset blank
+ 00000E5B  BA 0000064F R     3	mov edx, offset blank
  00000E60  E8 00000000 E     3	call WriteString
- 00000E65  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00000E65  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  00000E6A  E8 00000000 E     3	call WriteString
  00000E6F  8B 43 04	     3	mov eax, [ebx].item.buyValue
  00000E72  E8 00000000 E     3	call WriteDec
- 00000E77  BA 0000062A R     3	mov edx, offset blank
+ 00000E77  BA 0000064F R     3	mov edx, offset blank
  00000E7C  E8 00000000 E     3	call WriteString
- 00000E81  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00000E81  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  00000E86  E8 00000000 E     3	call WriteString
  00000E8B  8B 43 08	     3	mov eax, [ebx].item.SellValue
  00000E8E  E8 00000000 E     3	call WriteDec
- 00000E93  BA 0000062A R     3	mov edx, offset blank
+ 00000E93  BA 0000064F R     3	mov edx, offset blank
  00000E98  E8 00000000 E     3	call WriteString
- 00000E9D  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 00000E9D  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  00000EA2  E8 00000000 E     3	call WriteString
  00000EA7  8B 43 14	     3	mov eax, [ebx].item.combatValue
  00000EAA  E8 00000000 E     3	call WriteDec
- 00000EAF  BA 0000062A R     3	mov edx, offset blank
+ 00000EAF  BA 0000064F R     3	mov edx, offset blank
  00000EB4  E8 00000000 E     3	call WriteString
  00000EB9  B8 000007D0	     2		mov eax,2000
  00000EBE  E8 00000000 E     2		call Delay
  00000EC3		     2	endCase??0011:
  00000EC3  E9 0000102D	     1		jmp endInventory
  00000EC8		     1	item3:
- 00000EC8  BB 0000030F R     1		mov ebx,offset i4 ;//storing item for use
- 00000ECD  BA 0000061D R     2	mov edx, offset exitTitle
+ 00000EC8  BB 00000334 R     1		mov ebx,offset i4 ;//storing item for use
+ 00000ECD  BA 00000642 R     2	mov edx, offset exitTitle
  00000ED2  E8 00000000 E     2	call WriteString
- 00000ED7  BA 000003B8 R     2	mov edx, offset discardTitle
+ 00000ED7  BA 000003DD R     2	mov edx, offset discardTitle
  00000EDC  E8 00000000 E     2	call WriteString
- 00000EE1  BA 000003C6 R     2	mov edx, offset equipTitle
+ 00000EE1  BA 000003EB R     2	mov edx, offset equipTitle
  00000EE6  E8 00000000 E     2	call WriteString
- 00000EEB  BA 000003D2 R     2	mov edx, offset infoTitle
+ 00000EEB  BA 000003F7 R     2	mov edx, offset infoTitle
  00000EF0  E8 00000000 E     2	call WriteString
  00000EF5  E8 00000000 E     3		call ReadDec
  00000EFA  8B C8	     3		mov ecx, eax
@@ -2597,7 +2664,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00000F49  83 3D 00000074 R  4	cmp c1.weaponCode,0
 	   00
  00000F50  0F 84 000000C8    4	je nothingEquipped??0018
- 00000F56  BB 00000363 R     4	mov ebx, offset i1
+ 00000F56  BB 00000388 R     4	mov ebx, offset i1
  00000F5B		     4	notEmpty??0018:
  00000F5B  83 3B 00	     4	cmp [ebx].item.itemCode,0
  00000F5E  74 0F	     4	je isEmpty??0018 
@@ -2642,7 +2709,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001002  61		     5	popAD
  00001003  EB 19	     4	jmp nothingEquipped??0018
  00001005		     4	inventoryFull??0018:
- 00001005  BA 0000042C R     4	mov edx, offset inventoryFullTitle
+ 00001005  BA 00000451 R     4	mov edx, offset inventoryFullTitle
  0000100A  E8 00000000 E   *	    call   WriteString
  0000100F  B8 000005DC	     4	mov eax, 1500
  00001014  E8 00000000 E     4	call Delay
@@ -2684,39 +2751,39 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000010A4  EB 6D	     2		jmp endCase??0015
  000010A6		     2	infoItem??0015:
  000010A6  E8 00000000 E     2		call clrscr
- 000010AB  BA 0000062A R     3	mov edx, offset blank
+ 000010AB  BA 0000064F R     3	mov edx, offset blank
  000010B0  E8 00000000 E     3	call WriteString
- 000010B5  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 000010B5  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  000010BA  E8 00000000 E     3	call WriteString
  000010BF  8B 43 04	     3	mov eax, [ebx].item.buyValue
  000010C2  E8 00000000 E     3	call WriteDec
- 000010C7  BA 0000062A R     3	mov edx, offset blank
+ 000010C7  BA 0000064F R     3	mov edx, offset blank
  000010CC  E8 00000000 E     3	call WriteString
- 000010D1  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 000010D1  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  000010D6  E8 00000000 E     3	call WriteString
  000010DB  8B 43 08	     3	mov eax, [ebx].item.SellValue
  000010DE  E8 00000000 E     3	call WriteDec
- 000010E3  BA 0000062A R     3	mov edx, offset blank
+ 000010E3  BA 0000064F R     3	mov edx, offset blank
  000010E8  E8 00000000 E     3	call WriteString
- 000010ED  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 000010ED  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  000010F2  E8 00000000 E     3	call WriteString
  000010F7  8B 43 14	     3	mov eax, [ebx].item.combatValue
  000010FA  E8 00000000 E     3	call WriteDec
- 000010FF  BA 0000062A R     3	mov edx, offset blank
+ 000010FF  BA 0000064F R     3	mov edx, offset blank
  00001104  E8 00000000 E     3	call WriteString
  00001109  B8 000007D0	     2		mov eax,2000
  0000110E  E8 00000000 E     2		call Delay
  00001113		     2	endCase??0015:
  00001113  E9 00000DDD	     1		jmp endInventory
  00001118		     1	item4:
- 00001118  BB 000002F3 R     1		mov ebx,offset i5 ;//storing item for use
- 0000111D  BA 0000061D R     2	mov edx, offset exitTitle
+ 00001118  BB 00000318 R     1		mov ebx,offset i5 ;//storing item for use
+ 0000111D  BA 00000642 R     2	mov edx, offset exitTitle
  00001122  E8 00000000 E     2	call WriteString
- 00001127  BA 000003B8 R     2	mov edx, offset discardTitle
+ 00001127  BA 000003DD R     2	mov edx, offset discardTitle
  0000112C  E8 00000000 E     2	call WriteString
- 00001131  BA 000003C6 R     2	mov edx, offset equipTitle
+ 00001131  BA 000003EB R     2	mov edx, offset equipTitle
  00001136  E8 00000000 E     2	call WriteString
- 0000113B  BA 000003D2 R     2	mov edx, offset infoTitle
+ 0000113B  BA 000003F7 R     2	mov edx, offset infoTitle
  00001140  E8 00000000 E     2	call WriteString
  00001145  E8 00000000 E     3		call ReadDec
  0000114A  8B C8	     3		mov ecx, eax
@@ -2746,7 +2813,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001199  83 3D 00000074 R  4	cmp c1.weaponCode,0
 	   00
  000011A0  0F 84 000000C8    4	je nothingEquipped??001C
- 000011A6  BB 00000363 R     4	mov ebx, offset i1
+ 000011A6  BB 00000388 R     4	mov ebx, offset i1
  000011AB		     4	notEmpty??001C:
  000011AB  83 3B 00	     4	cmp [ebx].item.itemCode,0
  000011AE  74 0F	     4	je isEmpty??001C 
@@ -2791,7 +2858,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001252  61		     5	popAD
  00001253  EB 19	     4	jmp nothingEquipped??001C
  00001255		     4	inventoryFull??001C:
- 00001255  BA 0000042C R     4	mov edx, offset inventoryFullTitle
+ 00001255  BA 00000451 R     4	mov edx, offset inventoryFullTitle
  0000125A  E8 00000000 E   *	    call   WriteString
  0000125F  B8 000005DC	     4	mov eax, 1500
  00001264  E8 00000000 E     4	call Delay
@@ -2833,39 +2900,39 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000012F4  EB 6D	     2		jmp endCase??0019
  000012F6		     2	infoItem??0019:
  000012F6  E8 00000000 E     2		call clrscr
- 000012FB  BA 0000062A R     3	mov edx, offset blank
+ 000012FB  BA 0000064F R     3	mov edx, offset blank
  00001300  E8 00000000 E     3	call WriteString
- 00001305  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00001305  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  0000130A  E8 00000000 E     3	call WriteString
  0000130F  8B 43 04	     3	mov eax, [ebx].item.buyValue
  00001312  E8 00000000 E     3	call WriteDec
- 00001317  BA 0000062A R     3	mov edx, offset blank
+ 00001317  BA 0000064F R     3	mov edx, offset blank
  0000131C  E8 00000000 E     3	call WriteString
- 00001321  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00001321  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  00001326  E8 00000000 E     3	call WriteString
  0000132B  8B 43 08	     3	mov eax, [ebx].item.SellValue
  0000132E  E8 00000000 E     3	call WriteDec
- 00001333  BA 0000062A R     3	mov edx, offset blank
+ 00001333  BA 0000064F R     3	mov edx, offset blank
  00001338  E8 00000000 E     3	call WriteString
- 0000133D  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 0000133D  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  00001342  E8 00000000 E     3	call WriteString
  00001347  8B 43 14	     3	mov eax, [ebx].item.combatValue
  0000134A  E8 00000000 E     3	call WriteDec
- 0000134F  BA 0000062A R     3	mov edx, offset blank
+ 0000134F  BA 0000064F R     3	mov edx, offset blank
  00001354  E8 00000000 E     3	call WriteString
  00001359  B8 000007D0	     2		mov eax,2000
  0000135E  E8 00000000 E     2		call Delay
  00001363		     2	endCase??0019:
  00001363  E9 00000B8D	     1		jmp endInventory
  00001368		     1	item5:
- 00001368  BB 000002D7 R     1		mov ebx,offset i6 ;//storing item for use
- 0000136D  BA 0000061D R     2	mov edx, offset exitTitle
+ 00001368  BB 000002FC R     1		mov ebx,offset i6 ;//storing item for use
+ 0000136D  BA 00000642 R     2	mov edx, offset exitTitle
  00001372  E8 00000000 E     2	call WriteString
- 00001377  BA 000003B8 R     2	mov edx, offset discardTitle
+ 00001377  BA 000003DD R     2	mov edx, offset discardTitle
  0000137C  E8 00000000 E     2	call WriteString
- 00001381  BA 000003C6 R     2	mov edx, offset equipTitle
+ 00001381  BA 000003EB R     2	mov edx, offset equipTitle
  00001386  E8 00000000 E     2	call WriteString
- 0000138B  BA 000003D2 R     2	mov edx, offset infoTitle
+ 0000138B  BA 000003F7 R     2	mov edx, offset infoTitle
  00001390  E8 00000000 E     2	call WriteString
  00001395  E8 00000000 E     3		call ReadDec
  0000139A  8B C8	     3		mov ecx, eax
@@ -2895,7 +2962,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000013E9  83 3D 00000074 R  4	cmp c1.weaponCode,0
 	   00
  000013F0  0F 84 000000C8    4	je nothingEquipped??0020
- 000013F6  BB 00000363 R     4	mov ebx, offset i1
+ 000013F6  BB 00000388 R     4	mov ebx, offset i1
  000013FB		     4	notEmpty??0020:
  000013FB  83 3B 00	     4	cmp [ebx].item.itemCode,0
  000013FE  74 0F	     4	je isEmpty??0020 
@@ -2940,7 +3007,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000014A2  61		     5	popAD
  000014A3  EB 19	     4	jmp nothingEquipped??0020
  000014A5		     4	inventoryFull??0020:
- 000014A5  BA 0000042C R     4	mov edx, offset inventoryFullTitle
+ 000014A5  BA 00000451 R     4	mov edx, offset inventoryFullTitle
  000014AA  E8 00000000 E   *	    call   WriteString
  000014AF  B8 000005DC	     4	mov eax, 1500
  000014B4  E8 00000000 E     4	call Delay
@@ -2982,39 +3049,39 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001544  EB 6D	     2		jmp endCase??001D
  00001546		     2	infoItem??001D:
  00001546  E8 00000000 E     2		call clrscr
- 0000154B  BA 0000062A R     3	mov edx, offset blank
+ 0000154B  BA 0000064F R     3	mov edx, offset blank
  00001550  E8 00000000 E     3	call WriteString
- 00001555  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00001555  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  0000155A  E8 00000000 E     3	call WriteString
  0000155F  8B 43 04	     3	mov eax, [ebx].item.buyValue
  00001562  E8 00000000 E     3	call WriteDec
- 00001567  BA 0000062A R     3	mov edx, offset blank
+ 00001567  BA 0000064F R     3	mov edx, offset blank
  0000156C  E8 00000000 E     3	call WriteString
- 00001571  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00001571  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  00001576  E8 00000000 E     3	call WriteString
  0000157B  8B 43 08	     3	mov eax, [ebx].item.SellValue
  0000157E  E8 00000000 E     3	call WriteDec
- 00001583  BA 0000062A R     3	mov edx, offset blank
+ 00001583  BA 0000064F R     3	mov edx, offset blank
  00001588  E8 00000000 E     3	call WriteString
- 0000158D  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 0000158D  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  00001592  E8 00000000 E     3	call WriteString
  00001597  8B 43 14	     3	mov eax, [ebx].item.combatValue
  0000159A  E8 00000000 E     3	call WriteDec
- 0000159F  BA 0000062A R     3	mov edx, offset blank
+ 0000159F  BA 0000064F R     3	mov edx, offset blank
  000015A4  E8 00000000 E     3	call WriteString
  000015A9  B8 000007D0	     2		mov eax,2000
  000015AE  E8 00000000 E     2		call Delay
  000015B3		     2	endCase??001D:
  000015B3  E9 0000093D	     1		jmp endInventory
  000015B8		     1	item6:
- 000015B8  BB 000002BB R     1		mov ebx,offset i7 ;//storing item for use
- 000015BD  BA 0000061D R     2	mov edx, offset exitTitle
+ 000015B8  BB 000002E0 R     1		mov ebx,offset i7 ;//storing item for use
+ 000015BD  BA 00000642 R     2	mov edx, offset exitTitle
  000015C2  E8 00000000 E     2	call WriteString
- 000015C7  BA 000003B8 R     2	mov edx, offset discardTitle
+ 000015C7  BA 000003DD R     2	mov edx, offset discardTitle
  000015CC  E8 00000000 E     2	call WriteString
- 000015D1  BA 000003C6 R     2	mov edx, offset equipTitle
+ 000015D1  BA 000003EB R     2	mov edx, offset equipTitle
  000015D6  E8 00000000 E     2	call WriteString
- 000015DB  BA 000003D2 R     2	mov edx, offset infoTitle
+ 000015DB  BA 000003F7 R     2	mov edx, offset infoTitle
  000015E0  E8 00000000 E     2	call WriteString
  000015E5  E8 00000000 E     3		call ReadDec
  000015EA  8B C8	     3		mov ecx, eax
@@ -3044,7 +3111,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001639  83 3D 00000074 R  4	cmp c1.weaponCode,0
 	   00
  00001640  0F 84 000000C8    4	je nothingEquipped??0024
- 00001646  BB 00000363 R     4	mov ebx, offset i1
+ 00001646  BB 00000388 R     4	mov ebx, offset i1
  0000164B		     4	notEmpty??0024:
  0000164B  83 3B 00	     4	cmp [ebx].item.itemCode,0
  0000164E  74 0F	     4	je isEmpty??0024 
@@ -3089,7 +3156,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000016F2  61		     5	popAD
  000016F3  EB 19	     4	jmp nothingEquipped??0024
  000016F5		     4	inventoryFull??0024:
- 000016F5  BA 0000042C R     4	mov edx, offset inventoryFullTitle
+ 000016F5  BA 00000451 R     4	mov edx, offset inventoryFullTitle
  000016FA  E8 00000000 E   *	    call   WriteString
  000016FF  B8 000005DC	     4	mov eax, 1500
  00001704  E8 00000000 E     4	call Delay
@@ -3131,39 +3198,39 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001794  EB 6D	     2		jmp endCase??0021
  00001796		     2	infoItem??0021:
  00001796  E8 00000000 E     2		call clrscr
- 0000179B  BA 0000062A R     3	mov edx, offset blank
+ 0000179B  BA 0000064F R     3	mov edx, offset blank
  000017A0  E8 00000000 E     3	call WriteString
- 000017A5  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 000017A5  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  000017AA  E8 00000000 E     3	call WriteString
  000017AF  8B 43 04	     3	mov eax, [ebx].item.buyValue
  000017B2  E8 00000000 E     3	call WriteDec
- 000017B7  BA 0000062A R     3	mov edx, offset blank
+ 000017B7  BA 0000064F R     3	mov edx, offset blank
  000017BC  E8 00000000 E     3	call WriteString
- 000017C1  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 000017C1  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  000017C6  E8 00000000 E     3	call WriteString
  000017CB  8B 43 08	     3	mov eax, [ebx].item.SellValue
  000017CE  E8 00000000 E     3	call WriteDec
- 000017D3  BA 0000062A R     3	mov edx, offset blank
+ 000017D3  BA 0000064F R     3	mov edx, offset blank
  000017D8  E8 00000000 E     3	call WriteString
- 000017DD  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 000017DD  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  000017E2  E8 00000000 E     3	call WriteString
  000017E7  8B 43 14	     3	mov eax, [ebx].item.combatValue
  000017EA  E8 00000000 E     3	call WriteDec
- 000017EF  BA 0000062A R     3	mov edx, offset blank
+ 000017EF  BA 0000064F R     3	mov edx, offset blank
  000017F4  E8 00000000 E     3	call WriteString
  000017F9  B8 000007D0	     2		mov eax,2000
  000017FE  E8 00000000 E     2		call Delay
  00001803		     2	endCase??0021:
  00001803  E9 000006ED	     1		jmp endInventory
  00001808		     1	item7:
- 00001808  BB 0000029F R     1		mov ebx,offset i8 ;//storing item for use
- 0000180D  BA 0000061D R     2	mov edx, offset exitTitle
+ 00001808  BB 000002C4 R     1		mov ebx,offset i8 ;//storing item for use
+ 0000180D  BA 00000642 R     2	mov edx, offset exitTitle
  00001812  E8 00000000 E     2	call WriteString
- 00001817  BA 000003B8 R     2	mov edx, offset discardTitle
+ 00001817  BA 000003DD R     2	mov edx, offset discardTitle
  0000181C  E8 00000000 E     2	call WriteString
- 00001821  BA 000003C6 R     2	mov edx, offset equipTitle
+ 00001821  BA 000003EB R     2	mov edx, offset equipTitle
  00001826  E8 00000000 E     2	call WriteString
- 0000182B  BA 000003D2 R     2	mov edx, offset infoTitle
+ 0000182B  BA 000003F7 R     2	mov edx, offset infoTitle
  00001830  E8 00000000 E     2	call WriteString
  00001835  E8 00000000 E     3		call ReadDec
  0000183A  8B C8	     3		mov ecx, eax
@@ -3193,7 +3260,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001889  83 3D 00000074 R  4	cmp c1.weaponCode,0
 	   00
  00001890  0F 84 000000C8    4	je nothingEquipped??0028
- 00001896  BB 00000363 R     4	mov ebx, offset i1
+ 00001896  BB 00000388 R     4	mov ebx, offset i1
  0000189B		     4	notEmpty??0028:
  0000189B  83 3B 00	     4	cmp [ebx].item.itemCode,0
  0000189E  74 0F	     4	je isEmpty??0028 
@@ -3238,7 +3305,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001942  61		     5	popAD
  00001943  EB 19	     4	jmp nothingEquipped??0028
  00001945		     4	inventoryFull??0028:
- 00001945  BA 0000042C R     4	mov edx, offset inventoryFullTitle
+ 00001945  BA 00000451 R     4	mov edx, offset inventoryFullTitle
  0000194A  E8 00000000 E   *	    call   WriteString
  0000194F  B8 000005DC	     4	mov eax, 1500
  00001954  E8 00000000 E     4	call Delay
@@ -3280,39 +3347,39 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000019E4  EB 6D	     2		jmp endCase??0025
  000019E6		     2	infoItem??0025:
  000019E6  E8 00000000 E     2		call clrscr
- 000019EB  BA 0000062A R     3	mov edx, offset blank
+ 000019EB  BA 0000064F R     3	mov edx, offset blank
  000019F0  E8 00000000 E     3	call WriteString
- 000019F5  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 000019F5  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  000019FA  E8 00000000 E     3	call WriteString
  000019FF  8B 43 04	     3	mov eax, [ebx].item.buyValue
  00001A02  E8 00000000 E     3	call WriteDec
- 00001A07  BA 0000062A R     3	mov edx, offset blank
+ 00001A07  BA 0000064F R     3	mov edx, offset blank
  00001A0C  E8 00000000 E     3	call WriteString
- 00001A11  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00001A11  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  00001A16  E8 00000000 E     3	call WriteString
  00001A1B  8B 43 08	     3	mov eax, [ebx].item.SellValue
  00001A1E  E8 00000000 E     3	call WriteDec
- 00001A23  BA 0000062A R     3	mov edx, offset blank
+ 00001A23  BA 0000064F R     3	mov edx, offset blank
  00001A28  E8 00000000 E     3	call WriteString
- 00001A2D  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 00001A2D  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  00001A32  E8 00000000 E     3	call WriteString
  00001A37  8B 43 14	     3	mov eax, [ebx].item.combatValue
  00001A3A  E8 00000000 E     3	call WriteDec
- 00001A3F  BA 0000062A R     3	mov edx, offset blank
+ 00001A3F  BA 0000064F R     3	mov edx, offset blank
  00001A44  E8 00000000 E     3	call WriteString
  00001A49  B8 000007D0	     2		mov eax,2000
  00001A4E  E8 00000000 E     2		call Delay
  00001A53		     2	endCase??0025:
  00001A53  E9 0000049D	     1		jmp endInventory
  00001A58		     1	item8:
- 00001A58  BB 00000283 R     1		mov ebx,offset i9 ;//storing item for use
- 00001A5D  BA 0000061D R     2	mov edx, offset exitTitle
+ 00001A58  BB 000002A8 R     1		mov ebx,offset i9 ;//storing item for use
+ 00001A5D  BA 00000642 R     2	mov edx, offset exitTitle
  00001A62  E8 00000000 E     2	call WriteString
- 00001A67  BA 000003B8 R     2	mov edx, offset discardTitle
+ 00001A67  BA 000003DD R     2	mov edx, offset discardTitle
  00001A6C  E8 00000000 E     2	call WriteString
- 00001A71  BA 000003C6 R     2	mov edx, offset equipTitle
+ 00001A71  BA 000003EB R     2	mov edx, offset equipTitle
  00001A76  E8 00000000 E     2	call WriteString
- 00001A7B  BA 000003D2 R     2	mov edx, offset infoTitle
+ 00001A7B  BA 000003F7 R     2	mov edx, offset infoTitle
  00001A80  E8 00000000 E     2	call WriteString
  00001A85  E8 00000000 E     3		call ReadDec
  00001A8A  8B C8	     3		mov ecx, eax
@@ -3342,7 +3409,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001AD9  83 3D 00000074 R  4	cmp c1.weaponCode,0
 	   00
  00001AE0  0F 84 000000C8    4	je nothingEquipped??002C
- 00001AE6  BB 00000363 R     4	mov ebx, offset i1
+ 00001AE6  BB 00000388 R     4	mov ebx, offset i1
  00001AEB		     4	notEmpty??002C:
  00001AEB  83 3B 00	     4	cmp [ebx].item.itemCode,0
  00001AEE  74 0F	     4	je isEmpty??002C 
@@ -3387,7 +3454,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001B92  61		     5	popAD
  00001B93  EB 19	     4	jmp nothingEquipped??002C
  00001B95		     4	inventoryFull??002C:
- 00001B95  BA 0000042C R     4	mov edx, offset inventoryFullTitle
+ 00001B95  BA 00000451 R     4	mov edx, offset inventoryFullTitle
  00001B9A  E8 00000000 E   *	    call   WriteString
  00001B9F  B8 000005DC	     4	mov eax, 1500
  00001BA4  E8 00000000 E     4	call Delay
@@ -3429,39 +3496,39 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001C34  EB 6D	     2		jmp endCase??0029
  00001C36		     2	infoItem??0029:
  00001C36  E8 00000000 E     2		call clrscr
- 00001C3B  BA 0000062A R     3	mov edx, offset blank
+ 00001C3B  BA 0000064F R     3	mov edx, offset blank
  00001C40  E8 00000000 E     3	call WriteString
- 00001C45  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00001C45  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  00001C4A  E8 00000000 E     3	call WriteString
  00001C4F  8B 43 04	     3	mov eax, [ebx].item.buyValue
  00001C52  E8 00000000 E     3	call WriteDec
- 00001C57  BA 0000062A R     3	mov edx, offset blank
+ 00001C57  BA 0000064F R     3	mov edx, offset blank
  00001C5C  E8 00000000 E     3	call WriteString
- 00001C61  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00001C61  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  00001C66  E8 00000000 E     3	call WriteString
  00001C6B  8B 43 08	     3	mov eax, [ebx].item.SellValue
  00001C6E  E8 00000000 E     3	call WriteDec
- 00001C73  BA 0000062A R     3	mov edx, offset blank
+ 00001C73  BA 0000064F R     3	mov edx, offset blank
  00001C78  E8 00000000 E     3	call WriteString
- 00001C7D  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 00001C7D  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  00001C82  E8 00000000 E     3	call WriteString
  00001C87  8B 43 14	     3	mov eax, [ebx].item.combatValue
  00001C8A  E8 00000000 E     3	call WriteDec
- 00001C8F  BA 0000062A R     3	mov edx, offset blank
+ 00001C8F  BA 0000064F R     3	mov edx, offset blank
  00001C94  E8 00000000 E     3	call WriteString
  00001C99  B8 000007D0	     2		mov eax,2000
  00001C9E  E8 00000000 E     2		call Delay
  00001CA3		     2	endCase??0029:
  00001CA3  E9 0000024D	     1		jmp endInventory
  00001CA8		     1	item9:
- 00001CA8  BB 00000267 R     1		mov ebx,offset i10 ;//storing item for use
- 00001CAD  BA 0000061D R     2	mov edx, offset exitTitle
+ 00001CA8  BB 0000028C R     1		mov ebx,offset i10 ;//storing item for use
+ 00001CAD  BA 00000642 R     2	mov edx, offset exitTitle
  00001CB2  E8 00000000 E     2	call WriteString
- 00001CB7  BA 000003B8 R     2	mov edx, offset discardTitle
+ 00001CB7  BA 000003DD R     2	mov edx, offset discardTitle
  00001CBC  E8 00000000 E     2	call WriteString
- 00001CC1  BA 000003C6 R     2	mov edx, offset equipTitle
+ 00001CC1  BA 000003EB R     2	mov edx, offset equipTitle
  00001CC6  E8 00000000 E     2	call WriteString
- 00001CCB  BA 000003D2 R     2	mov edx, offset infoTitle
+ 00001CCB  BA 000003F7 R     2	mov edx, offset infoTitle
  00001CD0  E8 00000000 E     2	call WriteString
  00001CD5  E8 00000000 E     3		call ReadDec
  00001CDA  8B C8	     3		mov ecx, eax
@@ -3491,7 +3558,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001D29  83 3D 00000074 R  4	cmp c1.weaponCode,0
 	   00
  00001D30  0F 84 000000C8    4	je nothingEquipped??0030
- 00001D36  BB 00000363 R     4	mov ebx, offset i1
+ 00001D36  BB 00000388 R     4	mov ebx, offset i1
  00001D3B		     4	notEmpty??0030:
  00001D3B  83 3B 00	     4	cmp [ebx].item.itemCode,0
  00001D3E  74 0F	     4	je isEmpty??0030 
@@ -3536,7 +3603,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001DE2  61		     5	popAD
  00001DE3  EB 19	     4	jmp nothingEquipped??0030
  00001DE5		     4	inventoryFull??0030:
- 00001DE5  BA 0000042C R     4	mov edx, offset inventoryFullTitle
+ 00001DE5  BA 00000451 R     4	mov edx, offset inventoryFullTitle
  00001DEA  E8 00000000 E   *	    call   WriteString
  00001DEF  B8 000005DC	     4	mov eax, 1500
  00001DF4  E8 00000000 E     4	call Delay
@@ -3578,25 +3645,25 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001E84  EB 6D	     2		jmp endCase??002D
  00001E86		     2	infoItem??002D:
  00001E86  E8 00000000 E     2		call clrscr
- 00001E8B  BA 0000062A R     3	mov edx, offset blank
+ 00001E8B  BA 0000064F R     3	mov edx, offset blank
  00001E90  E8 00000000 E     3	call WriteString
- 00001E95  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00001E95  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  00001E9A  E8 00000000 E     3	call WriteString
  00001E9F  8B 43 04	     3	mov eax, [ebx].item.buyValue
  00001EA2  E8 00000000 E     3	call WriteDec
- 00001EA7  BA 0000062A R     3	mov edx, offset blank
+ 00001EA7  BA 0000064F R     3	mov edx, offset blank
  00001EAC  E8 00000000 E     3	call WriteString
- 00001EB1  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00001EB1  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  00001EB6  E8 00000000 E     3	call WriteString
  00001EBB  8B 43 08	     3	mov eax, [ebx].item.SellValue
  00001EBE  E8 00000000 E     3	call WriteDec
- 00001EC3  BA 0000062A R     3	mov edx, offset blank
+ 00001EC3  BA 0000064F R     3	mov edx, offset blank
  00001EC8  E8 00000000 E     3	call WriteString
- 00001ECD  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 00001ECD  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  00001ED2  E8 00000000 E     3	call WriteString
  00001ED7  8B 43 14	     3	mov eax, [ebx].item.combatValue
  00001EDA  E8 00000000 E     3	call WriteDec
- 00001EDF  BA 0000062A R     3	mov edx, offset blank
+ 00001EDF  BA 0000064F R     3	mov edx, offset blank
  00001EE4  E8 00000000 E     3	call WriteString
  00001EE9  B8 000007D0	     2		mov eax,2000
  00001EEE  E8 00000000 E     2		call Delay
@@ -3610,7 +3677,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001EFF  83 3D 00000074 R  1	cmp c1.weaponCode,0
 	   00
  00001F06  0F 84 000000C8    1	je nothingEquipped??0031
- 00001F0C  BB 00000363 R     1	mov ebx, offset i1
+ 00001F0C  BB 00000388 R     1	mov ebx, offset i1
  00001F11		     1	notEmpty??0031:
  00001F11  83 3B 00	     1	cmp [ebx].item.itemCode,0
  00001F14  74 0F	     1	je isEmpty??0031 
@@ -3655,7 +3722,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001FB8  61		     2	popAD
  00001FB9  EB 19	     1	jmp nothingEquipped??0031
  00001FBB		     1	inventoryFull??0031:
- 00001FBB  BA 0000042C R     1	mov edx, offset inventoryFullTitle
+ 00001FBB  BA 00000451 R     1	mov edx, offset inventoryFullTitle
  00001FC0  E8 00000000 E   *	    call   WriteString
  00001FC5  B8 000005DC	     1	mov eax, 1500
  00001FCA  E8 00000000 E     1	call Delay
@@ -3664,11 +3731,11 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00001FD4  E9 00001051				jmp end_switch
  00001FD9				shop:
 						mShop
- 00001FD9  BA 00000555 R     1	mov edx, offset shopMenuTitle
+ 00001FD9  BA 0000057A R     1	mov edx, offset shopMenuTitle
  00001FDE  E8 00000000 E   *	    call   WriteString
- 00001FE3  BA 0000061D R     1	mov edx, offset exitTitle
+ 00001FE3  BA 00000642 R     1	mov edx, offset exitTitle
  00001FE8  E8 00000000 E   *	    call   WriteString
- 00001FED  BB 00000539 R     1	mov ebx, offset s1;//moving first item to read linked list
+ 00001FED  BB 0000055E R     1	mov ebx, offset s1;//moving first item to read linked list
  00001FF2  60		     2	pushAD
  00001FF3  33 C9	     2	xor ecx,ecx
  00001FF5		     2	DO1??0033:
@@ -3702,14 +3769,14 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  0000203A  BA 0000001B R     3		mov edx, offset defaultName
  0000203F		     3	print??0034:
  0000203F  E8 00000000 E   *	    call   WriteString
- 00002044  BA 0000062A R     2	mov edx,offset blank
+ 00002044  BA 0000064F R     2	mov edx,offset blank
  00002049  E8 00000000 E     2	call WriteString
  0000204E  8B 5B 10	     2	mov eBx,[ebx].item.next
  00002051  41		     2	inc ecx
  00002052  83 FB 00	     2	cmp ebx,null
  00002055  75 9E	     2	jne DO1??0033
  00002057  61		     2	popAD
- 00002058  BA 00000560 R     1	mov edx,offset sellModeTitle
+ 00002058  BA 00000585 R     1	mov edx,offset sellModeTitle
  0000205D  E8 00000000 E   *	    call   WriteString
  00002062  E8 00000000 E     2		call ReadDec
  00002067  8B C8	     2		mov ecx, eax
@@ -3737,11 +3804,11 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000020C9  0F 84 00000BA4    1		je sellMode
  000020CF  E9 00000F4F	     1	jmp exitShop
  000020D4		     1	item0??0032:
- 000020D4  BB 00000539 R     1		mov ebx,offset s1 ;//storing item for use
- 000020D9  BA 0000061D R     2	mov edx, offset exitTitle
- 000020DE  BA 00000579 R     2	mov edx, offset buyTitle
+ 000020D4  BB 0000055E R     1		mov ebx,offset s1 ;//storing item for use
+ 000020D9  BA 00000642 R     2	mov edx, offset exitTitle
+ 000020DE  BA 0000059E R     2	mov edx, offset buyTitle
  000020E3  E8 00000000 E     2	call WriteString
- 000020E8  BA 000003D2 R     2	mov edx, offset infoTitle
+ 000020E8  BA 000003F7 R     2	mov edx, offset infoTitle
  000020ED  E8 00000000 E     2	call WriteString
  000020F2  E8 00000000 E     3		call ReadDec
  000020F7  8B C8	     3		mov ecx, eax
@@ -3762,7 +3829,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002126  29 05 00000050 R  2		sub c1.gold,eax ;//decrease yout gold
  0000212C  8B C3	     2		mov eax,ebx ;//moving for add
  0000212E  8B D3	     2		mov edx,ebx ;//storing for remove
- 00002130  BB 00000363 R     3	mov ebx, offset i1
+ 00002130  BB 00000388 R     3	mov ebx, offset i1
  00002135		     3	notEmpty??0038:
  00002135  83 3B 00	     3	cmp [ebx].item.itemCode,0
  00002138  74 0B	     3	je isEmpty??0038 
@@ -3781,7 +3848,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002158  89 4B 14	     3	mov [ebx].item.combatValue,ecx
  0000215B  EB 19	     3	jmp end??0038
  0000215D		     3	inventoryFull??0038:
- 0000215D  BA 0000042C R     3	mov edx, offset inventoryFullTitle
+ 0000215D  BA 00000451 R     3	mov edx, offset inventoryFullTitle
  00002162  E8 00000000 E   *	    call   WriteString
  00002167  B8 000005DC	     3	mov eax, 1500
  0000216C  E8 00000000 E     3	call Delay
@@ -3796,43 +3863,43 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  0000218C  E9 00000088	     2		jmp endCase??0036
  00002191		     2		notEnoughGold??0036:
  00002191  E8 00000000 E     2		call clrscr
- 00002196  BA 0000058C R     2		mov edx, offset notEnoughGoldTitle
+ 00002196  BA 000005B1 R     2		mov edx, offset notEnoughGoldTitle
  0000219B  E8 00000000 E   *	    call   WriteString
  000021A0  B8 000007D0	     2		mov eax,2000
  000021A5  E8 00000000 E     2		call Delay
  000021AA  EB 6D	     2		jmp endCase??0036
  000021AC		     2	infoItem??0036:
  000021AC  E8 00000000 E     2		call clrscr
- 000021B1  BA 0000062A R     3	mov edx, offset blank
+ 000021B1  BA 0000064F R     3	mov edx, offset blank
  000021B6  E8 00000000 E     3	call WriteString
- 000021BB  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 000021BB  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  000021C0  E8 00000000 E     3	call WriteString
  000021C5  8B 43 04	     3	mov eax, [ebx].item.buyValue
  000021C8  E8 00000000 E     3	call WriteDec
- 000021CD  BA 0000062A R     3	mov edx, offset blank
+ 000021CD  BA 0000064F R     3	mov edx, offset blank
  000021D2  E8 00000000 E     3	call WriteString
- 000021D7  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 000021D7  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  000021DC  E8 00000000 E     3	call WriteString
  000021E1  8B 43 08	     3	mov eax, [ebx].item.SellValue
  000021E4  E8 00000000 E     3	call WriteDec
- 000021E9  BA 0000062A R     3	mov edx, offset blank
+ 000021E9  BA 0000064F R     3	mov edx, offset blank
  000021EE  E8 00000000 E     3	call WriteString
- 000021F3  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 000021F3  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  000021F8  E8 00000000 E     3	call WriteString
  000021FD  8B 43 14	     3	mov eax, [ebx].item.combatValue
  00002200  E8 00000000 E     3	call WriteDec
- 00002205  BA 0000062A R     3	mov edx, offset blank
+ 00002205  BA 0000064F R     3	mov edx, offset blank
  0000220A  E8 00000000 E     3	call WriteString
  0000220F  B8 000007D0	     2		mov eax,2000
  00002214  E8 00000000 E     2		call Delay
  00002219		     2	endCase??0036:
  00002219  E9 FFFFFCD7	     1		jmp endInventory
  0000221E		     1	item1??0032:
- 0000221E  BB 0000051D R     1		mov ebx,offset s2 ;//storing item for use
- 00002223  BA 0000061D R     2	mov edx, offset exitTitle
- 00002228  BA 00000579 R     2	mov edx, offset buyTitle
+ 0000221E  BB 00000542 R     1		mov ebx,offset s2 ;//storing item for use
+ 00002223  BA 00000642 R     2	mov edx, offset exitTitle
+ 00002228  BA 0000059E R     2	mov edx, offset buyTitle
  0000222D  E8 00000000 E     2	call WriteString
- 00002232  BA 000003D2 R     2	mov edx, offset infoTitle
+ 00002232  BA 000003F7 R     2	mov edx, offset infoTitle
  00002237  E8 00000000 E     2	call WriteString
  0000223C  E8 00000000 E     3		call ReadDec
  00002241  8B C8	     3		mov ecx, eax
@@ -3853,7 +3920,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002270  29 05 00000050 R  2		sub c1.gold,eax ;//decrease yout gold
  00002276  8B C3	     2		mov eax,ebx ;//moving for add
  00002278  8B D3	     2		mov edx,ebx ;//storing for remove
- 0000227A  BB 00000363 R     3	mov ebx, offset i1
+ 0000227A  BB 00000388 R     3	mov ebx, offset i1
  0000227F		     3	notEmpty??003B:
  0000227F  83 3B 00	     3	cmp [ebx].item.itemCode,0
  00002282  74 0B	     3	je isEmpty??003B 
@@ -3872,7 +3939,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000022A2  89 4B 14	     3	mov [ebx].item.combatValue,ecx
  000022A5  EB 19	     3	jmp end??003B
  000022A7		     3	inventoryFull??003B:
- 000022A7  BA 0000042C R     3	mov edx, offset inventoryFullTitle
+ 000022A7  BA 00000451 R     3	mov edx, offset inventoryFullTitle
  000022AC  E8 00000000 E   *	    call   WriteString
  000022B1  B8 000005DC	     3	mov eax, 1500
  000022B6  E8 00000000 E     3	call Delay
@@ -3887,43 +3954,43 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000022D6  E9 00000088	     2		jmp endCase??0039
  000022DB		     2		notEnoughGold??0039:
  000022DB  E8 00000000 E     2		call clrscr
- 000022E0  BA 0000058C R     2		mov edx, offset notEnoughGoldTitle
+ 000022E0  BA 000005B1 R     2		mov edx, offset notEnoughGoldTitle
  000022E5  E8 00000000 E   *	    call   WriteString
  000022EA  B8 000007D0	     2		mov eax,2000
  000022EF  E8 00000000 E     2		call Delay
  000022F4  EB 6D	     2		jmp endCase??0039
  000022F6		     2	infoItem??0039:
  000022F6  E8 00000000 E     2		call clrscr
- 000022FB  BA 0000062A R     3	mov edx, offset blank
+ 000022FB  BA 0000064F R     3	mov edx, offset blank
  00002300  E8 00000000 E     3	call WriteString
- 00002305  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00002305  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  0000230A  E8 00000000 E     3	call WriteString
  0000230F  8B 43 04	     3	mov eax, [ebx].item.buyValue
  00002312  E8 00000000 E     3	call WriteDec
- 00002317  BA 0000062A R     3	mov edx, offset blank
+ 00002317  BA 0000064F R     3	mov edx, offset blank
  0000231C  E8 00000000 E     3	call WriteString
- 00002321  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00002321  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  00002326  E8 00000000 E     3	call WriteString
  0000232B  8B 43 08	     3	mov eax, [ebx].item.SellValue
  0000232E  E8 00000000 E     3	call WriteDec
- 00002333  BA 0000062A R     3	mov edx, offset blank
+ 00002333  BA 0000064F R     3	mov edx, offset blank
  00002338  E8 00000000 E     3	call WriteString
- 0000233D  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 0000233D  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  00002342  E8 00000000 E     3	call WriteString
  00002347  8B 43 14	     3	mov eax, [ebx].item.combatValue
  0000234A  E8 00000000 E     3	call WriteDec
- 0000234F  BA 0000062A R     3	mov edx, offset blank
+ 0000234F  BA 0000064F R     3	mov edx, offset blank
  00002354  E8 00000000 E     3	call WriteString
  00002359  B8 000007D0	     2		mov eax,2000
  0000235E  E8 00000000 E     2		call Delay
  00002363		     2	endCase??0039:
  00002363  E9 FFFFFB8D	     1		jmp endInventory
  00002368		     1	item2??0032:
- 00002368  BB 00000501 R     1		mov ebx,offset s3 ;//storing item for use
- 0000236D  BA 0000061D R     2	mov edx, offset exitTitle
- 00002372  BA 00000579 R     2	mov edx, offset buyTitle
+ 00002368  BB 00000526 R     1		mov ebx,offset s3 ;//storing item for use
+ 0000236D  BA 00000642 R     2	mov edx, offset exitTitle
+ 00002372  BA 0000059E R     2	mov edx, offset buyTitle
  00002377  E8 00000000 E     2	call WriteString
- 0000237C  BA 000003D2 R     2	mov edx, offset infoTitle
+ 0000237C  BA 000003F7 R     2	mov edx, offset infoTitle
  00002381  E8 00000000 E     2	call WriteString
  00002386  E8 00000000 E     3		call ReadDec
  0000238B  8B C8	     3		mov ecx, eax
@@ -3944,7 +4011,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000023BA  29 05 00000050 R  2		sub c1.gold,eax ;//decrease yout gold
  000023C0  8B C3	     2		mov eax,ebx ;//moving for add
  000023C2  8B D3	     2		mov edx,ebx ;//storing for remove
- 000023C4  BB 00000363 R     3	mov ebx, offset i1
+ 000023C4  BB 00000388 R     3	mov ebx, offset i1
  000023C9		     3	notEmpty??003E:
  000023C9  83 3B 00	     3	cmp [ebx].item.itemCode,0
  000023CC  74 0B	     3	je isEmpty??003E 
@@ -3963,7 +4030,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000023EC  89 4B 14	     3	mov [ebx].item.combatValue,ecx
  000023EF  EB 19	     3	jmp end??003E
  000023F1		     3	inventoryFull??003E:
- 000023F1  BA 0000042C R     3	mov edx, offset inventoryFullTitle
+ 000023F1  BA 00000451 R     3	mov edx, offset inventoryFullTitle
  000023F6  E8 00000000 E   *	    call   WriteString
  000023FB  B8 000005DC	     3	mov eax, 1500
  00002400  E8 00000000 E     3	call Delay
@@ -3978,43 +4045,43 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002420  E9 00000088	     2		jmp endCase??003C
  00002425		     2		notEnoughGold??003C:
  00002425  E8 00000000 E     2		call clrscr
- 0000242A  BA 0000058C R     2		mov edx, offset notEnoughGoldTitle
+ 0000242A  BA 000005B1 R     2		mov edx, offset notEnoughGoldTitle
  0000242F  E8 00000000 E   *	    call   WriteString
  00002434  B8 000007D0	     2		mov eax,2000
  00002439  E8 00000000 E     2		call Delay
  0000243E  EB 6D	     2		jmp endCase??003C
  00002440		     2	infoItem??003C:
  00002440  E8 00000000 E     2		call clrscr
- 00002445  BA 0000062A R     3	mov edx, offset blank
+ 00002445  BA 0000064F R     3	mov edx, offset blank
  0000244A  E8 00000000 E     3	call WriteString
- 0000244F  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 0000244F  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  00002454  E8 00000000 E     3	call WriteString
  00002459  8B 43 04	     3	mov eax, [ebx].item.buyValue
  0000245C  E8 00000000 E     3	call WriteDec
- 00002461  BA 0000062A R     3	mov edx, offset blank
+ 00002461  BA 0000064F R     3	mov edx, offset blank
  00002466  E8 00000000 E     3	call WriteString
- 0000246B  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 0000246B  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  00002470  E8 00000000 E     3	call WriteString
  00002475  8B 43 08	     3	mov eax, [ebx].item.SellValue
  00002478  E8 00000000 E     3	call WriteDec
- 0000247D  BA 0000062A R     3	mov edx, offset blank
+ 0000247D  BA 0000064F R     3	mov edx, offset blank
  00002482  E8 00000000 E     3	call WriteString
- 00002487  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 00002487  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  0000248C  E8 00000000 E     3	call WriteString
  00002491  8B 43 14	     3	mov eax, [ebx].item.combatValue
  00002494  E8 00000000 E     3	call WriteDec
- 00002499  BA 0000062A R     3	mov edx, offset blank
+ 00002499  BA 0000064F R     3	mov edx, offset blank
  0000249E  E8 00000000 E     3	call WriteString
  000024A3  B8 000007D0	     2		mov eax,2000
  000024A8  E8 00000000 E     2		call Delay
  000024AD		     2	endCase??003C:
  000024AD  E9 FFFFFA43	     1		jmp endInventory
  000024B2		     1	item3??0032:
- 000024B2  BB 000004E5 R     1		mov ebx,offset s4 ;//storing item for use
- 000024B7  BA 0000061D R     2	mov edx, offset exitTitle
- 000024BC  BA 00000579 R     2	mov edx, offset buyTitle
+ 000024B2  BB 0000050A R     1		mov ebx,offset s4 ;//storing item for use
+ 000024B7  BA 00000642 R     2	mov edx, offset exitTitle
+ 000024BC  BA 0000059E R     2	mov edx, offset buyTitle
  000024C1  E8 00000000 E     2	call WriteString
- 000024C6  BA 000003D2 R     2	mov edx, offset infoTitle
+ 000024C6  BA 000003F7 R     2	mov edx, offset infoTitle
  000024CB  E8 00000000 E     2	call WriteString
  000024D0  E8 00000000 E     3		call ReadDec
  000024D5  8B C8	     3		mov ecx, eax
@@ -4035,7 +4102,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002504  29 05 00000050 R  2		sub c1.gold,eax ;//decrease yout gold
  0000250A  8B C3	     2		mov eax,ebx ;//moving for add
  0000250C  8B D3	     2		mov edx,ebx ;//storing for remove
- 0000250E  BB 00000363 R     3	mov ebx, offset i1
+ 0000250E  BB 00000388 R     3	mov ebx, offset i1
  00002513		     3	notEmpty??0041:
  00002513  83 3B 00	     3	cmp [ebx].item.itemCode,0
  00002516  74 0B	     3	je isEmpty??0041 
@@ -4054,7 +4121,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002536  89 4B 14	     3	mov [ebx].item.combatValue,ecx
  00002539  EB 19	     3	jmp end??0041
  0000253B		     3	inventoryFull??0041:
- 0000253B  BA 0000042C R     3	mov edx, offset inventoryFullTitle
+ 0000253B  BA 00000451 R     3	mov edx, offset inventoryFullTitle
  00002540  E8 00000000 E   *	    call   WriteString
  00002545  B8 000005DC	     3	mov eax, 1500
  0000254A  E8 00000000 E     3	call Delay
@@ -4069,43 +4136,43 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  0000256A  E9 00000088	     2		jmp endCase??003F
  0000256F		     2		notEnoughGold??003F:
  0000256F  E8 00000000 E     2		call clrscr
- 00002574  BA 0000058C R     2		mov edx, offset notEnoughGoldTitle
+ 00002574  BA 000005B1 R     2		mov edx, offset notEnoughGoldTitle
  00002579  E8 00000000 E   *	    call   WriteString
  0000257E  B8 000007D0	     2		mov eax,2000
  00002583  E8 00000000 E     2		call Delay
  00002588  EB 6D	     2		jmp endCase??003F
  0000258A		     2	infoItem??003F:
  0000258A  E8 00000000 E     2		call clrscr
- 0000258F  BA 0000062A R     3	mov edx, offset blank
+ 0000258F  BA 0000064F R     3	mov edx, offset blank
  00002594  E8 00000000 E     3	call WriteString
- 00002599  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00002599  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  0000259E  E8 00000000 E     3	call WriteString
  000025A3  8B 43 04	     3	mov eax, [ebx].item.buyValue
  000025A6  E8 00000000 E     3	call WriteDec
- 000025AB  BA 0000062A R     3	mov edx, offset blank
+ 000025AB  BA 0000064F R     3	mov edx, offset blank
  000025B0  E8 00000000 E     3	call WriteString
- 000025B5  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 000025B5  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  000025BA  E8 00000000 E     3	call WriteString
  000025BF  8B 43 08	     3	mov eax, [ebx].item.SellValue
  000025C2  E8 00000000 E     3	call WriteDec
- 000025C7  BA 0000062A R     3	mov edx, offset blank
+ 000025C7  BA 0000064F R     3	mov edx, offset blank
  000025CC  E8 00000000 E     3	call WriteString
- 000025D1  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 000025D1  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  000025D6  E8 00000000 E     3	call WriteString
  000025DB  8B 43 14	     3	mov eax, [ebx].item.combatValue
  000025DE  E8 00000000 E     3	call WriteDec
- 000025E3  BA 0000062A R     3	mov edx, offset blank
+ 000025E3  BA 0000064F R     3	mov edx, offset blank
  000025E8  E8 00000000 E     3	call WriteString
  000025ED  B8 000007D0	     2		mov eax,2000
  000025F2  E8 00000000 E     2		call Delay
  000025F7		     2	endCase??003F:
  000025F7  E9 FFFFF8F9	     1		jmp endInventory
  000025FC		     1	item4??0032:
- 000025FC  BB 000004C9 R     1		mov ebx,offset s5 ;//storing item for use
- 00002601  BA 0000061D R     2	mov edx, offset exitTitle
- 00002606  BA 00000579 R     2	mov edx, offset buyTitle
+ 000025FC  BB 000004EE R     1		mov ebx,offset s5 ;//storing item for use
+ 00002601  BA 00000642 R     2	mov edx, offset exitTitle
+ 00002606  BA 0000059E R     2	mov edx, offset buyTitle
  0000260B  E8 00000000 E     2	call WriteString
- 00002610  BA 000003D2 R     2	mov edx, offset infoTitle
+ 00002610  BA 000003F7 R     2	mov edx, offset infoTitle
  00002615  E8 00000000 E     2	call WriteString
  0000261A  E8 00000000 E     3		call ReadDec
  0000261F  8B C8	     3		mov ecx, eax
@@ -4126,7 +4193,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  0000264E  29 05 00000050 R  2		sub c1.gold,eax ;//decrease yout gold
  00002654  8B C3	     2		mov eax,ebx ;//moving for add
  00002656  8B D3	     2		mov edx,ebx ;//storing for remove
- 00002658  BB 00000363 R     3	mov ebx, offset i1
+ 00002658  BB 00000388 R     3	mov ebx, offset i1
  0000265D		     3	notEmpty??0044:
  0000265D  83 3B 00	     3	cmp [ebx].item.itemCode,0
  00002660  74 0B	     3	je isEmpty??0044 
@@ -4145,7 +4212,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002680  89 4B 14	     3	mov [ebx].item.combatValue,ecx
  00002683  EB 19	     3	jmp end??0044
  00002685		     3	inventoryFull??0044:
- 00002685  BA 0000042C R     3	mov edx, offset inventoryFullTitle
+ 00002685  BA 00000451 R     3	mov edx, offset inventoryFullTitle
  0000268A  E8 00000000 E   *	    call   WriteString
  0000268F  B8 000005DC	     3	mov eax, 1500
  00002694  E8 00000000 E     3	call Delay
@@ -4160,43 +4227,43 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000026B4  E9 00000088	     2		jmp endCase??0042
  000026B9		     2		notEnoughGold??0042:
  000026B9  E8 00000000 E     2		call clrscr
- 000026BE  BA 0000058C R     2		mov edx, offset notEnoughGoldTitle
+ 000026BE  BA 000005B1 R     2		mov edx, offset notEnoughGoldTitle
  000026C3  E8 00000000 E   *	    call   WriteString
  000026C8  B8 000007D0	     2		mov eax,2000
  000026CD  E8 00000000 E     2		call Delay
  000026D2  EB 6D	     2		jmp endCase??0042
  000026D4		     2	infoItem??0042:
  000026D4  E8 00000000 E     2		call clrscr
- 000026D9  BA 0000062A R     3	mov edx, offset blank
+ 000026D9  BA 0000064F R     3	mov edx, offset blank
  000026DE  E8 00000000 E     3	call WriteString
- 000026E3  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 000026E3  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  000026E8  E8 00000000 E     3	call WriteString
  000026ED  8B 43 04	     3	mov eax, [ebx].item.buyValue
  000026F0  E8 00000000 E     3	call WriteDec
- 000026F5  BA 0000062A R     3	mov edx, offset blank
+ 000026F5  BA 0000064F R     3	mov edx, offset blank
  000026FA  E8 00000000 E     3	call WriteString
- 000026FF  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 000026FF  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  00002704  E8 00000000 E     3	call WriteString
  00002709  8B 43 08	     3	mov eax, [ebx].item.SellValue
  0000270C  E8 00000000 E     3	call WriteDec
- 00002711  BA 0000062A R     3	mov edx, offset blank
+ 00002711  BA 0000064F R     3	mov edx, offset blank
  00002716  E8 00000000 E     3	call WriteString
- 0000271B  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 0000271B  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  00002720  E8 00000000 E     3	call WriteString
  00002725  8B 43 14	     3	mov eax, [ebx].item.combatValue
  00002728  E8 00000000 E     3	call WriteDec
- 0000272D  BA 0000062A R     3	mov edx, offset blank
+ 0000272D  BA 0000064F R     3	mov edx, offset blank
  00002732  E8 00000000 E     3	call WriteString
  00002737  B8 000007D0	     2		mov eax,2000
  0000273C  E8 00000000 E     2		call Delay
  00002741		     2	endCase??0042:
  00002741  E9 FFFFF7AF	     1		jmp endInventory
  00002746		     1	item5??0032:
- 00002746  BB 000004AD R     1		mov ebx,offset s6 ;//storing item for use
- 0000274B  BA 0000061D R     2	mov edx, offset exitTitle
- 00002750  BA 00000579 R     2	mov edx, offset buyTitle
+ 00002746  BB 000004D2 R     1		mov ebx,offset s6 ;//storing item for use
+ 0000274B  BA 00000642 R     2	mov edx, offset exitTitle
+ 00002750  BA 0000059E R     2	mov edx, offset buyTitle
  00002755  E8 00000000 E     2	call WriteString
- 0000275A  BA 000003D2 R     2	mov edx, offset infoTitle
+ 0000275A  BA 000003F7 R     2	mov edx, offset infoTitle
  0000275F  E8 00000000 E     2	call WriteString
  00002764  E8 00000000 E     3		call ReadDec
  00002769  8B C8	     3		mov ecx, eax
@@ -4217,7 +4284,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002798  29 05 00000050 R  2		sub c1.gold,eax ;//decrease yout gold
  0000279E  8B C3	     2		mov eax,ebx ;//moving for add
  000027A0  8B D3	     2		mov edx,ebx ;//storing for remove
- 000027A2  BB 00000363 R     3	mov ebx, offset i1
+ 000027A2  BB 00000388 R     3	mov ebx, offset i1
  000027A7		     3	notEmpty??0047:
  000027A7  83 3B 00	     3	cmp [ebx].item.itemCode,0
  000027AA  74 0B	     3	je isEmpty??0047 
@@ -4236,7 +4303,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000027CA  89 4B 14	     3	mov [ebx].item.combatValue,ecx
  000027CD  EB 19	     3	jmp end??0047
  000027CF		     3	inventoryFull??0047:
- 000027CF  BA 0000042C R     3	mov edx, offset inventoryFullTitle
+ 000027CF  BA 00000451 R     3	mov edx, offset inventoryFullTitle
  000027D4  E8 00000000 E   *	    call   WriteString
  000027D9  B8 000005DC	     3	mov eax, 1500
  000027DE  E8 00000000 E     3	call Delay
@@ -4251,43 +4318,43 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000027FE  E9 00000088	     2		jmp endCase??0045
  00002803		     2		notEnoughGold??0045:
  00002803  E8 00000000 E     2		call clrscr
- 00002808  BA 0000058C R     2		mov edx, offset notEnoughGoldTitle
+ 00002808  BA 000005B1 R     2		mov edx, offset notEnoughGoldTitle
  0000280D  E8 00000000 E   *	    call   WriteString
  00002812  B8 000007D0	     2		mov eax,2000
  00002817  E8 00000000 E     2		call Delay
  0000281C  EB 6D	     2		jmp endCase??0045
  0000281E		     2	infoItem??0045:
  0000281E  E8 00000000 E     2		call clrscr
- 00002823  BA 0000062A R     3	mov edx, offset blank
+ 00002823  BA 0000064F R     3	mov edx, offset blank
  00002828  E8 00000000 E     3	call WriteString
- 0000282D  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 0000282D  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  00002832  E8 00000000 E     3	call WriteString
  00002837  8B 43 04	     3	mov eax, [ebx].item.buyValue
  0000283A  E8 00000000 E     3	call WriteDec
- 0000283F  BA 0000062A R     3	mov edx, offset blank
+ 0000283F  BA 0000064F R     3	mov edx, offset blank
  00002844  E8 00000000 E     3	call WriteString
- 00002849  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00002849  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  0000284E  E8 00000000 E     3	call WriteString
  00002853  8B 43 08	     3	mov eax, [ebx].item.SellValue
  00002856  E8 00000000 E     3	call WriteDec
- 0000285B  BA 0000062A R     3	mov edx, offset blank
+ 0000285B  BA 0000064F R     3	mov edx, offset blank
  00002860  E8 00000000 E     3	call WriteString
- 00002865  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 00002865  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  0000286A  E8 00000000 E     3	call WriteString
  0000286F  8B 43 14	     3	mov eax, [ebx].item.combatValue
  00002872  E8 00000000 E     3	call WriteDec
- 00002877  BA 0000062A R     3	mov edx, offset blank
+ 00002877  BA 0000064F R     3	mov edx, offset blank
  0000287C  E8 00000000 E     3	call WriteString
  00002881  B8 000007D0	     2		mov eax,2000
  00002886  E8 00000000 E     2		call Delay
  0000288B		     2	endCase??0045:
  0000288B  E9 FFFFF665	     1		jmp endInventory
  00002890		     1	item6??0032:
- 00002890  BB 00000491 R     1		mov ebx,offset s7 ;//storing item for use
- 00002895  BA 0000061D R     2	mov edx, offset exitTitle
- 0000289A  BA 00000579 R     2	mov edx, offset buyTitle
+ 00002890  BB 000004B6 R     1		mov ebx,offset s7 ;//storing item for use
+ 00002895  BA 00000642 R     2	mov edx, offset exitTitle
+ 0000289A  BA 0000059E R     2	mov edx, offset buyTitle
  0000289F  E8 00000000 E     2	call WriteString
- 000028A4  BA 000003D2 R     2	mov edx, offset infoTitle
+ 000028A4  BA 000003F7 R     2	mov edx, offset infoTitle
  000028A9  E8 00000000 E     2	call WriteString
  000028AE  E8 00000000 E     3		call ReadDec
  000028B3  8B C8	     3		mov ecx, eax
@@ -4308,7 +4375,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  000028E2  29 05 00000050 R  2		sub c1.gold,eax ;//decrease yout gold
  000028E8  8B C3	     2		mov eax,ebx ;//moving for add
  000028EA  8B D3	     2		mov edx,ebx ;//storing for remove
- 000028EC  BB 00000363 R     3	mov ebx, offset i1
+ 000028EC  BB 00000388 R     3	mov ebx, offset i1
  000028F1		     3	notEmpty??004A:
  000028F1  83 3B 00	     3	cmp [ebx].item.itemCode,0
  000028F4  74 0B	     3	je isEmpty??004A 
@@ -4327,7 +4394,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002914  89 4B 14	     3	mov [ebx].item.combatValue,ecx
  00002917  EB 19	     3	jmp end??004A
  00002919		     3	inventoryFull??004A:
- 00002919  BA 0000042C R     3	mov edx, offset inventoryFullTitle
+ 00002919  BA 00000451 R     3	mov edx, offset inventoryFullTitle
  0000291E  E8 00000000 E   *	    call   WriteString
  00002923  B8 000005DC	     3	mov eax, 1500
  00002928  E8 00000000 E     3	call Delay
@@ -4342,43 +4409,43 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002948  E9 00000088	     2		jmp endCase??0048
  0000294D		     2		notEnoughGold??0048:
  0000294D  E8 00000000 E     2		call clrscr
- 00002952  BA 0000058C R     2		mov edx, offset notEnoughGoldTitle
+ 00002952  BA 000005B1 R     2		mov edx, offset notEnoughGoldTitle
  00002957  E8 00000000 E   *	    call   WriteString
  0000295C  B8 000007D0	     2		mov eax,2000
  00002961  E8 00000000 E     2		call Delay
  00002966  EB 6D	     2		jmp endCase??0048
  00002968		     2	infoItem??0048:
  00002968  E8 00000000 E     2		call clrscr
- 0000296D  BA 0000062A R     3	mov edx, offset blank
+ 0000296D  BA 0000064F R     3	mov edx, offset blank
  00002972  E8 00000000 E     3	call WriteString
- 00002977  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00002977  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  0000297C  E8 00000000 E     3	call WriteString
  00002981  8B 43 04	     3	mov eax, [ebx].item.buyValue
  00002984  E8 00000000 E     3	call WriteDec
- 00002989  BA 0000062A R     3	mov edx, offset blank
+ 00002989  BA 0000064F R     3	mov edx, offset blank
  0000298E  E8 00000000 E     3	call WriteString
- 00002993  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00002993  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  00002998  E8 00000000 E     3	call WriteString
  0000299D  8B 43 08	     3	mov eax, [ebx].item.SellValue
  000029A0  E8 00000000 E     3	call WriteDec
- 000029A5  BA 0000062A R     3	mov edx, offset blank
+ 000029A5  BA 0000064F R     3	mov edx, offset blank
  000029AA  E8 00000000 E     3	call WriteString
- 000029AF  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 000029AF  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  000029B4  E8 00000000 E     3	call WriteString
  000029B9  8B 43 14	     3	mov eax, [ebx].item.combatValue
  000029BC  E8 00000000 E     3	call WriteDec
- 000029C1  BA 0000062A R     3	mov edx, offset blank
+ 000029C1  BA 0000064F R     3	mov edx, offset blank
  000029C6  E8 00000000 E     3	call WriteString
  000029CB  B8 000007D0	     2		mov eax,2000
  000029D0  E8 00000000 E     2		call Delay
  000029D5		     2	endCase??0048:
  000029D5  E9 FFFFF51B	     1		jmp endInventory
  000029DA		     1	item7??0032:
- 000029DA  BB 00000475 R     1		mov ebx,offset s8 ;//storing item for use
- 000029DF  BA 0000061D R     2	mov edx, offset exitTitle
- 000029E4  BA 00000579 R     2	mov edx, offset buyTitle
+ 000029DA  BB 0000049A R     1		mov ebx,offset s8 ;//storing item for use
+ 000029DF  BA 00000642 R     2	mov edx, offset exitTitle
+ 000029E4  BA 0000059E R     2	mov edx, offset buyTitle
  000029E9  E8 00000000 E     2	call WriteString
- 000029EE  BA 000003D2 R     2	mov edx, offset infoTitle
+ 000029EE  BA 000003F7 R     2	mov edx, offset infoTitle
  000029F3  E8 00000000 E     2	call WriteString
  000029F8  E8 00000000 E     3		call ReadDec
  000029FD  8B C8	     3		mov ecx, eax
@@ -4399,7 +4466,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002A2C  29 05 00000050 R  2		sub c1.gold,eax ;//decrease yout gold
  00002A32  8B C3	     2		mov eax,ebx ;//moving for add
  00002A34  8B D3	     2		mov edx,ebx ;//storing for remove
- 00002A36  BB 00000363 R     3	mov ebx, offset i1
+ 00002A36  BB 00000388 R     3	mov ebx, offset i1
  00002A3B		     3	notEmpty??004D:
  00002A3B  83 3B 00	     3	cmp [ebx].item.itemCode,0
  00002A3E  74 0B	     3	je isEmpty??004D 
@@ -4418,7 +4485,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002A5E  89 4B 14	     3	mov [ebx].item.combatValue,ecx
  00002A61  EB 19	     3	jmp end??004D
  00002A63		     3	inventoryFull??004D:
- 00002A63  BA 0000042C R     3	mov edx, offset inventoryFullTitle
+ 00002A63  BA 00000451 R     3	mov edx, offset inventoryFullTitle
  00002A68  E8 00000000 E   *	    call   WriteString
  00002A6D  B8 000005DC	     3	mov eax, 1500
  00002A72  E8 00000000 E     3	call Delay
@@ -4433,43 +4500,43 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002A92  E9 00000088	     2		jmp endCase??004B
  00002A97		     2		notEnoughGold??004B:
  00002A97  E8 00000000 E     2		call clrscr
- 00002A9C  BA 0000058C R     2		mov edx, offset notEnoughGoldTitle
+ 00002A9C  BA 000005B1 R     2		mov edx, offset notEnoughGoldTitle
  00002AA1  E8 00000000 E   *	    call   WriteString
  00002AA6  B8 000007D0	     2		mov eax,2000
  00002AAB  E8 00000000 E     2		call Delay
  00002AB0  EB 6D	     2		jmp endCase??004B
  00002AB2		     2	infoItem??004B:
  00002AB2  E8 00000000 E     2		call clrscr
- 00002AB7  BA 0000062A R     3	mov edx, offset blank
+ 00002AB7  BA 0000064F R     3	mov edx, offset blank
  00002ABC  E8 00000000 E     3	call WriteString
- 00002AC1  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00002AC1  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  00002AC6  E8 00000000 E     3	call WriteString
  00002ACB  8B 43 04	     3	mov eax, [ebx].item.buyValue
  00002ACE  E8 00000000 E     3	call WriteDec
- 00002AD3  BA 0000062A R     3	mov edx, offset blank
+ 00002AD3  BA 0000064F R     3	mov edx, offset blank
  00002AD8  E8 00000000 E     3	call WriteString
- 00002ADD  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00002ADD  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  00002AE2  E8 00000000 E     3	call WriteString
  00002AE7  8B 43 08	     3	mov eax, [ebx].item.SellValue
  00002AEA  E8 00000000 E     3	call WriteDec
- 00002AEF  BA 0000062A R     3	mov edx, offset blank
+ 00002AEF  BA 0000064F R     3	mov edx, offset blank
  00002AF4  E8 00000000 E     3	call WriteString
- 00002AF9  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 00002AF9  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  00002AFE  E8 00000000 E     3	call WriteString
  00002B03  8B 43 14	     3	mov eax, [ebx].item.combatValue
  00002B06  E8 00000000 E     3	call WriteDec
- 00002B0B  BA 0000062A R     3	mov edx, offset blank
+ 00002B0B  BA 0000064F R     3	mov edx, offset blank
  00002B10  E8 00000000 E     3	call WriteString
  00002B15  B8 000007D0	     2		mov eax,2000
  00002B1A  E8 00000000 E     2		call Delay
  00002B1F		     2	endCase??004B:
  00002B1F  E9 FFFFF3D1	     1		jmp endInventory
  00002B24		     1	item8??0032:
- 00002B24  BB 00000459 R     1		mov ebx,offset s9 ;//storing item for use
- 00002B29  BA 0000061D R     2	mov edx, offset exitTitle
- 00002B2E  BA 00000579 R     2	mov edx, offset buyTitle
+ 00002B24  BB 0000047E R     1		mov ebx,offset s9 ;//storing item for use
+ 00002B29  BA 00000642 R     2	mov edx, offset exitTitle
+ 00002B2E  BA 0000059E R     2	mov edx, offset buyTitle
  00002B33  E8 00000000 E     2	call WriteString
- 00002B38  BA 000003D2 R     2	mov edx, offset infoTitle
+ 00002B38  BA 000003F7 R     2	mov edx, offset infoTitle
  00002B3D  E8 00000000 E     2	call WriteString
  00002B42  E8 00000000 E     3		call ReadDec
  00002B47  8B C8	     3		mov ecx, eax
@@ -4490,7 +4557,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002B76  29 05 00000050 R  2		sub c1.gold,eax ;//decrease yout gold
  00002B7C  8B C3	     2		mov eax,ebx ;//moving for add
  00002B7E  8B D3	     2		mov edx,ebx ;//storing for remove
- 00002B80  BB 00000363 R     3	mov ebx, offset i1
+ 00002B80  BB 00000388 R     3	mov ebx, offset i1
  00002B85		     3	notEmpty??0050:
  00002B85  83 3B 00	     3	cmp [ebx].item.itemCode,0
  00002B88  74 0B	     3	je isEmpty??0050 
@@ -4509,7 +4576,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002BA8  89 4B 14	     3	mov [ebx].item.combatValue,ecx
  00002BAB  EB 19	     3	jmp end??0050
  00002BAD		     3	inventoryFull??0050:
- 00002BAD  BA 0000042C R     3	mov edx, offset inventoryFullTitle
+ 00002BAD  BA 00000451 R     3	mov edx, offset inventoryFullTitle
  00002BB2  E8 00000000 E   *	    call   WriteString
  00002BB7  B8 000005DC	     3	mov eax, 1500
  00002BBC  E8 00000000 E     3	call Delay
@@ -4524,42 +4591,42 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002BDC  E9 00000088	     2		jmp endCase??004E
  00002BE1		     2		notEnoughGold??004E:
  00002BE1  E8 00000000 E     2		call clrscr
- 00002BE6  BA 0000058C R     2		mov edx, offset notEnoughGoldTitle
+ 00002BE6  BA 000005B1 R     2		mov edx, offset notEnoughGoldTitle
  00002BEB  E8 00000000 E   *	    call   WriteString
  00002BF0  B8 000007D0	     2		mov eax,2000
  00002BF5  E8 00000000 E     2		call Delay
  00002BFA  EB 6D	     2		jmp endCase??004E
  00002BFC		     2	infoItem??004E:
  00002BFC  E8 00000000 E     2		call clrscr
- 00002C01  BA 0000062A R     3	mov edx, offset blank
+ 00002C01  BA 0000064F R     3	mov edx, offset blank
  00002C06  E8 00000000 E     3	call WriteString
- 00002C0B  BA 000003FE R     3	mov edx, offset itemBuyValueTitle ;displays buy value
+ 00002C0B  BA 00000423 R     3	mov edx, offset itemBuyValueTitle ;displays buy value
  00002C10  E8 00000000 E     3	call WriteString
  00002C15  8B 43 04	     3	mov eax, [ebx].item.buyValue
  00002C18  E8 00000000 E     3	call WriteDec
- 00002C1D  BA 0000062A R     3	mov edx, offset blank
+ 00002C1D  BA 0000064F R     3	mov edx, offset blank
  00002C22  E8 00000000 E     3	call WriteString
- 00002C27  BA 000003EF R     3	mov edx, offset itemSellValueTitle ;displays sell value 
+ 00002C27  BA 00000414 R     3	mov edx, offset itemSellValueTitle ;displays sell value 
  00002C2C  E8 00000000 E     3	call WriteString
  00002C31  8B 43 08	     3	mov eax, [ebx].item.SellValue
  00002C34  E8 00000000 E     3	call WriteDec
- 00002C39  BA 0000062A R     3	mov edx, offset blank
+ 00002C39  BA 0000064F R     3	mov edx, offset blank
  00002C3E  E8 00000000 E     3	call WriteString
- 00002C43  BA 0000040C R     3	mov edx, offset itemCombatValueTitle ;displays combat value
+ 00002C43  BA 00000431 R     3	mov edx, offset itemCombatValueTitle ;displays combat value
  00002C48  E8 00000000 E     3	call WriteString
  00002C4D  8B 43 14	     3	mov eax, [ebx].item.combatValue
  00002C50  E8 00000000 E     3	call WriteDec
- 00002C55  BA 0000062A R     3	mov edx, offset blank
+ 00002C55  BA 0000064F R     3	mov edx, offset blank
  00002C5A  E8 00000000 E     3	call WriteString
  00002C5F  B8 000007D0	     2		mov eax,2000
  00002C64  E8 00000000 E     2		call Delay
  00002C69		     2	endCase??004E:
  00002C69  E9 FFFFF287	     1		jmp endInventory
  00002C6E		     1	item9??0032:
- 00002C6E  BB 0000043D R     1		mov ebx,offset s10 ;//storing item for use
+ 00002C6E  BB 00000462 R     1		mov ebx,offset s10 ;//storing item for use
  00002C73		     1	sellMode:
  00002C73  E8 00000000 E     1		call clrscr
- 00002C78  BB 00000363 R     2	mov ebx, offset i1
+ 00002C78  BB 00000388 R     2	mov ebx, offset i1
  00002C7D  60		     3	pushAD
  00002C7E  33 C9	     3	xor ecx,ecx
  00002C80		     3	DO1??0052:
@@ -4593,7 +4660,7 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002CC5  BA 0000001B R     4		mov edx, offset defaultName
  00002CCA		     4	print??0053:
  00002CCA  E8 00000000 E   *	    call   WriteString
- 00002CCF  BA 0000062A R     3	mov edx,offset blank
+ 00002CCF  BA 0000064F R     3	mov edx,offset blank
  00002CD4  E8 00000000 E     3	call WriteString
  00002CD9  8B 5B 10	     3	mov eBx,[ebx].item.next
  00002CDC  41		     3	inc ecx
@@ -4623,9 +4690,9 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00002D37  83 F9 09	     2	cmp ecx,9
  00002D3A  0F 84 00000297    2		je item9??0051
  00002D40		     2	item0??0051:
- 00002D40  BB 00000363 R     2		mov ebx,offset i1 ;//storing item for use
+ 00002D40  BB 00000388 R     2		mov ebx,offset i1 ;//storing item for use
  00002D45  E8 00000000 E     3	call clrscr
- 00002D4A  BA 00000582 R     3	mov edx, offset sellTitle
+ 00002D4A  BA 000005A7 R     3	mov edx, offset sellTitle
  00002D4F  E8 00000000 E   *	    call   WriteString
  00002D54  E8 00000000 E     4		call ReadDec
  00002D59  8B C8	     4		mov ecx, eax
@@ -4643,9 +4710,9 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 	   00000000
  00002D85  E9 00000294	     2		jmp endInventory??0051
  00002D8A		     2	item1??0051:
- 00002D8A  BB 00000347 R     2		mov ebx,offset i2 ;//storing item for use
+ 00002D8A  BB 0000036C R     2		mov ebx,offset i2 ;//storing item for use
  00002D8F  E8 00000000 E     3	call clrscr
- 00002D94  BA 00000582 R     3	mov edx, offset sellTitle
+ 00002D94  BA 000005A7 R     3	mov edx, offset sellTitle
  00002D99  E8 00000000 E   *	    call   WriteString
  00002D9E  E8 00000000 E     4		call ReadDec
  00002DA3  8B C8	     4		mov ecx, eax
@@ -4663,9 +4730,9 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 	   00000000
  00002DCF  E9 0000024A	     2		jmp endInventory??0051
  00002DD4		     2	item2??0051:
- 00002DD4  BB 0000032B R     2		mov ebx,offset i3 ;//storing item for use
+ 00002DD4  BB 00000350 R     2		mov ebx,offset i3 ;//storing item for use
  00002DD9  E8 00000000 E     3	call clrscr
- 00002DDE  BA 00000582 R     3	mov edx, offset sellTitle
+ 00002DDE  BA 000005A7 R     3	mov edx, offset sellTitle
  00002DE3  E8 00000000 E   *	    call   WriteString
  00002DE8  E8 00000000 E     4		call ReadDec
  00002DED  8B C8	     4		mov ecx, eax
@@ -4683,9 +4750,9 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 	   00000000
  00002E19  E9 00000200	     2		jmp endInventory??0051
  00002E1E		     2	item3??0051:
- 00002E1E  BB 0000030F R     2		mov ebx,offset i4 ;//storing item for use
+ 00002E1E  BB 00000334 R     2		mov ebx,offset i4 ;//storing item for use
  00002E23  E8 00000000 E     3	call clrscr
- 00002E28  BA 00000582 R     3	mov edx, offset sellTitle
+ 00002E28  BA 000005A7 R     3	mov edx, offset sellTitle
  00002E2D  E8 00000000 E   *	    call   WriteString
  00002E32  E8 00000000 E     4		call ReadDec
  00002E37  8B C8	     4		mov ecx, eax
@@ -4703,9 +4770,9 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 	   00000000
  00002E63  E9 000001B6	     2		jmp endInventory??0051
  00002E68		     2	item4??0051:
- 00002E68  BB 000002F3 R     2		mov ebx,offset i5 ;//storing item for use
+ 00002E68  BB 00000318 R     2		mov ebx,offset i5 ;//storing item for use
  00002E6D  E8 00000000 E     3	call clrscr
- 00002E72  BA 00000582 R     3	mov edx, offset sellTitle
+ 00002E72  BA 000005A7 R     3	mov edx, offset sellTitle
  00002E77  E8 00000000 E   *	    call   WriteString
  00002E7C  E8 00000000 E     4		call ReadDec
  00002E81  8B C8	     4		mov ecx, eax
@@ -4723,9 +4790,9 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 	   00000000
  00002EAD  E9 0000016C	     2		jmp endInventory??0051
  00002EB2		     2	item5??0051:
- 00002EB2  BB 000002D7 R     2		mov ebx,offset i6 ;//storing item for use
+ 00002EB2  BB 000002FC R     2		mov ebx,offset i6 ;//storing item for use
  00002EB7  E8 00000000 E     3	call clrscr
- 00002EBC  BA 00000582 R     3	mov edx, offset sellTitle
+ 00002EBC  BA 000005A7 R     3	mov edx, offset sellTitle
  00002EC1  E8 00000000 E   *	    call   WriteString
  00002EC6  E8 00000000 E     4		call ReadDec
  00002ECB  8B C8	     4		mov ecx, eax
@@ -4743,9 +4810,9 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 	   00000000
  00002EF7  E9 00000122	     2		jmp endInventory??0051
  00002EFC		     2	item6??0051:
- 00002EFC  BB 000002BB R     2		mov ebx,offset i7 ;//storing item for use
+ 00002EFC  BB 000002E0 R     2		mov ebx,offset i7 ;//storing item for use
  00002F01  E8 00000000 E     3	call clrscr
- 00002F06  BA 00000582 R     3	mov edx, offset sellTitle
+ 00002F06  BA 000005A7 R     3	mov edx, offset sellTitle
  00002F0B  E8 00000000 E   *	    call   WriteString
  00002F10  E8 00000000 E     4		call ReadDec
  00002F15  8B C8	     4		mov ecx, eax
@@ -4763,9 +4830,9 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 	   00000000
  00002F41  E9 000000D8	     2		jmp endInventory??0051
  00002F46		     2	item7??0051:
- 00002F46  BB 0000029F R     2		mov ebx,offset i8 ;//storing item for use
+ 00002F46  BB 000002C4 R     2		mov ebx,offset i8 ;//storing item for use
  00002F4B  E8 00000000 E     3	call clrscr
- 00002F50  BA 00000582 R     3	mov edx, offset sellTitle
+ 00002F50  BA 000005A7 R     3	mov edx, offset sellTitle
  00002F55  E8 00000000 E   *	    call   WriteString
  00002F5A  E8 00000000 E     4		call ReadDec
  00002F5F  8B C8	     4		mov ecx, eax
@@ -4783,9 +4850,9 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 	   00000000
  00002F8B  E9 0000008E	     2		jmp endInventory??0051
  00002F90		     2	item8??0051:
- 00002F90  BB 00000283 R     2		mov ebx,offset i9 ;//storing item for use
+ 00002F90  BB 000002A8 R     2		mov ebx,offset i9 ;//storing item for use
  00002F95  E8 00000000 E     3	call clrscr
- 00002F9A  BA 00000582 R     3	mov edx, offset sellTitle
+ 00002F9A  BA 000005A7 R     3	mov edx, offset sellTitle
  00002F9F  E8 00000000 E   *	    call   WriteString
  00002FA4  E8 00000000 E     4		call ReadDec
  00002FA9  8B C8	     4		mov ecx, eax
@@ -4803,9 +4870,9 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
 	   00000000
  00002FD5  EB 47	     2		jmp endInventory??0051
  00002FD7		     2	item9??0051:
- 00002FD7  BB 00000267 R     2		mov ebx,offset i10 ;//storing item for use
+ 00002FD7  BB 0000028C R     2		mov ebx,offset i10 ;//storing item for use
  00002FDC  E8 00000000 E     3	call clrscr
- 00002FE1  BA 00000582 R     3	mov edx, offset sellTitle
+ 00002FE1  BA 000005A7 R     3	mov edx, offset sellTitle
  00002FE6  E8 00000000 E   *	    call   WriteString
  00002FEB  E8 00000000 E     4		call ReadDec
  00002FF0  8B C8	     4		mov ecx, eax
@@ -4828,19 +4895,40 @@ c:\Irvine\SmallWin.inc(11) : warning A4011:multiple .MODEL directives found : .M
  00003023  E8 00000000 E     1	Call clrscr
  00003028  EB 00				jmp end_switch
  0000302A				end_switch:
- 0000302A  E9 FFFFD043			jmp while_main ;//default
+					_save_char
+ 0000302A  60		     1		pushad
+ 0000302B  60		     2		pushAD
+ 0000302C  BE 0000002C R     2		mov esi, offset C1
+ 00003031  BF 00000662 R     2		mov edi, offset save_write_buffer
+ 00003036  8A 06	     2		mov al, [esi]	
+ 00003038  B9 00000080	     2		mov ecx, 128 ;// sizeof(character)
+ 0000303D		     2	while$L:
+ 0000303D  AA		     2		stosb ;// inc edi and mov [edi], al
+ 0000303E  46		     2		inc esi
+ 0000303F  8A 06	     2		mov al, [esi]
+ 00003041  E2 FA	     2		loop while$L
+ 00003043  61		     2		popAD
+ 00003044  68 00000653 R   *	    push   OFFSET save_file
+ 00003049  68 00000662 R   *	    push   OFFSET save_write_buffer
+ 0000304E  E8 00000000 E   *	    call   save_character
+ 00003053  83 C4 08	   *	    add    esp, 000000008h
+ 00003056  61		     1		popad
+ 00003057  E9 FFFFD016			jmp while_main ;//default
 
+					
 
- 0000302F				 endwhile_main:
+ 0000305C				 endwhile_main:
+
+					
 					
 					invoke ExitProcess, 0
- 0000302F  6A 00	   *	    push   +000000000h
- 00003031  E8 00000000 E   *	    call   ExitProcess
+ 0000305C  6A 00	   *	    push   +000000000h
+ 0000305E  E8 00000000 E   *	    call   ExitProcess
 
- 00003036			main endp
+ 00003063			main endp
 
-				end main
-Microsoft (R) Macro Assembler Version 14.13.26129.0	    04/03/18 20:42:29
+				end
+Microsoft (R) Macro Assembler Version 14.12.25834.0	    04/05/18 13:19:15
 main.asm						     Symbols 2 - 1
 
 
@@ -4851,6 +4939,9 @@ Macros:
                 N a m e                 Type
 
 _get_input . . . . . . . . . . .	Proc
+_save_char . . . . . . . . . . .	Proc
+_test_save . . . . . . . . . . .	Proc
+_write_char_to_buffer  . . . . .	Proc
 mAddItem . . . . . . . . . . . .	Proc
 mBuyOptions  . . . . . . . . . .	Proc
 mCombat  . . . . . . . . . . . .	Proc
@@ -4952,7 +5043,7 @@ SYSTEMTIME . . . . . . . . . . .	 00000010
   wMilliseconds  . . . . . . . .	 0000000E	 Word
 WINDOW_BUFFER_SIZE_RECORD  . . .	 00000004
   dwSize . . . . . . . . . . . .	 00000000	 DWord
-character  . . . . . . . . . . .	 0000005C
+character  . . . . . . . . . . .	 00000081
   xPos . . . . . . . . . . . . .	 00000000	 DWord
   yPos . . . . . . . . . . . . .	 00000004	 DWord
   characterName  . . . . . . . .	 00000008	 Byte
@@ -4973,6 +5064,7 @@ character  . . . . . . . . . . .	 0000005C
   weaponSellValue  . . . . . . .	 00000050	 DWord
   weaponDamage . . . . . . . . .	 00000054	 DWord
   defence  . . . . . . . . . . .	 00000058	 DWord
+  char_pad . . . . . . . . . . .	 0000005C	 Byte
 enemy  . . . . . . . . . . . . .	 00000020
   enemyName  . . . . . . . . . .	 00000000	 Byte
   hpMax  . . . . . . . . . . . .	 00000008	 DWord
@@ -4997,8 +5089,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 0000062E DWord	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00003036 DWord	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000A63 DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00003063 DWord	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -5105,7 +5197,7 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00003036 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00003063 Public C
   while_main . . . . . . . . . .	L Near	 00000072 _TEXT	
   character_sheet  . . . . . . .	L Near	 00000111 _TEXT	
   item0??0001  . . . . . . . . .	L Near	 00000317 _TEXT	
@@ -5390,9 +5482,12 @@ main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00003036 Public 
   endInventory??0051 . . . . . .	L Near	 0000301E _TEXT	
   exitShop . . . . . . . . . . .	L Near	 00003023 _TEXT	
   end_switch . . . . . . . . . .	L Near	 0000302A _TEXT	
-  endwhile_main  . . . . . . . .	L Near	 0000302F _TEXT	
+  while$L  . . . . . . . . . . .	L Near	 0000303D _TEXT	
+  endwhile_main  . . . . . . . .	L Near	 0000305C _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
+save_character . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
+test_print_num . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 
@@ -5610,73 +5705,73 @@ VK_UP  . . . . . . . . . . . . .	Number	 00000026h
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
-agilityTitle . . . . . . . . . .	Byte	 000000F5 _DATA	
-attackTitle  . . . . . . . . . .	Byte	 000001EB _DATA	
+agilityTitle . . . . . . . . . .	Byte	 0000011A _DATA	
+attackTitle  . . . . . . . . . .	Byte	 00000210 _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
-blank  . . . . . . . . . . . . .	Byte	 0000062A _DATA	
+blank  . . . . . . . . . . . . .	Byte	 0000064F _DATA	
 blue . . . . . . . . . . . . . .	Number	 00000001h   
-brawnTitle . . . . . . . . . . .	Byte	 000000EC _DATA	
+brawnTitle . . . . . . . . . . .	Byte	 00000111 _DATA	
 brown  . . . . . . . . . . . . .	Number	 00000006h   
-buyTitle . . . . . . . . . . . .	Byte	 00000579 _DATA	
-characterSheetTitle  . . . . . .	Byte	 00000088 _DATA	
-characterSheet . . . . . . . . .	Byte	 000005B5 _DATA	
-combatAttributesTitle  . . . . .	Byte	 00000113 _DATA	
-combatMenuTitle  . . . . . . . .	Byte	 0000019F _DATA	
-combatOptionsMenuTitle . . . . .	Byte	 000001D6 _DATA	
-combatTitle  . . . . . . . . . .	Byte	 000005C9 _DATA	
-command1 . . . . . . . . . . . .	Byte	 00000150 _DATA	
-continueCommand  . . . . . . . .	Byte	 00000603 _DATA	
+buyTitle . . . . . . . . . . . .	Byte	 0000059E _DATA	
+characterSheetTitle  . . . . . .	Byte	 000000AD _DATA	
+characterSheet . . . . . . . . .	Byte	 000005DA _DATA	
+combatAttributesTitle  . . . . .	Byte	 00000138 _DATA	
+combatMenuTitle  . . . . . . . .	Byte	 000001C4 _DATA	
+combatOptionsMenuTitle . . . . .	Byte	 000001FB _DATA	
+combatTitle  . . . . . . . . . .	Byte	 000005EE _DATA	
+command1 . . . . . . . . . . . .	Byte	 00000175 _DATA	
+continueCommand  . . . . . . . .	Byte	 00000628 _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
-damageTitle  . . . . . . . . . .	Byte	 00000131 _DATA	
+damageTitle  . . . . . . . . . .	Byte	 00000156 _DATA	
 defaultName  . . . . . . . . . .	Byte	 0000001B _DATA	
-defenceTitle . . . . . . . . . .	Byte	 0000013B _DATA	
-dequipTitle  . . . . . . . . . .	Byte	 000005EF _DATA	
-discardTitle . . . . . . . . . .	Byte	 000003B8 _DATA	
-e1 . . . . . . . . . . . . . . .	enemy	 0000017C _DATA	
-enemyDamageTitle . . . . . . . .	Byte	 000001C6 _DATA	
-enemyDefeatedEvent . . . . . . .	Byte	 00000224 _DATA	
-enemyDefeated  . . . . . . . . .	Byte	 0000019E _DATA	
-enemyHPTitle . . . . . . . . . .	Byte	 000001BA _DATA	
-enemyNameTitle . . . . . . . . .	Byte	 000001AC _DATA	
-equipTitle . . . . . . . . . . .	Byte	 000003C6 _DATA	
-equippedWeaponTitle  . . . . . .	Byte	 00000146 _DATA	
-escapeEvent  . . . . . . . . . .	Byte	 00000201 _DATA	
-escape . . . . . . . . . . . . .	Byte	 0000019C _DATA	
-exitTitle  . . . . . . . . . . .	Byte	 0000061D _DATA	
+defenceTitle . . . . . . . . . .	Byte	 00000160 _DATA	
+dequipTitle  . . . . . . . . . .	Byte	 00000614 _DATA	
+discardTitle . . . . . . . . . .	Byte	 000003DD _DATA	
+e1 . . . . . . . . . . . . . . .	enemy	 000001A1 _DATA	
+enemyDamageTitle . . . . . . . .	Byte	 000001EB _DATA	
+enemyDefeatedEvent . . . . . . .	Byte	 00000249 _DATA	
+enemyDefeated  . . . . . . . . .	Byte	 000001C3 _DATA	
+enemyHPTitle . . . . . . . . . .	Byte	 000001DF _DATA	
+enemyNameTitle . . . . . . . . .	Byte	 000001D1 _DATA	
+equipTitle . . . . . . . . . . .	Byte	 000003EB _DATA	
+equippedWeaponTitle  . . . . . .	Byte	 0000016B _DATA	
+escapeEvent  . . . . . . . . . .	Byte	 00000226 _DATA	
+escape . . . . . . . . . . . . .	Byte	 000001C1 _DATA	
+exitTitle  . . . . . . . . . . .	Byte	 00000642 _DATA	
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
-expTitle . . . . . . . . . . . .	Byte	 000000C2 _DATA	
-fleeTitle  . . . . . . . . . . .	Byte	 000001F7 _DATA	
-fortuneTitle . . . . . . . . . .	Byte	 00000108 _DATA	
-goldTitle  . . . . . . . . . . .	Byte	 000000CA _DATA	
+expTitle . . . . . . . . . . . .	Byte	 000000E7 _DATA	
+fleeTitle  . . . . . . . . . . .	Byte	 0000021C _DATA	
+fortuneTitle . . . . . . . . . .	Byte	 0000012D _DATA	
+goldTitle  . . . . . . . . . . .	Byte	 000000EF _DATA	
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
-hpTitle  . . . . . . . . . . . .	Byte	 0000012B _DATA	
-i10  . . . . . . . . . . . . . .	item	 00000267 _DATA	
-i1 . . . . . . . . . . . . . . .	item	 00000363 _DATA	
-i2 . . . . . . . . . . . . . . .	item	 00000347 _DATA	
-i3 . . . . . . . . . . . . . . .	item	 0000032B _DATA	
-i4 . . . . . . . . . . . . . . .	item	 0000030F _DATA	
-i5 . . . . . . . . . . . . . . .	item	 000002F3 _DATA	
-i6 . . . . . . . . . . . . . . .	item	 000002D7 _DATA	
-i7 . . . . . . . . . . . . . . .	item	 000002BB _DATA	
-i8 . . . . . . . . . . . . . . .	item	 0000029F _DATA	
-i9 . . . . . . . . . . . . . . .	item	 00000283 _DATA	
-infoTitle  . . . . . . . . . . .	Byte	 000003D2 _DATA	
+hpTitle  . . . . . . . . . . . .	Byte	 00000150 _DATA	
+i10  . . . . . . . . . . . . . .	item	 0000028C _DATA	
+i1 . . . . . . . . . . . . . . .	item	 00000388 _DATA	
+i2 . . . . . . . . . . . . . . .	item	 0000036C _DATA	
+i3 . . . . . . . . . . . . . . .	item	 00000350 _DATA	
+i4 . . . . . . . . . . . . . . .	item	 00000334 _DATA	
+i5 . . . . . . . . . . . . . . .	item	 00000318 _DATA	
+i6 . . . . . . . . . . . . . . .	item	 000002FC _DATA	
+i7 . . . . . . . . . . . . . . .	item	 000002E0 _DATA	
+i8 . . . . . . . . . . . . . . .	item	 000002C4 _DATA	
+i9 . . . . . . . . . . . . . . .	item	 000002A8 _DATA	
+infoTitle  . . . . . . . . . . .	Byte	 000003F7 _DATA	
 input_state  . . . . . . . . . .	DWord	 00000028 _DATA	
-inventoryFullTitle . . . . . . .	Byte	 0000042C _DATA	
-inventoryTitle . . . . . . . . .	Byte	 000005E1 _DATA	
-itemBuyValueTitle  . . . . . . .	Byte	 000003FE _DATA	
-itemCombatValueTitle . . . . . .	Byte	 0000040C _DATA	
+inventoryFullTitle . . . . . . .	Byte	 00000451 _DATA	
+inventoryTitle . . . . . . . . .	Byte	 00000606 _DATA	
+itemBuyValueTitle  . . . . . . .	Byte	 00000423 _DATA	
+itemCombatValueTitle . . . . . .	Byte	 00000431 _DATA	
 itemName1  . . . . . . . . . . .	Byte	 00000000 _DATA	
 itemName2  . . . . . . . . . . .	Byte	 00000007 _DATA	
 itemName3  . . . . . . . . . . .	Byte	 0000000D _DATA	
 itemName4  . . . . . . . . . . .	Byte	 00000015 _DATA	
-itemNameTitle  . . . . . . . . .	Byte	 000003E1 _DATA	
-itemSellValueTitle . . . . . . .	Byte	 000003EF _DATA	
-itemType . . . . . . . . . . . .	Byte	 0000041C _DATA	
-levelTitle . . . . . . . . . . .	Byte	 000000B8 _DATA	
-levelUpTitle . . . . . . . . . .	Byte	 000005D4 _DATA	
-leveledUpResponse  . . . . . . .	Byte	 00000255 _DATA	
+itemNameTitle  . . . . . . . . .	Byte	 00000406 _DATA	
+itemSellValueTitle . . . . . . .	Byte	 00000414 _DATA	
+itemType . . . . . . . . . . . .	Byte	 00000441 _DATA	
+levelTitle . . . . . . . . . . .	Byte	 000000DD _DATA	
+levelUpTitle . . . . . . . . . .	Byte	 000005F9 _DATA	
+leveledUpResponse  . . . . . . .	Byte	 0000027A _DATA	
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
 lightGray  . . . . . . . . . . .	Number	 00000007h   
@@ -5684,37 +5779,40 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
-mainMenuTitle  . . . . . . . . .	Byte	 0000059E _DATA	
-mindTitle  . . . . . . . . . . .	Byte	 00000100 _DATA	
-nameTitle  . . . . . . . . . . .	Byte	 000000AF _DATA	
-notEnoughGoldTitle . . . . . . .	Byte	 0000058C _DATA	
-notEnoughResponse  . . . . . . .	Byte	 0000023D _DATA	
-playerDefeatedEvent  . . . . . .	Byte	 00000210 _DATA	
-playerDefeated . . . . . . . . .	Byte	 0000019D _DATA	
-primaryAttributesTitle . . . . .	Byte	 000000D3 _DATA	
-quitTitle  . . . . . . . . . . .	Byte	 000005AA _DATA	
+mainMenuTitle  . . . . . . . . .	Byte	 000005C3 _DATA	
+mindTitle  . . . . . . . . . . .	Byte	 00000125 _DATA	
+nameTitle  . . . . . . . . . . .	Byte	 000000D4 _DATA	
+notEnoughGoldTitle . . . . . . .	Byte	 000005B1 _DATA	
+notEnoughResponse  . . . . . . .	Byte	 00000262 _DATA	
+playerDefeatedEvent  . . . . . .	Byte	 00000235 _DATA	
+playerDefeated . . . . . . . . .	Byte	 000001C2 _DATA	
+primaryAttributesTitle . . . . .	Byte	 000000F8 _DATA	
+quitTitle  . . . . . . . . . . .	Byte	 000005CF _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
-s10  . . . . . . . . . . . . . .	item	 0000043D _DATA	
-s1 . . . . . . . . . . . . . . .	item	 00000539 _DATA	
-s2 . . . . . . . . . . . . . . .	item	 0000051D _DATA	
-s3 . . . . . . . . . . . . . . .	item	 00000501 _DATA	
-s4 . . . . . . . . . . . . . . .	item	 000004E5 _DATA	
-s5 . . . . . . . . . . . . . . .	item	 000004C9 _DATA	
-s6 . . . . . . . . . . . . . . .	item	 000004AD _DATA	
-s7 . . . . . . . . . . . . . . .	item	 00000491 _DATA	
-s8 . . . . . . . . . . . . . . .	item	 00000475 _DATA	
-s9 . . . . . . . . . . . . . . .	item	 00000459 _DATA	
-selectItemTitle  . . . . . . . .	Byte	 000003A3 _DATA	
-sellModeTitle  . . . . . . . . .	Byte	 00000560 _DATA	
-sellTitle  . . . . . . . . . . .	Byte	 00000582 _DATA	
-shopMenuTitle  . . . . . . . . .	Byte	 00000555 _DATA	
-shopTitle  . . . . . . . . . . .	Byte	 000005FA _DATA	
-t1 . . . . . . . . . . . . . . .	item	 0000037F _DATA	
-tempString . . . . . . . . . . .	Byte	 0000039B _DATA	
+s10  . . . . . . . . . . . . . .	item	 00000462 _DATA	
+s1 . . . . . . . . . . . . . . .	item	 0000055E _DATA	
+s2 . . . . . . . . . . . . . . .	item	 00000542 _DATA	
+s3 . . . . . . . . . . . . . . .	item	 00000526 _DATA	
+s4 . . . . . . . . . . . . . . .	item	 0000050A _DATA	
+s5 . . . . . . . . . . . . . . .	item	 000004EE _DATA	
+s6 . . . . . . . . . . . . . . .	item	 000004D2 _DATA	
+s7 . . . . . . . . . . . . . . .	item	 000004B6 _DATA	
+s8 . . . . . . . . . . . . . . .	item	 0000049A _DATA	
+s9 . . . . . . . . . . . . . . .	item	 0000047E _DATA	
+save_file  . . . . . . . . . . .	Byte	 00000653 _DATA	
+save_write_buffer  . . . . . . .	Byte	 00000662 _DATA	
+save_write_len . . . . . . . . .	Number	 00000400h   
+selectItemTitle  . . . . . . . .	Byte	 000003C8 _DATA	
+sellModeTitle  . . . . . . . . .	Byte	 00000585 _DATA	
+sellTitle  . . . . . . . . . . .	Byte	 000005A7 _DATA	
+shopMenuTitle  . . . . . . . . .	Byte	 0000057A _DATA	
+shopTitle  . . . . . . . . . . .	Byte	 0000061F _DATA	
+t1 . . . . . . . . . . . . . . .	item	 000003A4 _DATA	
+tempString . . . . . . . . . . .	Byte	 000003C0 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
-xPosTitle  . . . . . . . . . . .	Byte	 0000009D _DATA	
-yPosTitle  . . . . . . . . . . .	Byte	 000000A6 _DATA	
+xPosTitle  . . . . . . . . . . .	Byte	 000000C2 _DATA	
+yPosTitle  . . . . . . . . . . .	Byte	 000000CB _DATA	
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   
 
 	   1 Warnings

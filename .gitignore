@@ -1,4 +1,8 @@
 
+### project specific files ###
+*.save
+
+
 # Created by https://www.gitignore.io/api/c++,batch,windows,assembler,visualstudio
 
 ### Assembler ###

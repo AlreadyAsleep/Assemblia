@@ -27,4 +27,6 @@ weaponDamage    DWORD 0
 
 defence        DWORD 0
 
+char_pad byte 37 dup (0) ;// pad character struct to 128 bytes
+
 character ends
