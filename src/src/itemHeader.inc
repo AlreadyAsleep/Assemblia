@@ -11,4 +11,7 @@ next      DWORD NULL
 combatValue DWORD NULL ;// attack for weapons defense for armor
 itemType  DWORD NULL
 
+pad DWORD NULL
+
+
 item ends
