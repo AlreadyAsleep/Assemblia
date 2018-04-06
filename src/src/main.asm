@@ -3,10 +3,6 @@
 ;// Since: 3/16/18
 
 
-;includelib libcmt.lib
-;includelib libvcruntime.lib
-;includelib libucrt.lib
-;includelib legacy_stdio_definitions.lib
 
 .386
 .model stdcall, flat
@@ -52,6 +48,8 @@ blank byte " ", 13, 10, 0
 
 save_character proto C character: ptr byte,  filename: ptr byte
 test_print_num proto C
+
+include save_vars.inc
 
 
 .code
@@ -128,8 +126,10 @@ while_main:						;//while( ecx != 0 )
 		mTravel
 		jmp end_switch
 	end_switch:
+	_save_char
 	jmp while_main ;//default
 
+	
 
 	 endwhile_main:
 

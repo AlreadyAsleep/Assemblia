@@ -199,4 +199,19 @@ mov c1.damageMax,eax
 popAD
 endm
 
+_write_char_to_buffer MACRO ;// writes the character struct to the save buffer
+	Local L
+	pushAD
+	mov esi, offset C1
+	mov edi, offset save_write_buffer
+	mov al, [esi]	
+	mov ecx, 128 ;// sizeof(character)
+while$L:
+	stosb ;// inc edi and mov [edi], al
+	inc esi
+	mov al, [esi]
+	loop while$L
+
+	popAD
+endm
 
