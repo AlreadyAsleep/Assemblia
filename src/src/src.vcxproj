@@ -26,6 +26,10 @@
     <None Include="itemHeader.inc" />
     <None Include="levelUp.inc" />
     <None Include="shop.inc" />
+    <None Include="travel.inc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="save.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{30111174-79c6-4488-be72-6fb074774414}</ProjectGuid>

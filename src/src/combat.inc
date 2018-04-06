@@ -16,6 +16,14 @@ escapeEvent          byte "You Escaped!"          , 13, 10, 0
 playerDefeatedEvent  byte "You were defeated"     , 13, 10, 0
 enemyDefeatedEvent   byte "You Defeated the Enemy", 13, 10, 0
 
+youGotTitle     byte "You got "    , 0,10,0
+goldRewardTitle byte " gold"       ,13,10,0
+expRewardTitle  byte " experience" ,13,10,0
+
+youTookTitle  byte "You took "  , 0,10,0
+damageCombatTitle   byte " damage"    ,13,10,0
+youDealtTitle byte "You dealt " , 0,10,0
+
 mCombat MACRO
 Local L
 pushAD
@@ -113,13 +121,13 @@ invoke WriteString
 
 	
 		cmp ecx, 0 ;//switch
-		je attack
+		je attack&L
 		cmp ecx, 1
-		je flee
+		je flee&L
 	
 		jmp end_switch&L
 
-		attack:
+		attack&L:
 			mov eax,c1.damageMax;//player attacks
 			mov ebx,c1.damageMin
 			sub eax,ebx
@@ -128,13 +136,23 @@ invoke WriteString
 			add eax,ebx
 			sub e1.hp,eax
 
+			mov edx, offset youDealtTitle
+			invoke WriteString
+			call WriteDec
+			mov edx, offset damageCombatTitle
+			invoke WriteString
+
+			mov edx, offset continueCommand
+			invoke WriteString
+			_get_input
+
 			cmp e1.hp,0 ;//check to see if enemy died
-			jle enemy_dead
+			jle enemy_dead&L
 			jmp end_switch&L
-			enemy_dead:
+			enemy_dead&L:
 				mov enemyDefeated,1
 				jmp AND_FALSE_COMBAT&L
-		flee:
+		flee&L:
 			mov escape,1
 			
 		end_switch&L:
@@ -147,33 +165,45 @@ invoke WriteString
 			add eax,ebx
 			sub c1.hp,eax
 
+			mov edx, offset youTookTitle
+			invoke WriteString
+			call WriteDec
+			mov edx, offset damageCombatTitle
+			invoke WriteString
+
+			mov edx, offset continueCommand
+			invoke WriteString
+			_get_input
+
+			call Clrscr
+
 			cmp c1.hp,0    ;// checking to see if character died
-			jle character_dead
-			jmp character_not_dead
-			character_dead:
+			jle character_dead&L
+			jmp character_not_dead&L
+			character_dead&L:
 				mov playerDefeated,1
-			character_not_dead:
+			character_not_dead&L:
 
 		jmp WHILE_COMBAT&L;//default
 
 AND_FALSE_COMBAT&L:
 
 cmp escape,0
-je not_escape
+je not_escape&L
 
 mov edx, offset escapeEvent;//will print if player fleed
 invoke WriteString
-jmp eventDetermined
+jmp eventDetermined&L
 
-not_escape:
+not_escape&L:
 cmp playerDefeated,0
-je not_playerDefeated
+je not_playerDefeated&L
 
 mov edx, offset playerDefeatedEvent;//will print if player was defeated
 invoke WriteString
-jmp eventDetermined
+jmp eventDetermined&L
 
-not_playerDefeated:
+not_playerDefeated&L:
 
 mov edx,offset enemyDefeatedEvent;//will print if enemy was defeated
 invoke WriteString
@@ -189,13 +219,33 @@ mov ebx,c1.gold
 add ebx,eax
 mov c1.gold,ebx
 
+
+mov edx,offset youGotTitle
+invoke WriteString
+call WriteDec
+mov edx,offset goldRewardTitle
+invoke WriteString
+
 mov eax,e1.expReward ;//rewarding player exp
 add c1.exp,eax
 
-eventDetermined:
+mov edx,offset youGotTitle
+invoke WriteString
+call WriteDec
+mov edx,offset expRewardTitle
+invoke WriteString
 
-mov eax,2000
-call Delay
+
+
+eventDetermined&L:
+
+mov edx, offset continueCommand
+invoke WriteString
+
+_get_input
+
+
+
 
 
 

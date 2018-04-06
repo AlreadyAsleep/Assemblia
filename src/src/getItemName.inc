@@ -1,8 +1,11 @@
 ;// gets items name based off code and prints it
-itemName1 byte "rope" , 0 , 10, 0
-itemName2 byte "gun"  , 0 , 10, 0
+itemName1 byte "dagger" , 0 , 10, 0
+itemName2 byte "halberd"  , 0 , 10, 0
 itemName3 byte "sword", 0 , 10, 0
 itemName4 byte "axe"  , 0 , 10, 0
+itemName5 byte "spear"  , 0 , 10, 0
+itemName6 byte "katana"  , 0 , 10, 0
+itemName7 byte "bow"  , 0 , 10, 0
 
 defaultName   byte "Empty Slot", 0 , 10, 0
 

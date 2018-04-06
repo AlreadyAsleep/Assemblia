@@ -28,19 +28,21 @@ include combat.inc
 include levelUp.inc
 include inventory.inc
 include shop.inc
+include travel.inc
 
 WriteDec proto
 ReadDec proto
 ExitProcess proto, dwExitCode:dword
 
 mainMenuTitle    byte "Main Menu"        , 13, 10, 0
-quitTitle        byte "909 Quit"           , 13, 10, 0
+quitTitle        byte "909 Quit"         , 13, 10, 0
 characterSheet   byte "1 Character Sheet", 13, 10, 0
 combatTitle      byte "2 Combat"         , 13, 10, 0
 levelUpTitle     byte "3 Level Up"       , 13, 10, 0
 inventoryTitle   byte "4 Inventory"      , 13, 10, 0
 dequipTitle      byte "5 Dequip"         , 13, 10, 0
 shopTitle        byte "6 Shop"           , 13, 10, 0
+travelTitle      byte "7 Travel"         , 13, 10, 0
 
 continueCommand byte "Press Enter to Continue",13, 10, 0
 
@@ -79,6 +81,8 @@ while_main:						;//while( ecx != 0 )
 		call WriteString
 		mov edx, offset shopTitle
 		call WriteString
+		mov edx, offset travelTitle
+		call WriteString
 
 		_get_input
 
@@ -98,6 +102,8 @@ while_main:						;//while( ecx != 0 )
 	je dequip
 	cmp ecx, 6
 	je shop
+	cmp ecx, 7
+	je travel
 	jmp end_switch
 
 	character_sheet:
@@ -117,6 +123,9 @@ while_main:						;//while( ecx != 0 )
 		jmp end_switch
 	shop:
 		mShop
+		jmp end_switch
+	travel:
+		mTravel
 		jmp end_switch
 	end_switch:
 	jmp while_main ;//default
