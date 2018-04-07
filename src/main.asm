@@ -15,6 +15,7 @@ include itemHeader.inc
 
 .data
 include getItemName.inc
+include getEnemyName.inc
 include input_data.inc
 include get_input.inc
 

@@ -1,7 +1,7 @@
 ;// structure of enemy object
 enemy struct 
 
-enemyName  db    8 dup (?)
+enemyNameCode  DWORD 0
 
 hpMax          DWORD 0
 hp             DWORD 0

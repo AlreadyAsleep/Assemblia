@@ -23,6 +23,12 @@ cmp eax,3
 je item2&L
 cmp eax,4
 je item3&L
+cmp eax,5
+je item4&L
+cmp eax,6
+je item5&L
+cmp eax,7
+je item6&L
 
 jmp default&L
 
@@ -44,6 +50,18 @@ item3&L:
 	mov edx, offset itemName4
 	
 	jmp print&L
+item4&L:
+	mov edx, offset itemName5
+	
+	jmp print&L
+item5&L:
+	mov edx, offset itemName6
+	
+	jmp print&L
+item6&L:
+	mov edx, offset itemName7
+	
+	jmp print&L
 
 default&L:
 	mov edx, offset defaultName
@@ -51,5 +69,31 @@ default&L:
 print&L:
 	invoke WriteString
 
+
+endm
+
+mInitializeItem MACRO
+Local L
+
+mov eax,7 ;//generating item name
+call RandomRange
+inc eax
+
+mov t1.itemCode,eax 
+
+mov eax,2 ;//generating combatValue
+call RandomRange
+inc eax
+
+mul c1.level
+
+mov t1.combatValue,eax
+
+inc eax ;//generating buyValue
+mov t1.buyValue,eax
+
+dec eax ;//generating sellValue
+dec eax
+mov t1.sellValue,eax
 
 endm

@@ -8,9 +8,9 @@ i7 item {0,0,0,i6,i8}
 i6 item {0,0,0,i5,i7}
 i5 item {0,0,0,i4,i6}
 i4 item {0,0,0,i3,i5}
-i3 item {1,1,2,i2,i4,5,"W"}
-i2 item {2,1,2,i1,i3,10,"W"}
-i1 item {3,1,2,null,i2,3,"A"}
+i3 item {0,0,0,i2,i4,0,"W"}
+i2 item {0,0,0,i1,i3,0,"W"}
+i1 item {0,0,0,null,i2,0,"A"}
 
 t1 item {4,1,2,NULL,NULL,3}
 

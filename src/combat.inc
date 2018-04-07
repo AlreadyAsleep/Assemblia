@@ -24,9 +24,19 @@ youTookTitle  byte "You took "  , 0,10,0
 damageCombatTitle   byte " damage"    ,13,10,0
 youDealtTitle byte "You dealt " , 0,10,0
 
+attackedResponse byte "You are attacked!",13,10,0
+
 mCombat MACRO
 Local L
 pushAD
+
+mov edx, offset attackedResponse
+invoke WriteString
+mov edx, offset continueCommand
+invoke WriteString
+
+_get_input
+call clrscr
 
 mInitializeEnemy
 
@@ -54,8 +64,9 @@ AND_COMBAT_TRUE&L:
 
 	mov edx, offset enemyNameTitle ;//prints enemy name
 	invoke WriteString
-	mov edx, offset e1.enemyName
-	invoke WriteString
+	
+	mGetEnemyName
+
 	mov edx, offset blank
 	invoke WriteString
 
@@ -208,6 +219,8 @@ not_playerDefeated&L:
 mov edx,offset enemyDefeatedEvent;//will print if enemy was defeated
 invoke WriteString
 
+
+mInitializeItem
 mov eax, offset t1 ;//adds axe to inventory
 mAddItem
 

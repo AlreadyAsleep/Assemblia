@@ -25,7 +25,7 @@ notEnoughGoldTitle byte "Not Enough Gold" , 13, 10, 0
 mShop MACRO
 Local L
 
-
+mInitializeShop
 
 mov edx, offset shopPrompt1
 invoke WriteString
@@ -300,5 +300,35 @@ mov c1.gold,edx
 
 mRemoveItem
 
+endm
+
+mInitializeShop MACRO
+Local L
+
+mov ebx, offset s1
+
+
+while1&L:
+cmp ebx,null
+jne do&L
+jmp end_while&L
+do&L:
+
+mInitializeItem
+
+mov eax, t1.item.itemCode
+mov [ebx].item.itemCode, eax
+mov eax, t1.item.buyValue
+mov [ebx].item.buyValue, eax
+mov eax, t1.item.sellValue
+mov [ebx].item.sellValue, eax
+mov eax, t1.item.combatValue
+mov [ebx].item.combatValue, eax
+
+mov ebx,[ebx].item.next
+inc ecx
+jmp while1&L
+
+end_while&L:
 endm
 

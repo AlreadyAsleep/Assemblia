@@ -1,8 +1,10 @@
-e1 enemy{"Boglin",1,1,1,1,1,1}
+e1 enemy{1,1,1,1,1,1,1}
 
 ;//initialize emeny
 mInitializeEnemy MACRO
 pushAD
+
+mSetEnemyName
 
 mov ebx, c1.level ;//initialize enemy hp
 mov eax,3
