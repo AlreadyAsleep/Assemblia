@@ -210,7 +210,7 @@ invoke WriteString
 _get_input
 
 cmp ecx,909
-	jmp while_main
+	je while_main
 cmp ecx,0
 	je item0&L
 cmp ecx,1
@@ -288,11 +288,14 @@ mSellOptions MACRO
 Local L
 call clrscr
 
+mov edx, offset exitTitle
+invoke WriteString
 mov edx, offset sellTitle
 invoke WriteString
 
 _get_input
-
+cmp ecx, 909
+je goBack&L
 cmp ecx, 1
 je doSell&L
 
@@ -303,6 +306,8 @@ add edx,eax
 mov c1.gold,edx
 
 mRemoveItem
+goBack&L:
+call clrscr
 
 endm
 
