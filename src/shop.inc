@@ -137,6 +137,7 @@ endm
 mBuyOptions MACRO
 local L
 mov edx, offset exitTitle
+invoke WriteString
 mov edx, offset buyTitle
 call WriteString
 mov edx, offset infoTitle
@@ -146,7 +147,6 @@ _get_input
 
 cmp ecx,909
 je exit&L
-
 cmp ecx,2
 je buyItem&L
 cmp ecx,3
@@ -189,7 +189,7 @@ infoItem&L:
 	call Delay
 	
 endCase&L:
-
+call clrscr
 endm
 
 mSellMode MACRO

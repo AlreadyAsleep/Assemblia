@@ -16,13 +16,13 @@ mov ebx,c1.expToNext
 cmp eax,ebx
 jl notEnough
 
-inc c1.level
-mInitializeCharacter
-
 mov eax,c1.exp
 mov ebx,c1.expToNext
 sub eax,ebx
 mov c1.exp,eax
+
+inc c1.level
+mInitializeCharacter
 
 
 mov edx, offset attributeSelection

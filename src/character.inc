@@ -175,7 +175,12 @@ endm
 mInitializeCharacter MACRO ;//prints character sheet
 pushAD
 
-
+mov eax, c1.expToNext ;//intialize exp to next level
+mov ebx,3
+mul ebx
+mov ebx,2
+div ebx
+mov c1.expToNext,eax 
 
 inc c1.brawn   ;// sets primary attributes
 inc c1.agility
@@ -197,6 +202,17 @@ add eax,ebx
 mov c1.damageMax,eax
 
 popAD
+endm
+
+mUpdateWeapon MACRO
+mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
+sar eax,1;//divide by 2
+add eax,c1.weaponDamage
+mov c1.damageMin,eax
+mov ebx,c1.agility
+sar ebx,2;//divide by 4
+add eax,ebx
+mov c1.damageMax,eax
 endm
 
 _write_char_to_buffer MACRO ;// writes the character struct to the save buffer

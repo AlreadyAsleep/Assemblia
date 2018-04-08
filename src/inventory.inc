@@ -34,10 +34,15 @@ inventoryFullTitle   byte "INVENTORY FULL"   , 0, 10, 0
 
 unequipScuccesfulTitle byte "You unequip your items" ,13,10,0
 
+unequipFirst byte "Unequip your items first" ,13,10,0
+
 ;//displays inventory
 mDisplayInventory MACRO
 Local L
 pushAD
+
+mov edx, offset exitTitle
+invoke WriteString
 
 xor ecx,ecx
 DO1&L:
@@ -62,6 +67,10 @@ endm
 
 mInventory MACRO
 
+
+continueInventory:
+call clrscr
+
 mov edx, offset selectItemTitle
 call WriteString
 
@@ -69,6 +78,8 @@ mov eBx, offset i1
 mDisplayInventory
 _get_input
 
+cmp ecx,909
+	je endInventory
 cmp ecx,0
 	je item0
 cmp ecx,1
@@ -93,43 +104,43 @@ cmp ecx,9
 item0:
 	mov ebx,offset i1 ;//storing item for use
 	mitemOptions
-	jmp endInventory
+	jmp continueInventory
 item1:
 	mov ebx,offset i2 ;//storing item for use
 	mitemOptions
-	jmp endInventory
+	jmp continueInventory
 item2:
 	mov ebx,offset i3 ;//storing item for use
 	mitemOptions
-	jmp endInventory
+	jmp continueInventory
 item3:
 	mov ebx,offset i4 ;//storing item for use
 	mitemOptions
-	jmp endInventory
+	jmp continueInventory
 item4:
 	mov ebx,offset i5 ;//storing item for use
 	mitemOptions
-	jmp endInventory
+	jmp continueInventory
 item5:
 	mov ebx,offset i6 ;//storing item for use
 	mitemOptions
-	jmp endInventory
+	jmp continueInventory
 item6:
 	mov ebx,offset i7 ;//storing item for use
 	mitemOptions
-	jmp endInventory
+	jmp continueInventory
 item7:
 	mov ebx,offset i8 ;//storing item for use
 	mitemOptions
-	jmp endInventory
+	jmp continueInventory
 item8:
 	mov ebx,offset i9 ;//storing item for use
 	mitemOptions
-	jmp endInventory
+	jmp continueInventory
 item9:
 	mov ebx,offset i10 ;//storing item for use
 	mitemOptions
-	jmp endInventory
+	jmp continueInventory
 
 endInventory:
 
@@ -197,7 +208,7 @@ Local L
 
 cmp c1.weaponCode,0
 je notEquipped&L
-
+jmp somethingEquiped&L
 mov edx,ebx
 mDequip
 mov ebx,edx
@@ -212,7 +223,17 @@ mov c1.weaponBuyValue,edx
 mov edx,[ebx].item.sellValue
 mov c1.weaponsellValue,edx
 mRemoveItem
-mInitializeCharacter
+mUpdateWeapon
+jmp end&L
+somethingEquiped&L:
+
+mov edx, offset unequipFirst
+invoke WriteString
+mov edx, offset continueCommand
+invoke WriteString
+_get_input
+
+end&L:
 
 endm;//mEquip
 
@@ -279,7 +300,7 @@ mov c1.weaponSellValue,0
 mov eax, c1.weaponDamage
 mov [ebx].item.combatValue,eax
 mov c1.weaponDamage,0
-mInitializeCharacter
+mUpdateWeapon
 
 mov edx, offset unequipScuccesfulTitle
 invoke WriteString
