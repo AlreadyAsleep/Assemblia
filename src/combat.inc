@@ -66,6 +66,9 @@ AND_COMBAT_TRUE&L:
 
 	mov edx, offset enemyNameTitle ;//prints enemy name
 	invoke WriteString
+
+	mov eax, e1.elementalType
+	mGetElementalType
 	
 	mGetEnemyName
 
@@ -239,6 +242,8 @@ mAddItem
 
 mov edx, offset youFoundTitle 
 invoke WriteString
+mov eax, t1.item.elementalType
+mGetElementalType
 mov eax, t1.item.itemcode
 mGetItemName
 

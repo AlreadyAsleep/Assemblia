@@ -2,6 +2,7 @@
 enemy struct 
 
 enemyNameCode  DWORD 0
+elementalType  DWORD 0
 
 hpMax          DWORD 0
 hp             DWORD 0

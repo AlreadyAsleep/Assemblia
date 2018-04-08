@@ -7,6 +7,12 @@ itemName5 byte "spear"  , 0 , 10, 0
 itemName6 byte "katana"  , 0 , 10, 0
 itemName7 byte "bow"  , 0 , 10, 0
 
+elementalType1 byte "Fire " , 0 , 10, 0
+elementalType2 byte "Ice " , 0 , 10, 0
+elementalType3 byte "Lightning " , 0 , 10, 0
+
+noElementalType byte NULL , 0 , 10, 0
+
 defaultName   byte "Empty Slot", 0 , 10, 0
 
 mGetItemName MACRO
@@ -95,5 +101,40 @@ mov t1.buyValue,eax
 dec eax ;//generating sellValue
 dec eax
 mov t1.sellValue,eax
+
+mov eax,4 ;//generating elementalType
+call RandomRange
+mov t1.elementalType,eax
+
+endm
+
+mGetElementalType MACRO
+Local L
+
+;//code is in eax
+
+cmp eax,1
+je elementalType1&L
+cmp eax,2
+je elementalType2&L
+cmp eax,3
+je elementalType3&L
+jmp nothing&L
+
+elementalType1&L:
+	mov edx,offset elementalType1
+	jmp print&L
+elementalType2&L:
+	mov edx,offset elementalType2
+	jmp print&L
+elementalType3&L:
+	mov edx,offset elementalType3
+	jmp print&L
+nothing&L:
+	mov edx, offset noElementalType
+	
+
+print&L:
+	invoke WriteString
 
 endm

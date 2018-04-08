@@ -9,7 +9,7 @@ prev      DWORD NULL
 next      DWORD NULL
 
 combatValue DWORD NULL ;// attack for weapons defense for armor
-itemType  DWORD NULL
+elementalType DWORD ?
 
 pad DWORD NULL
 

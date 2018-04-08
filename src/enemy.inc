@@ -31,5 +31,9 @@ mov ebx,10
 mul ebx
 mov e1.expReward ,eax
 
+mov eax,4 ;//generating elementalType
+call RandomRange
+mov e1.elementalType,eax
+
 popAD
 endm

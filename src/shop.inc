@@ -45,8 +45,8 @@ stillShopping&L:
 
 mov edx, offset shopMenuTitle
 invoke WriteString
-mov edx, offset exitTitle
-invoke WriteString
+;mov edx, offset exitTitle
+;invoke WriteString
 
 mov ebx, offset s1;//moving first item to read linked list
 mDisplayInventory
@@ -80,7 +80,7 @@ cmp ecx,9
 	je item9&L
 cmp ecx,10
 	je sellMode&L
-jmp exitShop&L
+jmp stillShopping&L
 
 item0&L:
 	mov ebx,offset s1 ;//storing item for use
@@ -209,6 +209,8 @@ mov edx, offset buyModeTitle
 invoke WriteString
 _get_input
 
+cmp ecx,909
+	jmp while_main
 cmp ecx,0
 	je item0&L
 cmp ecx,1
@@ -326,6 +328,8 @@ mov eax, t1.item.sellValue
 mov [ebx].item.sellValue, eax
 mov eax, t1.item.combatValue
 mov [ebx].item.combatValue, eax
+mov eax, t1.item.elementalType
+mov [ebx].item.elementalType, eax
 
 mov ebx,[ebx].item.next
 inc ecx

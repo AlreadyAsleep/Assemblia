@@ -21,6 +21,7 @@ weaponCode      DWORD 0
 weaponBuyValue  DWORD 0
 weaponSellValue DWORD 0
 weaponDamage    DWORD 0
+weaponElementalType DWORD 0
 
 
 defence        DWORD 0

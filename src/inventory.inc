@@ -51,6 +51,8 @@ mov eax,ecx
 call WriteDec
 mov eax, ':'
 call WriteChar
+mov eax, [ebx].item.elementalType
+mGetElementalType
 mov eax, [ebx].item.itemCode
 mGetItemName
 mov edx,offset blank
@@ -198,6 +200,7 @@ mRemoveItem MACRO
 mov [ebx].item.itemCode,null
 mov [ebx].item.sellValue,0
 mov [ebx].item.buyValue,0
+mov [ebx].item.elementalType,0
 
 endm;//mRemoveItem
 
@@ -223,6 +226,8 @@ mov edx, [ebx].item.buyValue
 mov c1.weaponBuyValue,edx
 mov edx,[ebx].item.sellValue
 mov c1.weaponsellValue,edx
+mov edx,[ebx].item.elementalType
+mov c1.weaponElementalType,edx
 mRemoveItem
 mUpdateWeapon
 jmp end&L
@@ -303,6 +308,11 @@ mov c1.weaponSellValue,0
 mov eax, c1.weaponDamage
 mov [ebx].item.combatValue,eax
 mov c1.weaponDamage,0
+
+mov eax, c1.weaponElementalType
+mov [ebx].item.elementalType,eax
+mov c1.weaponElementalType,0
+
 mUpdateWeapon
 
 mov edx, offset unequipScuccesfulTitle
@@ -367,6 +377,9 @@ mov [ebx].item.sellValue,ecx
 
 mov ecx, [eax].item.combatValue
 mov [ebx].item.combatValue,ecx
+
+mov ecx, [eax].item.elementalType
+mov [ebx].item.elementalType,ecx
 
 jmp end&L
 

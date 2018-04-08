@@ -86,7 +86,7 @@ call clrscr
 
 mov ecx, 1
 while_main:;//while( ecx != 0 )
-
+call clrscr
 
 mov edx, offset mainMenuTitle;//Main Menu Display Start
 call WriteString
