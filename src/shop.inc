@@ -157,7 +157,7 @@ exit&L:
 	jmp endCase&L
 buyItem&L:
 
-	mov edx, c1.gold 
+	mov edx, c1.gold ;// making sure player has enough gold for item
 	mov eax, [ebx].item.buyValue
 	cmp edx,eax
 	jb notEnoughGold&L
@@ -177,16 +177,18 @@ buyItem&L:
 	call clrscr
 	mov edx, offset notEnoughGoldTitle
 	invoke WriteString
-	mov eax,2000
-	call Delay
+	mov edx, offset continueCommand
+	invoke WriteString
+	_get_input
 
 	jmp endCase&L
 
 infoItem&L:
 	call clrscr
 	mDisplayItemInfo
-	mov eax,2000
-	call Delay
+	mov edx, offset continueCommand
+	invoke WriteString
+	_get_input
 	
 endCase&L:
 call clrscr
@@ -293,7 +295,7 @@ cmp ecx, 1
 je doSell&L
 
 doSell&L:
-mov eax,[ebx].item.sellValue
+mov eax,[ebx].item.sellValue ;// giving player gold
 mov edx,c1.gold
 add edx,eax
 mov c1.gold,edx

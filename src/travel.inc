@@ -1,3 +1,4 @@
+;// Travel causes a random event of either an enemy or a shop
 mTravel MACRO
 Local L
 

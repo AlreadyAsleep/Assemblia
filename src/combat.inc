@@ -234,10 +234,10 @@ invoke WriteString
 
 
 mInitializeItem
-mov eax, offset t1 ;//adds axe to inventory
+mov eax, offset t1 ;//adds weapon to inventory
 mAddItem
 
-mov edx, offset youFoundTitle
+mov edx, offset youFoundTitle 
 invoke WriteString
 mov eax, t1.item.itemcode
 mGetItemName
@@ -245,7 +245,7 @@ mGetItemName
 call crlf
 
 
-mov eax, c1.level
+mov eax, c1.level ;//generating gold reward
 mov ecx,10
 mul ecx
 call RandomRange

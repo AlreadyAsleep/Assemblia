@@ -1,8 +1,6 @@
 ;// structure of character object
 character struct 
 
-xPos           DWORD 0
-yPos           DWORD 0
 characterName  db    16 dup (?)
 level          DWORD 0
 exp            DWORD 0

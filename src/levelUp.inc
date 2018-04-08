@@ -11,7 +11,7 @@ fortuneAttribute byte "3 Fortune" ,13,10,0
 mLevelUp MACRO
 pushAD
 
-mov eax,c1.exp
+mov eax,c1.exp ;//checking to see if player has enough experience
 mov ebx,c1.expToNext
 cmp eax,ebx
 jl notEnough
@@ -23,7 +23,6 @@ mov c1.exp,eax
 
 inc c1.level
 mInitializeCharacter
-
 
 mov edx, offset attributeSelection
 invoke WriteString

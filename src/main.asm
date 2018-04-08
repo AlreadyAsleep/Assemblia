@@ -47,6 +47,11 @@ continueCommand byte "Press Enter to Continue", 13, 10, 0
 
 exitTitle    byte "909 Exit: ", 13, 10, 0
 
+introTitle1 byte "You awaken to the smell of death and burnt flesh."   , 13, 10, 0
+introTitle2 byte "Around you lies the corpses of your fallen party."   , 13, 10, 0
+introTitle3 byte "You are stranded in the swamps of the Sudlands."     , 13, 10, 0
+introTitle4 byte "You have nothing."                                   , 13, 10, 0
+
 blank byte " ", 13, 10, 0
 
 save_character proto C character : ptr byte, filename : ptr byte
@@ -61,6 +66,23 @@ main proc C
 
 mGetCharacterName
 mInitializeCharacter
+
+call clrscr
+
+mov edx,offset introTitle1
+invoke WriteString
+mov edx, offset introTitle2
+invoke WriteString
+mov edx, offset introTitle3
+invoke WriteString
+mov edx, offset introTitle4
+invoke WriteString
+mov edx, offset continueCommand
+invoke WriteString
+
+_get_input
+
+call clrscr
 
 mov ecx, 1
 while_main:;//while( ecx != 0 )

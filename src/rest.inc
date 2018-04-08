@@ -5,7 +5,7 @@ mRest MACRO
 mov edx, offset restMessageTitle
 invoke WriteString
 
-mov eax, c1.hpMax
+mov eax, c1.hpMax ;// healing player to full
 mov c1.hp,eax
 
 mov edx,offset continueCommand

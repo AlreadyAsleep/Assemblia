@@ -182,8 +182,9 @@ equipItem&L:
 infoItem&L:
 	call clrscr
 	mDisplayItemInfo
-	mov eax,2000
-	call Delay
+	mov edx, offset continueCommand
+	invoke WriteString
+	_get_input
 
 endCase&L:
 
@@ -237,6 +238,8 @@ end&L:
 
 endm;//mEquip
 
+
+
 ;//displays item Info
 mDisplayItemInfo MACRO
 ;ebx is item Info
@@ -265,7 +268,7 @@ call WriteDec
 mov edx, offset blank
 call WriteString
 
-endm
+endm ;//mDisplayItemInfo
 
 mDequip MACRO
 Local L
@@ -273,7 +276,7 @@ Local L
 cmp c1.weaponCode,0
 je nothingEquipped&L
 
-mov ebx, offset i1
+mov ebx, offset i1 ;//getting first item for linked list
 
 notEmpty&L:
 cmp [ebx].item.itemCode,0
@@ -319,8 +322,9 @@ inventoryFull&L:
 mov edx, offset inventoryFullTitle
 invoke WriteString
 
-mov eax, 1500
-call Delay
+mov edx, offset continueCommand
+invoke WriteString
+_get_input
 call clrscr
 
 nothingEquipped&L:
@@ -334,7 +338,7 @@ call clrscr
 
 endUnequip&L:
 
-endm
+endm ;//mDequip
 
 mAddItem MACRO
 Local L
@@ -376,7 +380,7 @@ call clrscr
 
 end&L:
 
-endm
+endm;//mAddItem
 
 _save_inv macro 
 	Local L

@@ -1,3 +1,4 @@
+;//gets enemy name based on code
 enemyName1 byte "Boglin" , 0 , 10, 0
 enemyName2 byte "Necromancer" , 0 , 10, 0
 enemyName3 byte "Golem" , 0 , 10, 0

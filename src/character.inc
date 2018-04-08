@@ -1,9 +1,7 @@
 
-C1 character {0,0,"Name",1,0,100,0,4,4,4,4,5,5,1,3,}
+C1 character {"Name",1,0,100,0,4,4,4,4,5,5,1,3,}
 
 characterSheetTitle byte "--CharacterSheet--"       , 13, 10, 0
-xPosTitle           byte "xPos: "                   , 0 , 10, 0
-yPosTitle           byte "yPos: "                   , 0 , 10, 0
 nameTitle           byte "Name: "                   , 0 , 10, 0
 levelTitle          byte "Level: "                  , 0 , 10, 0
 expTitle            byte "Exp: "                    , 0 , 10, 0
@@ -28,20 +26,6 @@ mPrintCharacterSheet MACRO ;//prints character sheet
 pushAD
 
 mov edx, offset characterSheetTitle ;//prints a header
-invoke WriteString
-
-mov edx, offset xPosTitle ;// prints x position
-invoke WriteString
-mov eax, c1.xPos
-call WriteDec
-mov edx, offset blank
-invoke WriteString
-
-mov edx, offset yPosTitle ;// prints y position
-invoke WriteString
-mov eax, c1.yPos
-call WriteDec
-mov edx, offset blank
 invoke WriteString
 
 mov edx, offset nameTitle ;// prints character name
@@ -204,6 +188,7 @@ mov c1.damageMax,eax
 popAD
 endm
 
+;//updates players damage after equipping or unequipping weapon
 mUpdateWeapon MACRO
 mov eax,c1.brawn;// damageMin & Max initialize damageMin = brawn/2 damage max = damageMin + agility/4
 sar eax,1;//divide by 2
