@@ -15,10 +15,13 @@ fleeTitle              byte "1: Flee"           , 13, 10, 0
 escapeEvent          byte "You Escaped!"          , 13, 10, 0
 playerDefeatedEvent  byte "You were defeated"     , 13, 10, 0
 enemyDefeatedEvent   byte "You Defeated the Enemy", 13, 10, 0
+takeGoldEvent        byte "They took your gold"   , 13, 10, 0
 
-youGotTitle     byte "You got "    , 0,10,0
+youGotTitle     byte "You recieved "    , 0,10,0
 goldRewardTitle byte " gold"       ,13,10,0
 expRewardTitle  byte " experience" ,13,10,0
+
+youFoundTitle byte "You found a(n) ",0,10,0
 
 youTookTitle  byte "You took "  , 0,10,0
 damageCombatTitle   byte " damage"    ,13,10,0
@@ -40,8 +43,7 @@ call clrscr
 
 mInitializeEnemy
 
-mov eax,c1.hpMax
-mov c1.hp,eax
+
 
 mov escape        ,0 ;//combat end conditions
 mov playerDefeated,0
@@ -165,6 +167,7 @@ invoke WriteString
 				jmp AND_FALSE_COMBAT&L
 		flee&L:
 			mov escape,1
+			jmp AND_FALSE_COMBAT&L
 			
 		end_switch&L:
 
@@ -212,6 +215,16 @@ je not_playerDefeated&L
 
 mov edx, offset playerDefeatedEvent;//will print if player was defeated
 invoke WriteString
+mov edx, offset takeGoldEvent
+invoke WriteString
+
+mov c1.gold,0
+
+mov eax, c1.hpMax
+mov c1.hp,eax
+
+
+
 jmp eventDetermined&L
 
 not_playerDefeated&L:
@@ -223,6 +236,14 @@ invoke WriteString
 mInitializeItem
 mov eax, offset t1 ;//adds axe to inventory
 mAddItem
+
+mov edx, offset youFoundTitle
+invoke WriteString
+mov eax, t1.item.itemcode
+mGetItemName
+
+call crlf
+
 
 mov eax, c1.level
 mov ecx,10

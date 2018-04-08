@@ -17,6 +17,7 @@ t1 item {4,1,2,NULL,NULL,3}
 tempString  db    8 dup (?)
 
 selectItemTitle byte "--Select an Item--", 13, 10, 0
+noEquip byte "No item equipped", 13, 10, 0
 
 
 discardTitle byte "1 Discard: "   , 13, 10, 0
@@ -30,6 +31,8 @@ itemCombatValueTitle byte "Combat Value:"    , 0, 10, 0
 itemType             byte "Item Type:   "    , 0, 10, 0
 
 inventoryFullTitle   byte "INVENTORY FULL"   , 0, 10, 0
+
+unequipScuccesfulTitle byte "You unequip your items" ,13,10,0
 
 ;//displays inventory
 mDisplayInventory MACRO
@@ -277,7 +280,17 @@ mov eax, c1.weaponDamage
 mov [ebx].item.combatValue,eax
 mov c1.weaponDamage,0
 mInitializeCharacter
-jmp nothingEquipped&L
+
+mov edx, offset unequipScuccesfulTitle
+invoke WriteString
+mov edx, offset continueCommand
+invoke WriteString
+_get_input
+call clrscr
+
+
+jmp endUnequip&L
+
 
 
 inventoryFull&L:
@@ -290,6 +303,15 @@ call Delay
 call clrscr
 
 nothingEquipped&L:
+
+mov edx,offset noEquip
+invoke WriteString
+mov edx, offset continueCommand
+invoke WriteString
+_get_input
+call clrscr
+
+endUnequip&L:
 
 endm
 

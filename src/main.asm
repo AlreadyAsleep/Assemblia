@@ -26,6 +26,7 @@ include levelUp.inc
 include inventory.inc
 include shop.inc
 include travel.inc
+include rest.inc
 
 WriteDec proto
 ReadDec proto
@@ -37,9 +38,10 @@ characterSheet   byte "1 Character Sheet", 13, 10, 0
 combatTitle      byte "2 Combat", 13, 10, 0
 levelUpTitle     byte "3 Level Up", 13, 10, 0
 inventoryTitle   byte "4 Inventory", 13, 10, 0
-dequipTitle      byte "5 Dequip", 13, 10, 0
+dequipTitle      byte "5 Unequip", 13, 10, 0
 shopTitle        byte "6 Shop", 13, 10, 0
 travelTitle      byte "7 Travel", 13, 10, 0
+restTitle        byte "8 Rest", 13, 10, 0
 
 continueCommand byte "Press Enter to Continue", 13, 10, 0
 
@@ -82,6 +84,8 @@ mov edx, offset shopTitle
 call WriteString
 mov edx, offset travelTitle
 call WriteString
+mov edx, offset restTitle
+call WriteString
 
 _get_input
 
@@ -103,6 +107,8 @@ cmp ecx, 6
 je shop
 cmp ecx, 7
 je travel
+cmp ecx, 8
+je rest
 jmp end_switch
 
 character_sheet :
@@ -125,6 +131,9 @@ mShop
 jmp end_switch
 travel :
 mTravel
+jmp end_switch
+rest:
+mRest
 jmp end_switch
 end_switch :
 _save_char

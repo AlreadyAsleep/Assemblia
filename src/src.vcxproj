@@ -26,6 +26,7 @@
     <None Include="inventory.inc" />
     <None Include="itemHeader.inc" />
     <None Include="levelUp.inc" />
+    <None Include="rest.inc" />
     <None Include="save_vars.inc" />
     <None Include="shop.inc" />
     <None Include="travel.inc" />
