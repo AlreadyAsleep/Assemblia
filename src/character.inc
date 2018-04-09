@@ -126,6 +126,8 @@ invoke WriteString
 
 mov edx, offset equippedWeaponTitle
 invoke WriteString
+mov eax, c1.weaponElementalType
+mGetElementalType
 mov eax, c1.weaponCode
 mGetItemName
 

@@ -1,11 +1,11 @@
 ;// gets items name based off code and prints it
-itemName1 byte "dagger" , 0 , 10, 0
-itemName2 byte "halberd"  , 0 , 10, 0
-itemName3 byte "sword", 0 , 10, 0
-itemName4 byte "axe"  , 0 , 10, 0
-itemName5 byte "spear"  , 0 , 10, 0
-itemName6 byte "katana"  , 0 , 10, 0
-itemName7 byte "bow"  , 0 , 10, 0
+itemName1 byte "Dagger" , 0 , 10, 0
+itemName2 byte "Halberd"  , 0 , 10, 0
+itemName3 byte "Sword", 0 , 10, 0
+itemName4 byte "Axe"  , 0 , 10, 0
+itemName5 byte "Spear"  , 0 , 10, 0
+itemName6 byte "Katana"  , 0 , 10, 0
+itemName7 byte "Bow"  , 0 , 10, 0
 
 elementalType1 byte "Fire " , 0 , 10, 0
 elementalType2 byte "Ice " , 0 , 10, 0
