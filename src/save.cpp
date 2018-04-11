@@ -1,7 +1,7 @@
 # include <iostream>// std library for console IO
 # include <fstream> // std library for file IO
 
-# define WRITE_SIZE 1024
+# define WRITE_SIZE 4096
 
 
 using namespace std;

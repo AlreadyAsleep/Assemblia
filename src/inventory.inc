@@ -11,7 +11,6 @@ i4 item {0,0,0,i3,i5}
 i3 item {0,0,0,i2,i4,0,"W"}
 i2 item {0,0,0,i1,i3,0,"W"}
 i1 item {0,0,0,null,i2,0,"A"}
-
 t1 item {4,1,2,NULL,NULL,3}
 
 tempString  db    8 dup (?)
@@ -395,8 +394,25 @@ end&L:
 
 endm;//mAddItem
 
-_save_inv macro 
+write_inv_to_buffer macro 
 	Local L
+	pushAD
+	
+	mov esi, offset i10
+	mov edi, offset save_write_buffer
+	add edi, 128	;//see save_vars.inc
+	mov al, [esi]	
+	mov ecx, 2816 ;// sizeof(inventory)
+while1$L:
+	stosb ;// inc edi and mov [edi], al
+	inc esi
+	mov al, [esi]
+	loop while1$L
+
+	popAD
 	
 	
 endm
+
+
+	

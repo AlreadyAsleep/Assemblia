@@ -1,8 +1,10 @@
-save_write_len equ 1024
+save_write_len equ 4096
 
 save_file byte "../player.save", 0
 save_write_buffer byte save_write_len dup (?), 0
 ;// first 128 bytes are for character
+;// remaining bytes are for inventory
+
 
 
 
@@ -27,8 +29,16 @@ _save_char macro
 	pushad
 	
 	_write_char_to_buffer ;// found in character.inc
+	write_inv_to_buffer	  ;// found in inventory.inc
 
 	invoke save_character, addr save_write_buffer, addr save_file ;//  found in save.cpp
+
+	popad
+endm
+
+_load_buffer macro
+	Local L
+	pushad
 
 	popad
 endm

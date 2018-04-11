@@ -6,7 +6,7 @@
 
 .386
 .model stdcall, flat
-.stack 4096
+.stack 8192
 include irvine32.inc
 
 include characterHeader.inc
