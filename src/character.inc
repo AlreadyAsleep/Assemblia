@@ -209,12 +209,29 @@ _write_char_to_buffer MACRO ;// writes the character struct to the save buffer
 	mov edi, offset save_write_buffer
 	mov al, [esi]	
 	mov ecx, 128 ;// sizeof(character)
-while$L:
+whilechar$L:
 	stosb ;// inc edi and mov [edi], al
 	inc esi
 	mov al, [esi]
-	loop while$L
+	loop whilechar$L
 
 	popAD
 endm
+
+_load_char_from_buffer MACRO
+	Local L
+	pushAD
+	mov esi, offset save_write_buffer
+	mov edi, offset C1
+	mov al, [esi]
+	mov ecx, 128 ;// sizeof(character)
+whilechar1$L:
+	stosb ;// inc edi and mov [edi], al
+	inc esi
+	mov al, [esi]
+	loop whilechar1$L
+
+	popAD
+endm
+
 

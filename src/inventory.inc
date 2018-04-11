@@ -403,15 +403,31 @@ write_inv_to_buffer macro
 	add edi, 128	;//see save_vars.inc
 	mov al, [esi]	
 	mov ecx, 2816 ;// sizeof(inventory)
-while1$L:
+whileinv$L:
 	stosb ;// inc edi and mov [edi], al
 	inc esi
 	mov al, [esi]
-	loop while1$L
+	loop whileinv$L
 
 	popAD
-	
-	
+endm
+
+load_inv_from_buffer MACRO
+	Local L
+	pushAD
+
+	mov esi, offset save_write_buffer
+	add esi, 128	;// where inventory starts in buffer
+	mov edi, offset i10
+	mov al, [esi]
+	mov ecx, 2816 ;// sizeof(character)
+whileinv1$L:
+	stosb ;// inc edi and mov [edi], al
+	inc esi
+	mov al, [esi]
+	loop whileinv1$L
+
+	popAD
 endm
 
 

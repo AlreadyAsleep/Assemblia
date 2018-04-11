@@ -26,5 +26,22 @@ extern "C" void save_character(char* character, char* filename)
 	file.close();
 };
 
+extern "C" void load_character(char* character, char* filename)
+{
+	ifstream file;
+	cout << "Loading..." << endl;
+	file.open(filename, ios::in | ios::binary);
+	if (file)
+	{
+		file.read(character, WRITE_SIZE);
+	}
+	else
+	{
+		cout << "No save file... quitting" << endl;
+		exit(0);
+	}
+	file.close();
+}	
+
 
 

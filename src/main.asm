@@ -45,6 +45,8 @@ restTitle        byte "8 Rest", 13, 10, 0
 
 continueCommand byte "Press Enter to Continue", 13, 10, 0
 
+
+
 exitTitle    byte "909 Exit: ", 13, 10, 0
 
 introTitle1 byte "You awaken to the smell of death and burnt flesh."   , 13, 10, 0
@@ -52,37 +54,88 @@ introTitle2 byte "Around you lies the corpses of your fallen party."   , 13, 10,
 introTitle3 byte "You are stranded in the swamps of the Sudlands."     , 13, 10, 0
 introTitle4 byte "You have nothing."                                   , 13, 10, 0
 
+
+
+load_prompt byte "Load?(y/n)", 13, 10, 0
+entry_invalid byte "entry invalid", 13, 10, 0
+
+
+
 blank byte " ", 13, 10, 0
 
 save_character proto C character : ptr byte, filename : ptr byte
+load_character proto C character : ptr byte, filename : ptr byte
 test_print_num proto C
+
+
+
 
 include save_vars.inc
 
+loadTitle1 byte "You awaken from your short but needed rest", 13, 10, 0
 
 .code
 
 main proc C
 
-mGetCharacterName
-mInitializeCharacter
+;// ask if load or new
 
-call clrscr
+if_new:
+	mov edx, offset load_prompt
+	call WriteString
+	call ReadChar
+	or al, 00100000b ;// upper to lower
+	cmp al, "n"
+	je then_new
+	cmp al, "y"
+	je else_new
+	jmp err_new
+then_new:
+	mGetCharacterName
+	mInitializeCharacter
+	
+	mov edx, offset introTitle1
+	invoke WriteString
+	mov edx, offset introTitle2
+	invoke WriteString
+	mov edx, offset introTitle3
+	invoke WriteString
+	mov edx, offset introTitle4
+	invoke WriteString
+	mov edx, offset continueCommand
+	invoke WriteString
+	
+	_get_input
+	
+	call clrscr
+	
+	jmp end_new
+else_new:
+	mInitializeCharacter
+	_load_from_buffer
 
-mov edx,offset introTitle1
-invoke WriteString
-mov edx, offset introTitle2
-invoke WriteString
-mov edx, offset introTitle3
-invoke WriteString
-mov edx, offset introTitle4
-invoke WriteString
-mov edx, offset continueCommand
-invoke WriteString
+	call clrscr
 
-_get_input
+	mov edx, offset loadTitle1
+	invoke WriteString
+	
 
-call clrscr
+	_get_input
+
+	call clrscr
+	jmp end_new
+err_new:
+	mov edx, offset entry_invalid
+	invoke WriteString
+	jmp if_new
+end_new:
+	nop
+	
+	
+
+
+
+
 
 mov ecx, 1
 while_main:;//while( ecx != 0 )
