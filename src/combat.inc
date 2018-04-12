@@ -150,6 +150,7 @@ invoke WriteString
 			inc eax
 			call RandomRange
 			add eax,ebx
+			mSuperEffective
 			sub e1.hp,eax
 
 			mov edx, offset youDealtTitle

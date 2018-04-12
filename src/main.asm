@@ -27,6 +27,7 @@ include inventory.inc
 include shop.inc
 include travel.inc
 include rest.inc
+include damageTypes.inc
 
 WriteDec proto
 ReadDec proto

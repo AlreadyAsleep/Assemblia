@@ -17,6 +17,7 @@
     <None Include="character.inc" />
     <None Include="characterHeader.inc" />
     <None Include="combat.inc" />
+    <None Include="damageTypes.inc" />
     <None Include="enemy.inc" />
     <None Include="enemyHeader.inc" />
     <None Include="getEnemyName.inc" />
