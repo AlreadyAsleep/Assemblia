@@ -15,6 +15,8 @@ sellModeTitle byte "10 Switch to Sell Mode" , 13, 10, 0
 buyModeTitle byte "10 Switch to Buy Mode" , 13, 10, 0
 buyTitle      byte "2 Buy:"                 , 13, 10, 0
 
+yourInventory byte "--Your Inventory--" , 13, 10, 0
+
 sellTitle  byte "1 Sell:"  , 13, 10, 0
 
 shopPrompt1 byte "A hooded figure approaches" , 13, 10, 0
@@ -198,6 +200,9 @@ mSellMode MACRO
 Local L
 
  stillShopping&L:
+
+ mov edx, offset yourInventory
+ invoke WriteString
 
 mov ebx, offset i1
 
