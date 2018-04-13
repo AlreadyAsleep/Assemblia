@@ -117,12 +117,13 @@ call WriteDec
 mov edx, offset blank
 invoke WriteString
 
-mov edx, offset defenceTitle ;//prints character defence
-invoke WriteString
-mov eax, c1.defence
-call WriteDec
-mov edx, offset blank
-invoke WriteString
+;// removed for later implementation
+;mov edx, offset defenceTitle ;//prints character defence
+;invoke WriteString
+;mov eax, c1.defence
+;call WriteDec
+;mov edx, offset blank
+;invoke WriteString
 
 mov edx, offset equippedWeaponTitle
 invoke WriteString
