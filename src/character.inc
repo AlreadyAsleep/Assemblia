@@ -2,10 +2,10 @@
 C1 character {"Name",1,0,100,0,4,4,4,4,5,5,1,3,}
 
 characterSheetTitle byte "--CharacterSheet--"       , 13, 10, 0
-nameTitle           byte "Name: "                   , 0 , 10, 0
-levelTitle          byte "Level: "                  , 0 , 10, 0
-expTitle            byte "Exp: "                    , 0 , 10, 0
-goldTitle           byte "Gold: "                   , 0 , 10, 0
+nameTitle           byte "Name:"                   , 0 , 10, 0
+levelTitle          byte "Level:"                  , 0 , 10, 0
+expTitle            byte "Exp:"                    , 0 , 10, 0
+goldTitle           byte "Gold:"                   , 0 , 10, 0
 
 
 primaryAttributesTitle byte "--Primary Attributes--", 13, 10, 0
