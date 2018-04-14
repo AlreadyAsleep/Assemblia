@@ -36,13 +36,11 @@ ExitProcess proto, dwExitCode:dword
 mainMenuTitle    byte "Main Menu", 13, 10, 0
 quitTitle        byte "909 Quit", 13, 10, 0
 characterSheet   byte "1 Character Sheet", 13, 10, 0
-combatTitle      byte "2 Combat", 13, 10, 0
-levelUpTitle     byte "3 Level Up", 13, 10, 0
-inventoryTitle   byte "4 Inventory", 13, 10, 0
-dequipTitle      byte "5 Unequip", 13, 10, 0
-shopTitle        byte "6 Shop", 13, 10, 0
-travelTitle      byte "7 Travel", 13, 10, 0
-restTitle        byte "8 Rest", 13, 10, 0
+levelUpTitle     byte "2 Level Up", 13, 10, 0
+inventoryTitle   byte "3 Inventory", 13, 10, 0
+dequipTitle      byte "4 Unequip", 13, 10, 0
+travelTitle      byte "5 Travel", 13, 10, 0
+restTitle        byte "6 Rest", 13, 10, 0
 
 continueCommand byte "Press Enter to Continue", 13, 10, 0
 
@@ -148,15 +146,11 @@ mov edx, offset quitTitle
 call WriteString
 mov edx, offset characterSheet
 call WriteString
-mov edx, offset combatTitle
-call WriteString
 mov edx, offset levelUpTitle
 call WriteString
 mov edx, offset inventoryTitle
 call WriteString
 mov edx, offset dequipTitle
-call WriteString
-mov edx, offset shopTitle
 call WriteString
 mov edx, offset travelTitle
 call WriteString
@@ -172,26 +166,19 @@ je endwhile_main
 cmp ecx, 1
 je character_sheet
 cmp ecx, 2
-je combat
-cmp ecx, 3
 je levelUp
-cmp ecx, 4
+cmp ecx, 3
 je inventory
-cmp ecx, 5
+cmp ecx, 4
 je dequip
-cmp ecx, 6
-je shop
-cmp ecx, 7
+cmp ecx, 5
 je travel
-cmp ecx, 8
+cmp ecx, 6
 je rest
 jmp end_switch
 
 character_sheet :
 mPrintCharacterSheet
-jmp end_switch
-combat :
-mCombat
 jmp end_switch
 levelUp :
 mLevelUp
@@ -201,9 +188,6 @@ mInventory
 jmp end_switch
 dequip :
 mDequip
-jmp end_switch
-shop :
-mShop
 jmp end_switch
 travel :
 mTravel

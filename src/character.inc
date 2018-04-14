@@ -17,7 +17,6 @@ fortuneTitle        byte "Fortune:"                 , 0 , 10, 0
 combatAttributesTitle byte "--Combat Attributes--"  , 13, 10, 0
 hpTitle             byte "HP:"                      , 0 , 10, 0
 damageTitle         byte "Damage:"                  , 0 , 10, 0
-defenceTitle        byte "Defence:"                 , 0 , 10, 0
 equippedWeaponTitle byte "Weapon:"                  , 0 , 10, 0
 
 command1 byte "Enter character name. Up to 15 Characters"  , 13, 10, 0
@@ -116,14 +115,6 @@ mov eax, c1.damageMax
 call WriteDec
 mov edx, offset blank
 invoke WriteString
-
-;// removed for later implementation
-;mov edx, offset defenceTitle ;//prints character defence
-;invoke WriteString
-;mov eax, c1.defence
-;call WriteDec
-;mov edx, offset blank
-;invoke WriteString
 
 mov edx, offset equippedWeaponTitle
 invoke WriteString
