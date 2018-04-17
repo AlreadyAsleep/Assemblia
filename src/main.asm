@@ -28,6 +28,7 @@ include shop.inc
 include travel.inc
 include rest.inc
 include damageTypes.inc
+include help.inc
 
 WriteDec proto
 ReadDec proto
@@ -41,6 +42,7 @@ inventoryTitle   byte "3 Inventory", 13, 10, 0
 dequipTitle      byte "4 Unequip", 13, 10, 0
 travelTitle      byte "5 Travel", 13, 10, 0
 restTitle        byte "6 Rest", 13, 10, 0
+helpTitle        byte "7 Help",13, 10, 0
 
 continueCommand byte "Press Enter to Continue", 13, 10, 0
 
@@ -53,7 +55,7 @@ introTitle2 byte "Around you lies the corpses of your fallen party."   , 13, 10,
 introTitle3 byte "You are stranded in the swamps of the Sudlands."     , 13, 10, 0
 introTitle4 byte "You have nothing."                                   , 13, 10, 0
 
-
+helpPrompt byte "In the main menu. Enter the number 7 and press enter for help." ,13,10,0
 
 load_prompt byte "Load?(y/n)", 13, 10, 0
 entry_invalid byte "entry invalid", 13, 10, 0
@@ -156,6 +158,8 @@ mov edx, offset travelTitle
 call WriteString
 mov edx, offset restTitle
 call WriteString
+mov edx, offset helpTitle
+call WriteString
 
 _get_input
 
@@ -175,7 +179,9 @@ cmp ecx, 5
 je travel
 cmp ecx, 6
 je rest
-jmp end_switch
+cmp ecx, 7
+je helpFunction
+jmp help
 
 character_sheet :
 mPrintCharacterSheet
@@ -195,8 +201,21 @@ jmp end_switch
 rest:
 mRest
 jmp end_switch
+helpFunction:
+mHelp
+jmp end_switch
+
+help:
+mov edx, offset helpPrompt
+invoke WriteString
+mov eax,3000
+call Delay
+
 end_switch :
 _save_char
+
+
+
 jmp while_main;//default
 
 

@@ -10,6 +10,8 @@ jl shop&L
 jmp combat&L
 shop&L:
 	mShop
+	jmp endMacro&L
 combat&L:
 	mCombat
+endMacro&L:
 endm

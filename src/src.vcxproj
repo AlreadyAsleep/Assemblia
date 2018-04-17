@@ -23,6 +23,7 @@
     <None Include="getEnemyName.inc" />
     <None Include="getItemName.inc" />
     <None Include="get_input.inc" />
+    <None Include="help.inc" />
     <None Include="input_data.inc" />
     <None Include="inventory.inc" />
     <None Include="itemHeader.inc" />
