@@ -122,6 +122,8 @@ item8&L:
 	jmp stillShopping&L
 item9&L:
 	mov ebx,offset s10 ;//storing item for use
+	mBuyOptions
+	jmp stillShopping&L
 sellMode&L:
 	call clrscr
 	mSellMode
@@ -309,6 +311,15 @@ mov eax,[ebx].item.sellValue ;// giving player gold
 mov edx,c1.gold
 add edx,eax
 mov c1.gold,edx
+mov edx,offset youGotTitle
+invoke WriteString
+call WriteDec
+mov edx, offset goldRewardTitle
+invoke WriteString
+call crlf
+mov edx, offset continueCommand
+invoke WriteString
+_get_input
 
 mRemoveItem
 goBack&L:

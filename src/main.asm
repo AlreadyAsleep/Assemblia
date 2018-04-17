@@ -215,9 +215,9 @@ jmp end_switch
 help:
 mov edx, offset helpPrompt
 invoke WriteString
-mov eax,3000
-call Delay
-
+mov edx, offset continueCommand
+invoke WriteString
+_get_input
 end_switch :
 _save_char
 
