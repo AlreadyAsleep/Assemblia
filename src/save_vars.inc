@@ -38,16 +38,13 @@ endm
 
 _load_from_buffer macro
 	Local L
-	pushad
-	
 	;//load from file into buffer
+
 	invoke load_character, addr save_write_buffer, addr save_file ;// found in save.cpp
 
 	;//write to character and then write to inventory
 	_load_char_from_buffer
 	load_inv_from_buffer
-
-	popad
 endm
 
    

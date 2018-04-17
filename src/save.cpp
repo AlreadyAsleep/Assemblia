@@ -37,11 +37,23 @@ extern "C" void load_character(char* character, char* filename)
 	}
 	else
 	{
-		cout << "No save file... quitting" << endl;
-		exit(0);
+		cout << "No save file..." << endl;
 	}
 	file.close();
 }	
+
+extern "C" int test_for_file(char* filename)
+{
+	ifstream file;
+	cout << "Checking for save file..." << endl;
+	file.open(filename);
+	if (!file)
+	{
+		cout << "No save file found, creating new character..." << endl;
+		return -1;
+	}
+	return 0;
+}
 
 
 
