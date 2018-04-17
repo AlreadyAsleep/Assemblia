@@ -64,6 +64,7 @@ blank byte " ", 13, 10, 0
 
 save_character proto C character : ptr byte, filename : ptr byte
 load_character proto C character : ptr byte, filename : ptr byte
+test_for_file  proto C filename  : ptr byte
 test_print_num proto C
 
 
@@ -80,6 +81,9 @@ main proc C
 ;// ask if load or new
 
 if_new:
+	invoke test_for_file, addr save_file
+	cmp eax, -1
+	je then_new
 	mov edx, offset load_prompt
 	call WriteString
 	call ReadChar
@@ -112,6 +116,9 @@ then_new:
 else_new:
 	mInitializeCharacter
 	_load_from_buffer
+	cmp edx, -1
+	je if_new
+
 
 	call clrscr
 
